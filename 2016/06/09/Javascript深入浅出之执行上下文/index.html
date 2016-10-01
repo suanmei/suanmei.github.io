@@ -1,0 +1,917 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="javascript,执行上下文,变量对象," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="当某个函数被调用时，会创建一个执行环境（execution context）及相应的作用域链。然后，使用arguments和其他命名参数的值来初始化函数的活动对象（activation object）。
+
+如果你刚看《高程》，看到这句话估计会似是而非的理解。其实我当时也是，直到最近撸第二遍，也是偶然看到大叔的系列文章，有心研究了下，加上自己的理解，促成了这几篇博文。今天我们先来聊聊执行上下文与活">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript深入浅出之执行上下文">
+<meta property="og:url" content="http://yoursite.com/2016/06/09/Javascript深入浅出之执行上下文/index.html">
+<meta property="og:site_name" content="拾邑">
+<meta property="og:description" content="当某个函数被调用时，会创建一个执行环境（execution context）及相应的作用域链。然后，使用arguments和其他命名参数的值来初始化函数的活动对象（activation object）。
+
+如果你刚看《高程》，看到这句话估计会似是而非的理解。其实我当时也是，直到最近撸第二遍，也是偶然看到大叔的系列文章，有心研究了下，加上自己的理解，促成了这几篇博文。今天我们先来聊聊执行上下文与活">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/article/EC-stack.png">
+<meta property="og:updated_time" content="2016-07-04T07:13:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Javascript深入浅出之执行上下文">
+<meta name="twitter:description" content="当某个函数被调用时，会创建一个执行环境（execution context）及相应的作用域链。然后，使用arguments和其他命名参数的值来初始化函数的活动对象（activation object）。
+
+如果你刚看《高程》，看到这句话估计会似是而非的理解。其实我当时也是，直到最近撸第二遍，也是偶然看到大叔的系列文章，有心研究了下，加上自己的理解，促成了这几篇博文。今天我们先来聊聊执行上下文与活">
+<meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/article/EC-stack.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6289373511051904000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Javascript深入浅出之执行上下文 | 拾邑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">拾邑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">读一书，增一智</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Javascript深入浅出之执行上下文
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-09T23:14:06+08:00" content="2016-06-09">
+              2016-06-09
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/09/Javascript深入浅出之执行上下文/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/09/Javascript深入浅出之执行上下文/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa">本文阅读量</i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>当某个函数被调用时，会创建一个执行环境（execution context）及相应的作用域链。然后，使用arguments和其他命名参数的值来初始化函数的活动对象（activation object）。</p>
+</blockquote>
+<p>如果你刚看《高程》，看到这句话估计会似是而非的理解。其实我当时也是，直到最近撸第二遍，也是偶然看到大叔的系列文章，有心研究了下，加上自己的理解，促成了这几篇博文。今天我们先来聊聊执行上下文与活动对象。</p>
+<a id="more"></a>
+<h2 id="执行上下文"><a href="#执行上下文" class="headerlink" title="执行上下文"></a>执行上下文</h2><p>执行上下文可能不太容易理解，其实它就是上面写到的执行环境，代码就是在相对应的执行环境中运行的。所以我们可以这样理解，每当调用一个函数，就会相应地为这个函数划出一块地，该函数所有的代码活动都被限制在这块地上。</p>
+<p>好，这里我们可以引出两个问题：这块地是什么？只有函数调用才能创建EC吗？</p>
+<h2 id="这块地是什么？"><a href="#这块地是什么？" class="headerlink" title="这块地是什么？"></a>这块地是什么？</h2><p>当然就是内存了。无论是js还是其他代码，代码的运行所需空间都是由内存来分配的。<br>内存分堆(heap)和栈(stack)，在这里，执行上下文组成了 <strong>执行上下文栈</strong> 来调控代码的进行，执行上下文栈的顶端就是正在使用的上下文。我们来用图示看一下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>,</div><div class="line">    b = <span class="number">2</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    a = <span class="number">3</span>;</div><div class="line">    bar();</div><div class="line">    alert(a + b);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    b = <span class="number">3</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">foo();</div></pre></td></tr></table></figure>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/article/EC-stack.png" alt="ECStack Losted" title="ECStack"></p>
+<p>当程序结束时，全局上下文出栈并销毁。  </p>
+<p>相信大家也注意到了上面出现了很多次的 <strong>全局上下文</strong> ，它可以很好的回答我们的第二个问题：不是! 那么，问题就来了。。。</p>
+<h2 id="什么代码可以创建EC？"><a href="#什么代码可以创建EC？" class="headerlink" title="什么代码可以创建EC？"></a>什么代码可以创建EC？</h2><blockquote>
+<p>全局代码</p>
+<p>函数代码</p>
+<p>Eval代码</p>
+</blockquote>
+<h3 id="全局代码"><a href="#全局代码" class="headerlink" title="全局代码"></a>全局代码</h3><p>全局代码就是 <code>&lt;script&gt;</code> 标签中的，或者是通过外部加载的js文件中的代码，它不包含任何函数体内的代码。<br>全局代码创建的EC就是我们上文中所提的全局上下文，它是程序刚开始，代码尚未执行时就产生的上下文，它永远处在执行上下文栈的底部。</p>
+<h3 id="函数代码"><a href="#函数代码" class="headerlink" title="函数代码"></a>函数代码</h3><p> <code>function</code> 函数中的代码段就是函数代码，它也不包括内部函数代码。</p>
+<p>函数如果递归调用自身，每调用一次都会创建一个新的执行上下文。如果函数体内有 <code>return</code> ，执行到它的时候会立刻退出当前执行上下文。</p>
+<h3 id="Eval代码"><a href="#Eval代码" class="headerlink" title="Eval代码"></a>Eval代码</h3><p>Eval代码和函数代码类似，执行到它的时候也会创建一个新的执行上下文。但不同的是，它有一个调用上下文（calling context），同样会压入ECStack。eval函数中如果进行变量、函数声明，将会体现到调用上下文中。</p>
+<p>不过eval会使阅读性、安全性、性能下降，不建议大家使用。</p>
+<h2 id="变量对象"><a href="#变量对象" class="headerlink" title="变量对象"></a>变量对象</h2><p>代码执行的时候访问的变量都是从变量对象中取到的。</p>
+<p>变量对象（Variable Object）其实是执行上下文的一个属性，执行上下文还有 <code>this</code> 和 <code>作用域</code> 属性。它们介绍起来篇幅很大，所以我把它放到了后面的文章。</p>
+<p>变量对象分为两类：<br>1.全局上下文变量对象<br>2.函数上下文变量对象</p>
+<h3 id="全局上下文中的变量对象"><a href="#全局上下文中的变量对象" class="headerlink" title="全局上下文中的变量对象"></a>全局上下文中的变量对象</h3><p>全局上下文变量对象就是全局对象。</p>
+<p>全局对象本身包含很多属性如Math、String、Date、parseInt等等，大家不妨用 <code>console.log(this)</code> 在控制台中查看一下，还有，在全局作用域中声明的变量和函数也会成为它的属性。</p>
+<p>当访问全局对象的属性时通常会忽略掉前缀，这是因为全局对象是不能通过名称直接访问的。不过我们依然可以通过全局上下文的this来访问全局对象，同样也可以递归引用自身。例如，DOM中的window。</p>
+<h3 id="函数上下文中的变量对象"><a href="#函数上下文中的变量对象" class="headerlink" title="函数上下文中的变量对象"></a>函数上下文中的变量对象</h3><p>函数上下文中存在的是活动对象，它可以当做变量对象使用，其中包含变量、函数声明、形参、arguments。  </p>
+<p>我们来配合一个例子看一下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="number">10</span>;</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">b</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> c = <span class="number">20</span>;</div><div class="line">    c += b;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">foo(<span class="number">30</span>)</div></pre></td></tr></table></figure>
+<p>对应的变量对象是：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 全局上下文的变量对象（不包含自带属性）</span></div><div class="line">VO(globalContext) = &#123;</div><div class="line">    <span class="attr">a</span>: <span class="number">10</span>,</div><div class="line">    <span class="attr">foo</span>: &lt;reference to function&gt;</div><div class="line">&#125;</div><div class="line"></div><div class="line">VO(foo functionContext) = &#123;</div><div class="line">    // arguments其实是一个类数组对象，可以通过下标来访问实参，它同时包含callee、length、properties-indexes三个属性</div><div class="line">    arguments: &lt;ArgO&gt;</div><div class="line">    b: 30, // 形参</div><div class="line">    c: 20 // 变量</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们想一个问题，变量对象是初始化时就是这样吗？其实不是这样，执行上下文中的代码分两个阶段，不同阶段值不同，这也是js的很重要的一个特性。</p>
+<h2 id="执行上下文的两个阶段"><a href="#执行上下文的两个阶段" class="headerlink" title="执行上下文的两个阶段"></a>执行上下文的两个阶段</h2><p>我们透过这段代码在不同时期的变量对象看一下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">a, b</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> c = <span class="number">10</span>;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">d</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">  <span class="keyword">var</span> e = <span class="function"><span class="keyword">function</span> <span class="title">_e</span>(<span class="params"></span>) </span>&#123;&#125;;</div><div class="line">  (<span class="function"><span class="keyword">function</span> <span class="title">x</span>(<span class="params"></span>) </span>&#123;&#125;);</div><div class="line">&#125;</div><div class="line"> </div><div class="line">test(<span class="number">10</span>); <span class="comment">// call</span></div></pre></td></tr></table></figure>
+<h3 id="进入执行上下文"><a href="#进入执行上下文" class="headerlink" title="进入执行上下文"></a>进入执行上下文</h3><p>这个阶段处于代码执行之前，此时执行上下文的VO已经包含函数声明、形参、变量、arguments。<strong>其实这个阶段就是声明提升的阶段</strong>。</p>
+<p>此时AO对象数据为：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th style="text-align:center">赋值与否</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>变量</td>
+<td style="text-align:center">undefined</td>
+</tr>
+<tr>
+<td>函数声明</td>
+<td style="text-align:center">对函数的引用</td>
+</tr>
+<tr>
+<td>形参</td>
+<td style="text-align:center">赋值</td>
+</tr>
+<tr>
+<td>arguments</td>
+<td style="text-align:center">赋值</td>
+</tr>
+</tbody>
+</table>
+<p>建议大家配合 <a href="http://suanmei.github.io/2016/06/07/Javascript深入浅出之声明与提升/" target="_blank" rel="external">Javascript深入浅出之声明与提升</a> 中的 提升规则 一起看看。</p>
+<p>对应变量对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 活动对象</span></div><div class="line">AO(test) = &#123;</div><div class="line">    <span class="attr">a</span>: <span class="number">10</span>,</div><div class="line">    <span class="attr">b</span>: <span class="literal">undefined</span>,</div><div class="line">    <span class="attr">c</span>: <span class="literal">undefined</span>,</div><div class="line">    <span class="attr">d</span>: &lt;reference to FunctionDeclaration "d"&gt;</div><div class="line">    e: undefined</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="代码执行"><a href="#代码执行" class="headerlink" title="代码执行"></a>代码执行</h3><p>此时AO对象数据为：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th style="text-align:center">赋值与否</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>变量</td>
+<td style="text-align:center">赋值</td>
+</tr>
+<tr>
+<td>函数声明</td>
+<td style="text-align:center">对函数的引用</td>
+</tr>
+<tr>
+<td>形参</td>
+<td style="text-align:center">赋值</td>
+</tr>
+<tr>
+<td>arguments</td>
+<td style="text-align:center">赋值</td>
+</tr>
+</tbody>
+</table>
+<p>在这个阶段中，AO被改成了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">AO[<span class="string">'c'</span>] = <span class="number">10</span>;</div><div class="line">AO[<span class="string">'e'</span>] = &lt;reference to FunctionExpression "_e"&gt;;</div></pre></td></tr></table></figure>
+<hr>
+<p>到了这里，相信大家都对函数调用阶段有个很多本质的理解，配合本文也可以更好地理解声明提升，也为后面理解闭包打好基础。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag">#javascript</a>
+          
+            <a href="/tags/执行上下文/" rel="tag">#执行上下文</a>
+          
+            <a href="/tags/变量对象/" rel="tag">#变量对象</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/07/Javascript深入浅出之声明与提升/" rel="next" title="Javascript深入浅出之声明与提升">
+                <i class="fa fa-chevron-left"></i> Javascript深入浅出之声明与提升
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/14/Javascript深入浅出之this/" rel="prev" title="Javascript深入浅出之this">
+                Javascript深入浅出之this <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/09/Javascript深入浅出之执行上下文/"
+           data-title="Javascript深入浅出之执行上下文" data-url="http://yoursite.com/2016/06/09/Javascript深入浅出之执行上下文/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o7nps5lzq.bkt.clouddn.com/avatar/avatar.jpg"
+               alt="酸梅先生" />
+          <p class="site-author-name" itemprop="name">酸梅先生</p>
+          <p class="site-description motion-element" itemprop="description">阅读，知识管理</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/suanmei" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/li-ruo-yu-34" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-code"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#执行上下文"><span class="nav-number">1.</span> <span class="nav-text">执行上下文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#这块地是什么？"><span class="nav-number">2.</span> <span class="nav-text">这块地是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么代码可以创建EC？"><span class="nav-number">3.</span> <span class="nav-text">什么代码可以创建EC？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全局代码"><span class="nav-number">3.1.</span> <span class="nav-text">全局代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数代码"><span class="nav-number">3.2.</span> <span class="nav-text">函数代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Eval代码"><span class="nav-number">3.3.</span> <span class="nav-text">Eval代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量对象"><span class="nav-number">4.</span> <span class="nav-text">变量对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全局上下文中的变量对象"><span class="nav-number">4.1.</span> <span class="nav-text">全局上下文中的变量对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数上下文中的变量对象"><span class="nav-number">4.2.</span> <span class="nav-text">函数上下文中的变量对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行上下文的两个阶段"><span class="nav-number">5.</span> <span class="nav-text">执行上下文的两个阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进入执行上下文"><span class="nav-number">5.1.</span> <span class="nav-text">进入执行上下文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码执行"><span class="nav-number">5.2.</span> <span class="nav-text">代码执行</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">酸梅先生</span>
+</div>
+        
+
+<div class="busuanzi-count">
+  <style>.busuanzi-count:before{display:none;}</style>
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa">你是第</i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span>位访客</span>
+  
+
+  
+    <span class="site-pv"><i class="fa">本站总访问量</i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"suanmeixiansheng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';                
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+                            
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').mousedown(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+  
+
+  
+
+  
+
+</body>
+</html>

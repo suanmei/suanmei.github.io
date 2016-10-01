@@ -1,0 +1,882 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="css,css规范,BFC,IFC,行盒,margin,float,position,display,自适应布局," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="BFC、IFC的概念重要吗？不重要，没有它们我们也能写出符合要求甚至很好的页面。重要，深入了了解了CSS这门语言的核心，你的CSS才可能会有创造性，你才能发明出你自己的奇淫技巧，而不是遇到新的情境就去百度，google。
+在看这篇文章之前，先得了解一些无聊的基本概念，重拾CSS规范之从盒类型谈起，当然，我已经尽可能让它有趣了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重拾CSS规范之BFC & IFC">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/重拾CSS规范之BFC&IFC/index.html">
+<meta property="og:site_name" content="拾邑">
+<meta property="og:description" content="BFC、IFC的概念重要吗？不重要，没有它们我们也能写出符合要求甚至很好的页面。重要，深入了了解了CSS这门语言的核心，你的CSS才可能会有创造性，你才能发明出你自己的奇淫技巧，而不是遇到新的情境就去百度，google。
+在看这篇文章之前，先得了解一些无聊的基本概念，重拾CSS规范之从盒类型谈起，当然，我已经尽可能让它有趣了。">
+<meta property="og:updated_time" content="2016-09-16T06:17:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重拾CSS规范之BFC & IFC">
+<meta name="twitter:description" content="BFC、IFC的概念重要吗？不重要，没有它们我们也能写出符合要求甚至很好的页面。重要，深入了了解了CSS这门语言的核心，你的CSS才可能会有创造性，你才能发明出你自己的奇淫技巧，而不是遇到新的情境就去百度，google。
+在看这篇文章之前，先得了解一些无聊的基本概念，重拾CSS规范之从盒类型谈起，当然，我已经尽可能让它有趣了。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6289373511051904000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 重拾CSS规范之BFC & IFC | 拾邑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">拾邑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">读一书，增一智</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                重拾CSS规范之BFC & IFC
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T23:47:23+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/CSS/" itemprop="url" rel="index">
+                    <span itemprop="name">CSS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/重拾CSS规范之BFC&IFC/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/重拾CSS规范之BFC&IFC/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa">本文阅读量</i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>BFC、IFC的概念重要吗？<strong>不重要，</strong>没有它们我们也能写出符合要求甚至很好的页面。<strong>重要，</strong>深入了了解了CSS这门语言的核心，你的CSS才可能会有创造性，你才能发明出你自己的奇淫技巧，而不是遇到新的情境就去百度，google。</p>
+<p>在看这篇文章之前，先得了解一些无聊的基本概念，<a href="http://suanmei.github.io/2016/09/02/重拾CSS规范之从盒类型谈起/" target="_blank" rel="external">重拾CSS规范之从盒类型谈起</a>，当然，我已经尽可能让它有趣了。</p>
+<a id="more"></a>
+<h2 id="FC"><a href="#FC" class="headerlink" title="FC"></a>FC</h2><p>FC（Formating Context，格式化上下文） 是一个布局的环境，它里面的盒子需要遵循FC这套体系的规则， CSS2.1 中定义了 BFC（Block Formating Context，块级格式化上下文） 和 IFC（Inline Formating Context，内联格式化上下文）， BFC 讲的是块级盒子的布局规则， IFC 讲的是内联级盒子的布局规则。</p>
+<h2 id="BFC"><a href="#BFC" class="headerlink" title="BFC"></a>BFC</h2><p>脱离特性讲定义都是流氓！！！光看个定义不好使，赶紧来捋一捋 BFC 的家规吧。</p>
+<p><strong>1.</strong> 浮动，绝对定位元素，非块盒的块容器（例如，inline-blocks，table-cells和table-captions）和’overflow’不为’visible’的块盒会为它们的内容建立一个新的块格式化上下文。</p>
+<p>这里只说明了一点： 如何触发BFC！（很重要啊，多练多记忆，一定要熟稔于心）</p>
+<p><strong>2.</strong> 在一个块格式化上下文中，从包含块的顶部开始，盒在竖直方向一个接一个地放置。两个兄弟盒之间的竖直距离由’margin’属性决定。同一个块格式化上下文中的相邻块级盒之间的竖直margin会合并。</p>
+<p>关于 margin 合并的问题，我在这篇文章里面已经描述的很详细了：<a href="http://suanmei.github.io/2016/07/30/重拾CSS规范之margin/" target="_blank" rel="external">重拾CSS规范之margin</a></p>
+<p>透过下面的DEMO来看看如何阻止 margin 合并：</p>
+<iframe width="100%" height="300" src="//jsrun.net/IrKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+<p>margin 一文中 margin合并规则 中写到了这么一句话，新建了块格式化上下文的元素不会与它的子元素的 margin 合并，所以 <code>.wrap</code> 元素就不会合并 <code>.first</code> 元素的 bottom margin 了，也就无法与 <code>.second</code> 元素发生 margin 合并了。</p>
+<p>而且我们可以发现， BFC 就是一个密闭的容器 ， BFC 里面的元素无法对外界元素在布局上产生直接的影响。（为什么我要用‘直接’呢，因为它完全可以撑开 BFC 元素，来‘挪动’外界元素的位置）</p>
+<p>那我们再考虑一个问题， 产生了新的 BFC 的盒会与它的兄弟盒产生 margin合并 吗？</p>
+<p>当然是会的。</p>
+<iframe width="100%" height="300" src="//jsrun.net/wrKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+<p><strong>3.</strong> 在一个块格式化上下文中，每个盒的left外边挨着包含块的left边（对于从右向左的格式化，right边挨着）。即使存在浮动（尽管一个盒的行盒可能会因为浮动收缩），这也成立。除非该盒建立了一个新的块格式化上下文（这种情况下，该盒自身可能会因为浮动变窄）</p>
+<p>这里主要涉及到的就是多栏自适应布局的应用了。</p>
+<iframe width="100%" height="300" src="//jsrun.net/8rKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+<p>如果要控制两者之间的间距，最好对 <code>.left</code> 元素使用 margin-right 。因为如果对 <code>.center</code> 元素使用 margin-left 的话，首先 margin-left 值必须要超过 <code>.left</code> 元素的宽度值，否则无法体现作用；再者对 <code>.center</code> 元素设置 margin-left 了，不就又回到了流体自适应布局了吗！</p>
+<p><strong>4.</strong> 在计算生成了 BFC 的元素的高度时，其浮动子元素应该参与计算。</p>
+<p>几年前我技术很差的时候总在疑惑，float元素没法撑开父元素高度，但是为什么给父元素增加设置不为 ‘none’ 的 ‘float’ 值就可以了，现在总算是解开谜题了。。。</p>
+<h2 id="IFC"><a href="#IFC" class="headerlink" title="IFC"></a>IFC</h2><p>上一篇文章中已经提到了很多 IFC 相关的知识，这次再补充一点。</p>
+<p>IFC 中的盒子与 BFC 中的不同的是，它们可以水平依次放置。</p>
+<p>IFC中的行盒的宽度是包含块的宽度减去 float 元素（如果有的话）的宽度，行盒高度是最高的盒的top与最低的盒的bottom之间的距离。</p>
+<p>内联盒的高度是由line-height决定的，而可替换元素，inline-block，inline-table 元素的高度则是由它们的 margin 盒高度决定的。</p>
+<p>关于行高的计算后面会有较大篇幅的文章来介绍，敬请期待！</p>
+<h2 id="‘display’，’position’与’float’之间的关系"><a href="#‘display’，’position’与’float’之间的关系" class="headerlink" title="‘display’，’position’与’float’之间的关系"></a>‘display’，’position’与’float’之间的关系</h2><p>如果’position’值为’absolute’或者’fixed’，或者’float’值不为’none’，或者该元素是根元素，那么display就根据下表来设置。</p>
+<p>同时设置’absolute’或者’fixed’、非 ‘none’ 的 float，float 会被覆盖为 ‘none’。</p>
+<table>
+<thead>
+<tr>
+<th>指定值</th>
+<th style="text-align:center">计算值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>inline-table</td>
+<td style="text-align:center">table</td>
+</tr>
+<tr>
+<td>inline, table-row-group, table-column, table-column-group, table-header-group, table-footer-group, table-row, table-cell, table-caption, inline-block</td>
+<td style="text-align:center">block</td>
+</tr>
+<tr>
+<td>其它</td>
+<td style="text-align:center">与指定值相同</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/css/" rel="tag">#css</a>
+          
+            <a href="/tags/css规范/" rel="tag">#css规范</a>
+          
+            <a href="/tags/BFC/" rel="tag">#BFC</a>
+          
+            <a href="/tags/IFC/" rel="tag">#IFC</a>
+          
+            <a href="/tags/行盒/" rel="tag">#行盒</a>
+          
+            <a href="/tags/margin/" rel="tag">#margin</a>
+          
+            <a href="/tags/float/" rel="tag">#float</a>
+          
+            <a href="/tags/position/" rel="tag">#position</a>
+          
+            <a href="/tags/display/" rel="tag">#display</a>
+          
+            <a href="/tags/自适应布局/" rel="tag">#自适应布局</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/02/重拾CSS规范之从盒类型谈起/" rel="next" title="重拾CSS规范之从盒类型谈起">
+                <i class="fa fa-chevron-left"></i> 重拾CSS规范之从盒类型谈起
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/13/重拾CSS规范之z-index/" rel="prev" title="重拾CSS规范之z-index">
+                重拾CSS规范之z-index <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/重拾CSS规范之BFC&IFC/"
+           data-title="重拾CSS规范之BFC & IFC" data-url="http://yoursite.com/2016/09/06/重拾CSS规范之BFC&IFC/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o7nps5lzq.bkt.clouddn.com/avatar/avatar.jpg"
+               alt="酸梅先生" />
+          <p class="site-author-name" itemprop="name">酸梅先生</p>
+          <p class="site-description motion-element" itemprop="description">阅读，知识管理</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/suanmei" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/li-ruo-yu-34" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-code"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#FC"><span class="nav-number">1.</span> <span class="nav-text">FC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BFC"><span class="nav-number">2.</span> <span class="nav-text">BFC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IFC"><span class="nav-number">3.</span> <span class="nav-text">IFC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#‘display’，’position’与’float’之间的关系"><span class="nav-number">4.</span> <span class="nav-text">‘display’，’position’与’float’之间的关系</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">酸梅先生</span>
+</div>
+        
+
+<div class="busuanzi-count">
+  <style>.busuanzi-count:before{display:none;}</style>
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa">你是第</i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span>位访客</span>
+  
+
+  
+    <span class="site-pv"><i class="fa">本站总访问量</i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"suanmeixiansheng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';                
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+                            
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').mousedown(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+  
+
+  
+
+  
+
+</body>
+</html>
