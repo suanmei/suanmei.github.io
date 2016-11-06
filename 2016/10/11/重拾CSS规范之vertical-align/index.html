@@ -104,7 +104,7 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/translation/Element%E2%80%99s%20Outer%20Edges%20Relative%20To%20the%20Line%20Box%E2%80%99s%20Outer%20Edges.png">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/translation/vertical-align-example.png">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/translation/add%20auxiliary%20lines.png">
-<meta property="og:updated_time" content="2016-10-19T16:16:36.000Z">
+<meta property="og:updated_time" content="2016-11-06T16:05:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重拾CSS规范之vertical-align">
 <meta name="twitter:description" content="我经常需要让元素在垂直方向上对齐。
@@ -340,6 +340,7 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
 <p><code>CSS</code> 提供了很多可用的方法。有时候我用 <code>float</code> 解决问题，有时候使用 <code>position: absolute</code> ，而有些时候呢，甚至通过手动添加 <code>margin</code> 与 <code>padding</code> 这样污染代码的方式来实现。</p>
 <p>我实在不喜欢这些解决方法。浮动元素仅在顶部对齐并且需要手动清除浮动。绝对定位使得元素脱离文档流，所以它们将再也无法影响周围元素。还有，使用固定 <code>margin</code> 和 <code>padding</code> 值的话，极小的改变都会立即破坏现有的布局。</p>
 <p>但是，这里还有另一个角色： <code>vertical-align</code> 。我认为它应当受到重任。好了，确切地说，使用 <code>vertical-align</code> 来布局是一种 <code>hack</code> 行为，因为它不是为此而生。它用来排列文本和文本旁边的元素。尽管如此，你还是可以在不同的上下文中用 <code>vertical-align</code> 来灵活地、精细地排列元素。元素的大小并不需要知晓。元素会继续在文档流中，所以其他元素可以据此改变它们的尺寸。这些优势让它成为了有价值的选择。</p>
+<a id="more"></a>
 <h2 id="vertical-align-的独特性"><a href="#vertical-align-的独特性" class="headerlink" title="vertical-align 的独特性"></a>vertical-align 的独特性</h2><p>但是，某些时候 <code>vertical-align</code> 是个十足的混蛋，用它解决问题可能会让人沮丧，似乎有一些难以理解的规则在起作用。比如，可能会出现这样的情况，你改变了 <code>vertical-align</code> 属性值的的元素压根没有改变对齐方式，但同一行的其他元素却有变动。我苦恼地撕扯着头发，仍不时地陷于 <code>vertical-align</code> 的死角。</p>
 <p>不幸的是，大部分有关于 <code>vertical-align</code> 的资料都稍显粗浅，尤其是我们想藉此进行布局的时候。它们都集中精力在这样一个误区，试图让一个元素中的所有东西垂直对齐。它们给出了这个属性的基础介绍，以及在特别简单的情况下元素如何对齐，但并未解释棘手的那部分。</p>
 <p>因此我给自己设立了一个目标，要一劳永逸地阐述清楚 <code>vertical-align</code> 的行为表现，最终通过研究 W3C 组织的 <a href="https://www.w3.org/TR/CSS21/" title="CSS 2.1 规范" target="_blank" rel="external">CSS 规范文档</a> 并且演练一些例子完成了。成果就是这篇文章。</p>
