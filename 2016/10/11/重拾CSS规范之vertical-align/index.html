@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion">
+<html class="theme-next pisces use-motion">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -117,12 +117,12 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
 <script type="text/javascript" id="hexo.configuration">
   var NexT = window.NexT || {};
   var CONFIG = {
-    scheme: 'Muse',
+    scheme: 'Pisces',
     sidebar: {"position":"left","display":"post"},
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
+      userId: '6289373511051904000',
       author: '博主'
     }
   };
@@ -195,6 +195,14 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
         </li>
       
         
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -207,14 +215,6 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
           <a href="/tags" rel="section">
             
             标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-schedule">
-          <a href="/schedule" rel="section">
-            
-            日程
           </a>
         </li>
       
@@ -317,6 +317,13 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
 
           
             
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/11/重拾CSS规范之vertical-align/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/11/重拾CSS规范之vertical-align/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -324,6 +331,11 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
           
           
 
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa">本文阅读量</i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+              </span>
           
         </div>
       </header>
@@ -497,9 +509,16 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
           </div>
           
 
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
 
           
   <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/11/重拾CSS规范之vertical-align/"
+           data-title="重拾CSS规范之vertical-align" data-url="http://yoursite.com/2016/10/11/重拾CSS规范之vertical-align/">
+      </div>
     
   </div>
 
@@ -550,10 +569,10 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
 
           
             <div class="site-state-item site-state-categories">
-              
+              <a href="/categories">
                 <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">分类</span>
-              
+              </a>
             </div>
           
 
@@ -571,6 +590,26 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
         
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/suanmei" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/li-ruo-yu-34" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-code"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
           
         </div>
 
@@ -622,11 +661,27 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
+    NexT.Pisces
   </a>
 </div>
 
         
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa">你是第</i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span>位访客</span>
+  
+
+  
+    <span class="site-pv"><i class="fa">本站总访问量</i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
 
         
       </div>
@@ -688,6 +743,13 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
   
   
 
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
@@ -703,9 +765,30 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
 
   
 
+  
+    
+  
 
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"suanmeixiansheng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
 
   
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
 
 
 
