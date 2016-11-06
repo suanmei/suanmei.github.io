@@ -1,0 +1,892 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="javascript,提升," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="var 声明了一个变量，同时可以初始化该变量。
+1var name1 [= value1 [, varname2 [, varname3 ... [, varnameN]]]];
+单 var 模式在函数的顶部使用一个单独的 var 语句是非常推荐的一种模式，它有如下一些好处：
+
+在同一个位置可以查找到函数所需的所有变量
+避免当在变量声明之前使用这个变量时产生的逻辑错误
+提醒你不要忘记声明变量，顺便">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript深入浅出之声明与提升">
+<meta property="og:url" content="http://yoursite.com/2016/06/07/Javascript深入浅出之声明与提升/index.html">
+<meta property="og:site_name" content="拾邑">
+<meta property="og:description" content="var 声明了一个变量，同时可以初始化该变量。
+1var name1 [= value1 [, varname2 [, varname3 ... [, varnameN]]]];
+单 var 模式在函数的顶部使用一个单独的 var 语句是非常推荐的一种模式，它有如下一些好处：
+
+在同一个位置可以查找到函数所需的所有变量
+避免当在变量声明之前使用这个变量时产生的逻辑错误
+提醒你不要忘记声明变量，顺便">
+<meta property="og:updated_time" content="2016-07-04T06:32:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Javascript深入浅出之声明与提升">
+<meta name="twitter:description" content="var 声明了一个变量，同时可以初始化该变量。
+1var name1 [= value1 [, varname2 [, varname3 ... [, varnameN]]]];
+单 var 模式在函数的顶部使用一个单独的 var 语句是非常推荐的一种模式，它有如下一些好处：
+
+在同一个位置可以查找到函数所需的所有变量
+避免当在变量声明之前使用这个变量时产生的逻辑错误
+提醒你不要忘记声明变量，顺便">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6289373511051904000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Javascript深入浅出之声明与提升 | 拾邑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">拾邑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">读一书，增一智</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Javascript深入浅出之声明与提升
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-07T19:42:19+08:00" content="2016-06-07">
+              2016-06-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/07/Javascript深入浅出之声明与提升/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/07/Javascript深入浅出之声明与提升/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa">本文阅读量</i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>var</code> 声明了一个变量，同时可以初始化该变量。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> name1 [= value1 [, varname2 [, varname3 ... [, varnameN]]]];</div></pre></td></tr></table></figure>
+<h2 id="单-var-模式"><a href="#单-var-模式" class="headerlink" title="单 var 模式"></a>单 var 模式</h2><p>在函数的顶部使用一个单独的 <code>var</code> 语句是非常推荐的一种模式，它有如下一些好处：</p>
+<ul>
+<li>在同一个位置可以查找到函数所需的所有变量</li>
+<li>避免当在变量声明之前使用这个变量时产生的逻辑错误</li>
+<li>提醒你不要忘记声明变量，顺便减少潜在的全局变量</li>
+<li>代码量更少（输入更少且更易做代码优化）</li>
+</ul>
+<a id="more"></a>
+<p>单 <code>var</code> 模式看起来像这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> a = <span class="number">1</span>,</div><div class="line">        b = <span class="number">2</span>,</div><div class="line">        sum = a + b,</div><div class="line">        myobject = &#123;&#125;,</div><div class="line">        i,</div><div class="line">        j;</div><div class="line">    <span class="comment">// function body...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="单-var-衍生的误区"><a href="#单-var-衍生的误区" class="headerlink" title="单 var 衍生的误区"></a>单 var 衍生的误区</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> param1 = param2 = <span class="number">2</span>;</div><div class="line">&#125;</div><div class="line">test();</div><div class="line"><span class="built_in">console</span>.log(param1); <span class="comment">// Uncaught ReferenceError</span></div><div class="line"><span class="built_in">console</span>.log(param2); <span class="comment">// 2</span></div></pre></td></tr></table></figure>
+<p>可能有人就会疑惑，为什么这里的 <code>param1</code> 是局部变量，而 <code>param2</code> 却是全局变量呢？</p>
+<p><code>=</code> 运算从右向左合并，上一段代码其实是这样运行的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> param1;</div><div class="line">    param2 = <span class="number">2</span>; <span class="comment">// 全局变量 （严格模式下会抛出错误）</span></div><div class="line">    param1 = param2; <span class="comment">// 局部变量</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="未声明变量"><a href="#未声明变量" class="headerlink" title="未声明变量"></a>未声明变量</h2><blockquote>
+<p>给一个非声明变量赋值会隐式创建一个全局变量（全局object的一个属性）。</p>
+</blockquote>
+<p>这句话大家应该都很熟悉，即便你是刚入门的新手；但也有人不完全赞同这句话，他们感觉它不符合ECMAScript的基本变量的定义，它只算是全局属性；那我们就来细细探讨一下声明变量与未声明变量的区别：</p>
+<ol>
+<li>声明变量的作用域限制在其声明位置的上下文中，而非声明变量总是全局的。</li>
+<li><p>声明变量在任何代码执行前创建，而非声明变量只有在执行赋值操作的时候才会被创建。</p>
+ <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// Uncaught ReferenceError</span></div><div class="line"><span class="built_in">console</span>.log(b); <span class="comment">// 2</span></div><div class="line">	</div><div class="line">a = <span class="number">1</span>;</div><div class="line"><span class="keyword">var</span> b = <span class="number">2</span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>声明变量是它所在上下文环境的不可配置属性（non-configurable property），非声明变量是可配置的（例如非声明变量可以被删除）。</p>
+ <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a =<span class="number">1</span>;</div><div class="line">b = <span class="number">1</span>;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">delete</span> a); <span class="comment">// false</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">delete</span> b); <span class="comment">// true</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">this</span>.a); <span class="comment">// 1</span></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">this</span>.b); <span class="comment">// Uncaught ReferenceError</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>所以，使用未经声明的变量会带来很多潜在的代码危险，也建议大家尽量不要使用；而且严格模式下会抛出错误。</p>
+<h2 id="提升"><a href="#提升" class="headerlink" title="提升"></a>提升</h2><p>先看一段代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">a = <span class="number">2</span>;</div><div class="line"><span class="keyword">var</span> a;</div><div class="line"><span class="built_in">console</span>.log(a);</div></pre></td></tr></table></figure>
+<p>很多人可能认为这段代码输出的是 <code>undefined</code> ；因为开始 <code>a</code> 被初始化为2，接着又被重新声明并被默认赋值为 <code>undefined</code> 。</p>
+<p>再看下一段代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(a);</div><div class="line"><span class="keyword">var</span> a = <span class="number">2</span>;</div></pre></td></tr></table></figure>
+<p>这段代码可能又会有人认为它要报错了，因为在执行 <code>console.log</code> 前 <code>a</code> 尚未声明。</p>
+<p>其实刚才两段代码会分别输出 <code>2</code> 和 <code>undefined</code> ，那又是为什么呢？ <strong>在引擎解释代码之前，编译器会预先对其进行编译，编译工作的其中一块就是将所有的声明预先进行处理。</strong> 当你看到 <code>var a = 2</code> 时，你以为直接就是将 <code>2</code> 赋值给 <code>a</code> ，其实它会分成两个阶段进行，第一阶段就是进行 <code>var a</code> 编译（在当前作用域代码执行前）； 第二阶段就是执行 <code>a = 2</code>（等待js执行到代码所在行）； 所以第一段代码真实的执行顺序是这样的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a;</div><div class="line">a = <span class="number">2</span>;</div><div class="line"><span class="built_in">console</span>.log(a);</div></pre></td></tr></table></figure>
+<p>第一阶段就是编译，第二阶段是执行；这就是 <strong>变量提升</strong>。<br>类似地，第二段是这样处理的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a;</div><div class="line"><span class="built_in">console</span>.log(a);</div><div class="line">a = <span class="number">2</span>;</div></pre></td></tr></table></figure>
+<h2 id="提升规则"><a href="#提升规则" class="headerlink" title="提升规则"></a>提升规则</h2><p>我们先来看看会进行提升的都有哪些，稍后再进行解释：</p>
+<blockquote>
+<ol>
+<li>函数声明，函数声明优先级最高，忽略重复的变量和形参声明</li>
+<li>形参，比变量声明优先，忽略重复的变量声明</li>
+<li>变量声明</li>
+</ol>
+</blockquote>
+<p>※ 提升只会在其自身执行上下文中进行。什么？不知道执行上下文？下篇文章会介绍！</p>
+<h3 id="形参"><a href="#形参" class="headerlink" title="形参"></a>形参</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(a);</div><div class="line">&#125;</div><div class="line"></div><div class="line">foo(<span class="number">2</span>); <span class="comment">// 2</span></div></pre></td></tr></table></figure>
+<p>上面 <code>foo</code> 在执行时，会先进行 <strong>隐式的声明赋值</strong> 操作 <code>var a = 2</code> ，然后在执行函数中的代码段；怎么证明呢？我们来改一下上面的代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a</span>) </span>&#123;</div><div class="line">    a = <span class="number">3</span>;</div><div class="line">    <span class="built_in">console</span>.log(a);</div><div class="line">&#125;</div><div class="line"></div><div class="line">foo(<span class="number">2</span>); <span class="comment">// 3</span></div><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// Uncaught ReferenceError</span></div></pre></td></tr></table></figure>
+<p>如果它没有这个隐式的声明，这里的 <code>a</code> 应该是全局变量（属性），函数体外就可以访问到。</p>
+<p>因为它的这一特性,我之前一直以为形参和变量一模一样，只声明不赋值（其实默认赋值undefined），只不过执行时它的代码在函数体所有代码之上，后来发现其实不然。 <strong>形参声明的同时会接受实参的赋值，如果没有对应实参，赋值为undefined</strong> 。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(a);</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;&#125;; </div><div class="line">&#125;</div><div class="line"></div><div class="line">foo(<span class="number">2</span>); <span class="comment">// function a() &#123;&#125;</span></div></pre></td></tr></table></figure>
+<p>如果按照我原先的理解，上面这段代码，在所有声明提升之后，执行 <code>console.log(a);</code> 之前会有一个 <code>a = 2</code> 的赋值，最后输出的就不会是 <code>function</code> 而是 <code>2</code> 。所以很明显，形参声明的同时就已经接收了实参的赋值，但优先级不高被函数声明覆盖了。</p>
+<h3 id="函数声明"><a href="#函数声明" class="headerlink" title="函数声明"></a>函数声明</h3><p>注意我们这里写的是 <strong>函数声明</strong> ，不包含 <strong>函数表达式</strong> 。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">foo();</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;&#125;</div></pre></td></tr></table></figure>
+<p>这一段代码可以正常执行，因为 <code>foo</code> 函数的声明已经被提升了。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">foo(); <span class="comment">// Uncaught ReferenceError</span></div><div class="line">a(); <span class="comment">// Uncaught TypeError</span></div><div class="line"><span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;&#125;;</div><div class="line">foo(); <span class="comment">// Uncaught ReferenceError</span></div></pre></td></tr></table></figure>
+<p>上面这段代码可以看出来函数表达式不会让函数得到提升。而 <code>a()</code> 为什么会提示Uncaught TypeError呢，因为上面代码实际是这样处理的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a;</div><div class="line">foo();</div><div class="line">a();</div><div class="line">a = <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;&#125;;</div><div class="line">foo(); <span class="comment">// Uncaught ReferenceError</span></div></pre></td></tr></table></figure>
+<p>执行到 <code>a()</code> 的时候 <code>a</code> 还只是被默认赋值为 <code>undefined</code> ，并不包含对函数的引用。<br>还要提到的一点就是，函数 <code>foo</code> 只能在其自身作用域内被发现。</p>
+<p><strong>函数声明比变量声明优先，忽略重复的变量声明</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// function a() &#123;&#125;</span></div><div class="line">	</div><div class="line"><span class="keyword">var</span> a = <span class="number">2</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">	</div><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 2</span></div></pre></td></tr></table></figure>
+<p>上面第一个 <code>console.log(a);</code> 会输出 <code>function a() {}</code> 是因为函数声明优先，并且忽略了后面同名变量的声明。第二个 <code>console.log(a);</code> 输出 <code>2</code> 是因为执行代码时不会忽略初始化操作。<br>代码的实际处理情况是：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line"><span class="comment">// var a; 被忽略了</span></div><div class="line">	</div><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// function a() &#123;&#125;</span></div><div class="line"></div><div class="line">a = <span class="number">2</span>;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 2</span></div></pre></td></tr></table></figure>
+<p>如果是同名函数的声明则会对其进行覆盖，所以js没有函数重载。</p>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> y = <span class="number">1</span>,</div><div class="line">    x = y = <span class="keyword">typeof</span> x;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(x);</div><div class="line"></div><div class="line">求上面代码段输出值;</div></pre></td></tr></table></figure>
+<h2 id="答案"><a href="#答案" class="headerlink" title="答案"></a>答案</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> y; <span class="comment">// undefined</span></div><div class="line"><span class="keyword">var</span> x; <span class="comment">// undefined</span></div><div class="line">y = <span class="number">1</span>;</div><div class="line">y = <span class="literal">undefined</span>;</div><div class="line">x = <span class="literal">undefined</span>;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(x); <span class="comment">// undefined</span></div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag">#javascript</a>
+          
+            <a href="/tags/提升/" rel="tag">#提升</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/09/Javascript深入浅出之执行上下文/" rel="prev" title="Javascript深入浅出之执行上下文">
+                Javascript深入浅出之执行上下文 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/07/Javascript深入浅出之声明与提升/"
+           data-title="Javascript深入浅出之声明与提升" data-url="http://yoursite.com/2016/06/07/Javascript深入浅出之声明与提升/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o7nps5lzq.bkt.clouddn.com/avatar/avatar.jpg"
+               alt="酸梅先生" />
+          <p class="site-author-name" itemprop="name">酸梅先生</p>
+          <p class="site-description motion-element" itemprop="description">阅读，知识管理</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/suanmei" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/li-ruo-yu-34" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-code"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#单-var-模式"><span class="nav-number">1.</span> <span class="nav-text">单 var 模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单-var-衍生的误区"><span class="nav-number">2.</span> <span class="nav-text">单 var 衍生的误区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未声明变量"><span class="nav-number">3.</span> <span class="nav-text">未声明变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提升"><span class="nav-number">4.</span> <span class="nav-text">提升</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提升规则"><span class="nav-number">5.</span> <span class="nav-text">提升规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#形参"><span class="nav-number">5.1.</span> <span class="nav-text">形参</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数声明"><span class="nav-number">5.2.</span> <span class="nav-text">函数声明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习"><span class="nav-number">6.</span> <span class="nav-text">练习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#答案"><span class="nav-number">7.</span> <span class="nav-text">答案</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">酸梅先生</span>
+</div>
+        
+
+<div class="busuanzi-count">
+  <style>.busuanzi-count:before{display:none;}</style>
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa">你是第</i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span>位访客</span>
+  
+
+  
+    <span class="site-pv"><i class="fa">本站总访问量</i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"suanmeixiansheng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';                
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+                            
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').mousedown(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+  
+
+  
+
+  
+
+</body>
+</html>
