@@ -92,7 +92,7 @@
 <meta property="og:site_name" content="拾邑">
 <meta property="og:description" content="overflow 的知识点没有那么多，所以这篇文章里面概念性的东西只放了一个，干货实例反而很多，而且都是很多我们平时都必须要用的，也有一些可能容易被忽略的知识点本文都有提及。所以，不要没有耐心，这里都是你的菜！
 当然文章也从来不是科普文，了解 overflow 基本概念就点击 CSS overflow 。">
-<meta property="og:updated_time" content="2016-09-16T14:34:16.000Z">
+<meta property="og:updated_time" content="2016-11-06T14:39:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重拾CSS规范之overflow">
 <meta name="twitter:description" content="overflow 的知识点没有那么多，所以这篇文章里面概念性的东西只放了一个，干货实例反而很多，而且都是很多我们平时都必须要用的，也有一些可能容易被忽略的知识点本文都有提及。所以，不要没有耐心，这里都是你的菜！
@@ -348,12 +348,10 @@
 <li>IE8+浏览器默认： <code>html { overflow: auto; }</code></li>
 </ul>
 <h3 id="overflow-x-overflow-y只设置一个"><a href="#overflow-x-overflow-y只设置一个" class="headerlink" title="overflow-x/overflow-y只设置一个"></a>overflow-x/overflow-y只设置一个</h3><p>如果 <code>overflow-x</code> 和 <code>overflow-y</code> 值不同，且其中一个值显式设置为 <code>visible</code> 或未设置而默认为 <code>visible</code> ，而另外一个值是非 <code>visible</code> 的值，则 <code>visible</code> 值会被重置为 <code>auto</code> 。</p>
-<iframe width="100%" height="300" src="//jsrun.net/YRKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
-
+<!--<iframe width="100%" height="300" src="//jsrun.net/YRKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>-->
 <p>按常理来说，我只给 <code>overflow-x</code> 设置了 <code>auto</code> ，那应该只生成横向滚动条。但恰恰是因为上面指出的特性， <code>.wrap</code> 元素的 <code>overflow-y</code> 也由 <code>visible</code> 变为了 <code>auto</code> 。</p>
 <h3 id="padding-bottom的缺失现象"><a href="#padding-bottom的缺失现象" class="headerlink" title="padding-bottom的缺失现象"></a>padding-bottom的缺失现象</h3><p>Chrome 支持，其他浏览器不支持 <code>padding-bottom</code> 。</p>
-<iframe width="100%" height="300" src="//jsrun.net/iRKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
-
+<!--<iframe width="100%" height="300" src="//jsrun.net/iRKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>-->
 <p>在不同浏览器打开我的博客查看即可。</p>
 <p>所以以后想添加这种效果或者计算滚动高度的时候要注意各个浏览器的兼容性。</p>
 <h3 id="JS计算页面滚动高度"><a href="#JS计算页面滚动高度" class="headerlink" title="JS计算页面滚动高度"></a>JS计算页面滚动高度</h3><ul>
@@ -373,8 +371,7 @@
 <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="selector-pseudo">::-webkit-scrollbar</span> <span class="comment">/*整体部分*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-button</span> <span class="comment">/*两端按钮*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-track</span> <span class="comment">/*外层轨道*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-track-piece</span> <span class="comment">/*内层轨道*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-thumb</span> <span class="comment">/*滚动滑块*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-corner</span> <span class="comment">/*边角*/</span></div></pre></td></tr></table></figure>
 <p>实际开发常用的就下面几个：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">::-webkit-scrollbar &#123; /*滚动条宽高*/</div><div class="line">    width: 8px;</div><div class="line">    height: 8px;</div><div class="line">&#125;</div><div class="line">::-webkit-scrollbar-thumb &#123; /*滚动滑块*/</div><div class="line">    background-color: rgba(0,0,0,.3);</div><div class="line">    border-radius: 6px;</div><div class="line">&#125;</div><div class="line">::-webkit-scrollbar-track &#123; /*轨道背景*/</div><div class="line">    background-color: #ddd;</div><div class="line">    border-radius: 6px;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<iframe width="100%" height="300" src="//jsrun.net/ZRKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
-
+<!--<iframe width="100%" height="300" src="//jsrun.net/ZRKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>-->
 <h2 id="absolute-溢出"><a href="#absolute-溢出" class="headerlink" title="absolute 溢出"></a>absolute 溢出</h2><iframe width="100%" height="300" src="//jsrun.net/hRKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 <p>我勒个擦，不是已经设置了 <code>overflow: hidden</code> 了吗，怎么还能出去？绝对定位要上天了。。。 </p>
@@ -392,14 +389,11 @@
 </ol>
 <p>设置非 <code>static</code> 的 <code>position</code> 即可。</p>
 <h3 id="实际案例"><a href="#实际案例" class="headerlink" title="实际案例"></a>实际案例</h3><p>下面是前两天leader要我们解决的一个案例的简化版。真实案例中，滚动窗中是一个表格，每一行中都有一个待提示字段，但是leader希望能够让出现的提示文本悬浮在滚动窗之上。</p>
-<iframe width="100%" height="300" src="//jsrun.net/WRKKp/embedded/all/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
-
+<!--<iframe width="100%" height="300" src="//jsrun.net/WRKKp/embedded/all/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>-->
 <p>反正我到现在没找到实现的可能性，因为如果去除 <code>relative</code> ， 绝对定位元素将会跑到滚动窗外边去，不去除 <code>relative</code> ，就一定会被限制在里面。昂，就是无解喽！</p>
-<h2 id="配合-overflow-才能实现的效果"><a href="#配合-overflow-才能实现的效果" class="headerlink" title="配合 overflow 才能实现的效果"></a>配合 overflow 才能实现的效果</h2><h3 id="resize-拉伸"><a href="#resize-拉伸" class="headerlink" title="resize 拉伸"></a>resize 拉伸</h3><iframe width="100%" height="200" src="//jsrun.net/bRKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
-
+<h2 id="配合-overflow-才能实现的效果"><a href="#配合-overflow-才能实现的效果" class="headerlink" title="配合 overflow 才能实现的效果"></a>配合 overflow 才能实现的效果</h2><h3 id="resize-拉伸"><a href="#resize-拉伸" class="headerlink" title="resize 拉伸"></a>resize 拉伸</h3><!--<iframe width="100%" height="200" src="//jsrun.net/bRKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>-->
 <p>必须配合非 <code>visible</code> 的 <code>resize</code> 才能实现。</p>
-<h3 id="文字溢出以-‘…’-显示"><a href="#文字溢出以-‘…’-显示" class="headerlink" title="文字溢出以 ‘…’ 显示"></a>文字溢出以 ‘…’ 显示</h3><iframe width="100%" height="200" src="//jsrun.net/yRKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
-
+<h3 id="文字溢出以-‘…’-显示"><a href="#文字溢出以-‘…’-显示" class="headerlink" title="文字溢出以 ‘…’ 显示"></a>文字溢出以 ‘…’ 显示</h3><!--<iframe width="100%" height="200" src="//jsrun.net/yRKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>-->
 <hr>
 <p>之前讲解 <code>BFC</code> 的时候，详细分析了它的各项特性， <code>overflow</code> 恰恰能够触发它，所以如果记不太清就赶紧回去翻翻看昂。</p>
 <p>今天还找到了一种比较好的写博客的方法，一边学习的时候一边在新建文件中写下来，写博客的时候一是方便整理思路，而是省去了一些重复劳动力，速度上去了好多。</p>
