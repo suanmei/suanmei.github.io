@@ -1,0 +1,855 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="css,css规范,盒类型,格式化模型," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重拾CSS规范之从盒类型谈起">
+<meta property="og:url" content="http://yoursite.com/2016/09/02/重拾CSS规范之从盒类型谈起/index.html">
+<meta property="og:site_name" content="拾邑">
+<meta property="og:description" content="今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/inlineBox_padding_margin.png">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/block_error.png">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/block_correct.png">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/inline_line_box.png">
+<meta property="og:updated_time" content="2016-09-06T20:01:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重拾CSS规范之从盒类型谈起">
+<meta name="twitter:description" content="今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！">
+<meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/css/inlineBox_padding_margin.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6289373511051904000,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 重拾CSS规范之从盒类型谈起 | 拾邑 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">拾邑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">读一书，增一智</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                重拾CSS规范之从盒类型谈起
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-02T21:23:07+08:00" content="2016-09-02">
+              2016-09-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/CSS/" itemprop="url" rel="index">
+                    <span itemprop="name">CSS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/02/重拾CSS规范之从盒类型谈起/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/02/重拾CSS规范之从盒类型谈起/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa">本文阅读量</i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！</p>
+<a id="more"></a>
+<h2 id="术语普及"><a href="#术语普及" class="headerlink" title="术语普及"></a>术语普及</h2><blockquote>
+<p><strong>盒：</strong> 每个元素都会生成一个盒，用来容纳后代（生成的盒）和自己生成的内容(比如说一段文字)。所以我们可以把一个页面看做是由一个个的盒子堆砌而成的，只是这些盒子也分种类，就像这个社会在视觉上由男人和女人构成。<br><strong>块级元素：</strong> <code>display</code> 为 <code>block/table/list-item</code> 的元素。<br><strong>块级盒：</strong> 块级元素生成的盒<br><strong>块容器盒：</strong> 块级盒同时也是块容器盒，除了表格盒与可替换元素。顾名思义，块容器盒就是它要容纳后代和它自身的内容。这里面我发现了一个很有趣的事儿，可替换元素，所以它们都是通过 <code>value/src</code> 之类的属性来控制内容显示，可能正是因为它们 <em>无法添加后代元素</em> 的特性所以才不算是块容器盒的。<br><strong>内联级元素：</strong> <code>display</code> 为 <code>inline/inline-block/inline-table</code> 的元素。<br><strong>内联级盒：</strong> 内联级元素生成的盒。但是只有 <code>inline</code> 元素生成的盒才叫做内联盒，它区别于 <code>inline-block</code> 元素的内联级块盒。<br><strong>行盒：</strong> 内联格式化上下文中，包含来自同一行的盒的矩形区域叫做行盒<br><strong>可替换元素：</strong> 浏览器根据元素的标签和它的属性来决定元素的具体显示内容。比如 <code>&lt;img&gt; &lt;input&gt; &lt;textarea&gt; &lt;select&gt; &lt;object&gt;</code>。</p>
+</blockquote>
+<h2 id="内联元素的一个小特性"><a href="#内联元素的一个小特性" class="headerlink" title="内联元素的一个小特性"></a>内联元素的一个小特性</h2><p>这里单独把内联元素给拿出来了，内联元素必须要区别于内联级元素，内联元素只是指 <code>diaplay</code> 为 <code>inline</code> 的元素。</p>
+<p><code>margin-top,margin-bottom</code> 对内联元素无效。<br><code>padding-top,padding-bottom</code> 对内联元素有效，但它们不能对布局产生任何影响。</p>
+<p>上面第一句话比较容易理解，第二句话可能需要通过例子辅助理解。</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/inlineBox_padding_margin.png" alt="Image losted" title="padding-top,padding-bottom对block box 和 inline box的影响"></p>
+<p>上图中 <code>padding-top</code> 和 <code>padding-bottom</code> 会影响到块级元素 <code>content</code> 区域位置，会让块级元素的空间真正意义上的变大，进而影响其他元素的位置。但是再看内联元素这边，我们可以看出来 <code>padding</code> 确实存在，但是它没有起到任何影响，没有能够让内联元素占据的空间变大，布局上没有对元素自身起到任何影响，更别提对其他元素产生影响了。可能唯一的作用就是设置 <code>background</code> 的时候， <code>padding</code> 能起到作用。</p>
+<h2 id="匿名盒"><a href="#匿名盒" class="headerlink" title="匿名盒"></a>匿名盒</h2><p>CSS为了方便布局，它规定：一个块容器盒要么只包含块级盒，要么只包含内联级盒。</p>
+<h3 id="匿名块盒"><a href="#匿名块盒" class="headerlink" title="匿名块盒"></a>匿名块盒</h3><p>我们来看看CSS会如何对待这段代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>我是span内的文字<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>我是p内的文字<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">    我是没有任何标签包含的文字</div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>大家好，我是 <code>div</code> ，我是一个块容器盒，我发现我的儿子 <code>p</code> 生成了块级盒，那么我其他的儿子也必须都是块级盒。sorry， <code>span</code> 龟儿子，麻烦你变个身，变成块级盒。卧槽，’我是没有任何标签包含的文字’ 这段文本不太好处理啊，他又不是我儿子，不好直接命令他。</p>
+<p>幸好老子灵机一动，要不我干脆认他做个干儿子。</p>
+<p>div：“文本小孩儿，你愿意做我的干儿子吗？”</p>
+<p>文本：“我愿意，爸爸！”</p>
+<p>div：“真是个好孩子。但是呢，今天这情况，你们都必须要有一个块级盒，你其他的哥哥们自己会生产，看你小子啥也不会，爸爸就送你一个吧，不过这个盒子无名无分，我们就叫它匿名块盒”</p>
+<p>准备工作都做好了，再来看看他们家的家谱吧！</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/block_error.png" alt="Image losted" title="block-box error"></p>
+<p>我们可以看到，上面 <code>span</code> 也变成块级盒了，那我们是不是像对待块级元素一样给它设置宽高呢？当然不能！！！所以说，<strong>上面的图片是错误的！！！</strong></p>
+<p>其实呢， <code>span</code> 这小子作弊了，它明明只是猴子派来的逗逼，当然不能像猴子一样变身，那层块级盒（block box）是它老爸发放的作战物资——匿名块盒。所以呢，真实的情况是：它自己本身只能产生内联盒，然后在它外面还会包裹着一个匿名块盒。</p>
+<p>那我们来看一看正确的家谱：</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/block_correct.png" alt="Image losted" title="block-box correct"></p>
+<p>正是因为匿名盒的存在， <code>span</code> 和那段小文本也能够像块级元素一样，单独占据一整行。</p>
+<p>那再有一个问题，几个内联元素在一起，它们明明是同一行排列啊，并没有像块级元素一样换行显示。其实呢，多个内联元素在一起，匿名块盒会把相邻的内联盒“打包”，一起包裹起来。</p>
+<h3 id="匿名内联盒"><a href="#匿名内联盒" class="headerlink" title="匿名内联盒"></a>匿名内联盒</h3><p>任何被直接包含在一个<strong>块容器元素中（不在一个内联元素里面）</strong>的文本，必须视为一个匿名内联元素。</p>
+<p>再来看一段代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>我是span中的文字我是span中的文字我是span中的文字<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    我是没有任何标签包含的文字</div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>大家好，我是 <code>p</code> 元素，我今天看了看我的儿子们，不容易啊，一个块级盒也木有昂，按照CSS当年定下的规矩，这样的情况下，本王必须建立<strong>内联格式化上下文（IFC）</strong>来安置这群傻孩子。</p>
+<p><code>span</code> 好说啊，自己本身就生成了内联级盒，麻烦的就是这个没有任何标签包围的文本了。咱们还用老方法行不行(⊙v⊙)</p>
+<p>p：“文本小孩儿，你愿意做我的干儿子吗？”</p>
+<p>文本：“我愿意，爸爸！”</p>
+<p>p：“真是个好孩子。但是呢，今天这情况，你们都必须要有一个内联级盒，你其他的哥哥们自己会生产，看你小子啥也不会，爸爸就送你一个吧，不过这个盒子无名无分，我们就叫它匿名内联盒”</p>
+<p>闲话不多说，看家谱：</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/inline_line_box.png" alt="Image losted" title="inline_line_box"></p>
+<p>我们可以看到如果一个行盒无法容纳下某个内联盒，这个内联盒就会分割开来放在多个行盒中。注意一下在换行（分割）的地方，是没有竖直线的，表示内联盒未结束，而且 <code>margin,padding</code> 值在这里是不会体现出来的， <code>margin-left,margin-right,padding-left,padding-right</code> 值只存在于内联盒的开始和结束的地方。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/css/" rel="tag">#css</a>
+          
+            <a href="/tags/css规范/" rel="tag">#css规范</a>
+          
+            <a href="/tags/盒类型/" rel="tag">#盒类型</a>
+          
+            <a href="/tags/格式化模型/" rel="tag">#格式化模型</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/30/重拾CSS规范之margin/" rel="next" title="重拾CSS规范之margin">
+                <i class="fa fa-chevron-left"></i> 重拾CSS规范之margin
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/重拾CSS规范之BFC&IFC/" rel="prev" title="重拾CSS规范之BFC & IFC">
+                重拾CSS规范之BFC & IFC <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/02/重拾CSS规范之从盒类型谈起/"
+           data-title="重拾CSS规范之从盒类型谈起" data-url="http://yoursite.com/2016/09/02/重拾CSS规范之从盒类型谈起/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o7nps5lzq.bkt.clouddn.com/avatar/avatar.jpg"
+               alt="酸梅先生" />
+          <p class="site-author-name" itemprop="name">酸梅先生</p>
+          <p class="site-description motion-element" itemprop="description">阅读，知识管理</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/suanmei" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/li-ruo-yu-34" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-code"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#术语普及"><span class="nav-number">1.</span> <span class="nav-text">术语普及</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内联元素的一个小特性"><span class="nav-number">2.</span> <span class="nav-text">内联元素的一个小特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匿名盒"><span class="nav-number">3.</span> <span class="nav-text">匿名盒</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#匿名块盒"><span class="nav-number">3.1.</span> <span class="nav-text">匿名块盒</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#匿名内联盒"><span class="nav-number">3.2.</span> <span class="nav-text">匿名内联盒</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">酸梅先生</span>
+</div>
+        
+
+<div class="busuanzi-count">
+  <style>.busuanzi-count:before{display:none;}</style>
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa">你是第</i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span>位访客</span>
+  
+
+  
+    <span class="site-pv"><i class="fa">本站总访问量</i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"suanmeixiansheng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';                
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+                            
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').mousedown(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+  
+
+  
+
+  
+
+</body>
+</html>
