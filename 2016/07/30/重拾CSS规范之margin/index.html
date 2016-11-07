@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/margin_collapse_2.jpg">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/margin_collapse_3.jpg">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/margin_collapse_4.jpg">
-<meta property="og:updated_time" content="2016-09-16T06:02:52.000Z">
+<meta property="og:updated_time" content="2016-11-07T16:00:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重拾CSS规范之margin">
 <meta name="twitter:description" content="好久没写博客了，甚是惭愧啊，md语法都快忘了。最近一直在忙着巩固基础，实在是厌倦那种似懂非懂的感觉。有的时候bug出来了，拿别人的代码可能一下子就解决了，可是知识面太零碎化。这篇文章不会涉及margin基本属性，因为这些网上都有。本文内容量不会特别大，但是里面的知识点很多人在实际开发中却会混淆。">
@@ -375,7 +375,7 @@
 </blockquote>
 <p>所以说，管你有没有设定高度，你都会把你的 <code>margin</code> 上下值设置为 0。也就是垂直方向上 div 原地不动！</p>
 <h3 id="What-else-can-水平-垂直居中-by-‘margin-auto’"><a href="#What-else-can-水平-垂直居中-by-‘margin-auto’" class="headerlink" title="What else can 水平/垂直居中 by ‘margin: auto’"></a>What else can 水平/垂直居中 by ‘margin: auto’</h3><p>除了本节的第一种情况外，还有一种情况，那就是 <strong>绝对定位元素</strong> 。</p>
-<iframe width="100%" height="300" src="//jsrun.net/LCKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+<script async src="//jsfiddle.net/suanmei/77q5tss1/embed/html,css,result/"></script>
 
 <p>它不仅能够水平居中，同样能够垂直居中。</p>
 <p>上面 <code>top/bottom/left/right</code> 我都设置的 0 ，当然也可以设置成非零元素，只需要让数值两两对称就行了，但是这样不够安全。举个栗子，有人作死，<code>top/bottom</code> 的值放得太大了，top + bottom + height + border + padding 超过了 包含块的高度，那咋办呢？？？ <code>margin</code> 不就要变成负值了吗？？？ 不会的，这时候，浏览器会忽略 <code>bottom</code> 值， <code>margin-top/margin-bottom</code> 置 0，根据方程式重新计算合适的 <code>bottom</code> 值，而我们里面的 <code>div</code> 就不会垂直居中了，它会根据 <code>top</code> 来定位。</p>

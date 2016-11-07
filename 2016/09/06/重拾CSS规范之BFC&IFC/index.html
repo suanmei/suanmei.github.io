@@ -92,7 +92,7 @@
 <meta property="og:site_name" content="拾邑">
 <meta property="og:description" content="BFC、IFC的概念重要吗？不重要，没有它们我们也能写出符合要求甚至很好的页面。重要，深入了了解了CSS这门语言的核心，你的CSS才可能会有创造性，你才能发明出你自己的奇淫技巧，而不是遇到新的情境就去百度，google。
 在看这篇文章之前，先得了解一些无聊的基本概念，重拾CSS规范之从盒类型谈起，当然，我已经尽可能让它有趣了。">
-<meta property="og:updated_time" content="2016-09-16T06:17:48.000Z">
+<meta property="og:updated_time" content="2016-11-07T16:04:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重拾CSS规范之BFC & IFC">
 <meta name="twitter:description" content="BFC、IFC的概念重要吗？不重要，没有它们我们也能写出符合要求甚至很好的页面。重要，深入了了解了CSS这门语言的核心，你的CSS才可能会有创造性，你才能发明出你自己的奇淫技巧，而不是遇到新的情境就去百度，google。
@@ -354,17 +354,17 @@
 <p><strong>2.</strong> 在一个块格式化上下文中，从包含块的顶部开始，盒在竖直方向一个接一个地放置。两个兄弟盒之间的竖直距离由’margin’属性决定。同一个块格式化上下文中的相邻块级盒之间的竖直margin会合并。</p>
 <p>关于 margin 合并的问题，我在这篇文章里面已经描述的很详细了：<a href="http://suanmei.github.io/2016/07/30/重拾CSS规范之margin/" target="_blank" rel="external">重拾CSS规范之margin</a></p>
 <p>透过下面的DEMO来看看如何阻止 margin 合并：</p>
-<iframe width="100%" height="300" src="//jsrun.net/IrKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+<script async src="//jsfiddle.net/suanmei/48chjgky/embed/html,css,result/"></script>
 
 <p>margin 一文中 margin合并规则 中写到了这么一句话，新建了块格式化上下文的元素不会与它的子元素的 margin 合并，所以 <code>.wrap</code> 元素就不会合并 <code>.first</code> 元素的 bottom margin 了，也就无法与 <code>.second</code> 元素发生 margin 合并了。</p>
 <p>而且我们可以发现， BFC 就是一个密闭的容器 ， BFC 里面的元素无法对外界元素在布局上产生直接的影响。（为什么我要用‘直接’呢，因为它完全可以撑开 BFC 元素，来‘挪动’外界元素的位置）</p>
 <p>那我们再考虑一个问题， 产生了新的 BFC 的盒会与它的兄弟盒产生 margin合并 吗？</p>
 <p>当然是会的。</p>
-<iframe width="100%" height="300" src="//jsrun.net/wrKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+<script async src="//jsfiddle.net/suanmei/7qoutta5/embed/html,css,result/"></script>
 
 <p><strong>3.</strong> 在一个块格式化上下文中，每个盒的left外边挨着包含块的left边（对于从右向左的格式化，right边挨着）。即使存在浮动（尽管一个盒的行盒可能会因为浮动收缩），这也成立。除非该盒建立了一个新的块格式化上下文（这种情况下，该盒自身可能会因为浮动变窄）</p>
 <p>这里主要涉及到的就是多栏自适应布局的应用了。</p>
-<iframe width="100%" height="300" src="//jsrun.net/8rKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+<script async src="//jsfiddle.net/suanmei/hbrdj5e0/embed/html,css,result/"></script>
 
 <p>如果要控制两者之间的间距，最好对 <code>.left</code> 元素使用 margin-right 。因为如果对 <code>.center</code> 元素使用 margin-left 的话，首先 margin-left 值必须要超过 <code>.left</code> 元素的宽度值，否则无法体现作用；再者对 <code>.center</code> 元素设置 margin-left 了，不就又回到了流体自适应布局了吗！</p>
 <p><strong>4.</strong> 在计算生成了 BFC 的元素的高度时，其浮动子元素应该参与计算。</p>
