@@ -95,7 +95,7 @@ What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠
 What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠等级？
 一个页面我们平时看到的是平面的，我们感觉它就是一个水平面（二维）的东西。但是为什么元素互相之间覆盖，这就说明，它们在垂直方向上是有顺序的。一个盒创建了层叠上下文，就是给它自己划了一片自治区，下面的盒无论是">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/z-index.png">
-<meta property="og:updated_time" content="2016-11-07T15:10:54.000Z">
+<meta property="og:updated_time" content="2016-11-07T15:22:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重拾CSS规范之z-index">
 <meta name="twitter:description" content="What’s z-indexz-index 会为当前的盒创建层叠上下文，也会指定该盒在父级层叠上下文中的层叠等级。
@@ -364,22 +364,26 @@ What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠
 </ol>
 <p>上面以及后面要讲的 “靠前” 就是z轴上越高，层叠顺序也越高。</p>
 <h2 id="极易混淆易错点"><a href="#极易混淆易错点" class="headerlink" title="极易混淆易错点"></a>极易混淆易错点</h2><h3 id="子层叠上下文无法比父层叠上下文低"><a href="#子层叠上下文无法比父层叠上下文低" class="headerlink" title="子层叠上下文无法比父层叠上下文低"></a>子层叠上下文无法比父层叠上下文低</h3><p>我们有时候会希望让子元素居于父元素下方，我们可能会立即想到给子元素设置一个比父元素更低的z-index，结果肯定得不到我们希望的效果。</p>
-<script async src="//jsfiddle.net/suanmei/sy7xjpmk/embed/html,css,result/dark/"></script>
+<script async src="//jsfiddle.net/suanmei/sy7xjpmk/4/embed/html,css,result/"></script>
 
 <p>回顾一下层叠七阶图，会发现，父层叠上下文的 <code>background</code> 处于第一阶，而子层叠上下文 <code>z-index</code> 为负，处在第二阶，子层叠上下文的层叠顺序在父层叠上下文之上！！！它们是父子层叠关系，不是兄弟层叠上下文，所以不能通过 <code>z-index</code> 来比较它们的层叠等级。</p>
 <p>那如何才能让子元素在父元素之下呢？让父元素不产生层叠上下文，并且让子元素 <code>z-index</code> 为负就可以了。</p>
-<!--<iframe width="100%" height="300" src="//jsrun.net/kjKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>-->
+<script async src="//jsfiddle.net/suanmei/qc95v2pm/embed/html,css,result/"></script>
+
 <p>层叠上下文不关心父子元素关系，它只关心父子层叠上下文。</p>
 <h3 id="不同上下文中的元素的比较不取决于自身"><a href="#不同上下文中的元素的比较不取决于自身" class="headerlink" title="不同上下文中的元素的比较不取决于自身"></a>不同上下文中的元素的比较不取决于自身</h3><p>上面那句话可能看着拗口不好理解，那我们看一下下面的例子辅助理解一下。</p>
-<!--<iframe width="100%" height="300" src="//jsrun.net/ijKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>-->
+<script async src="//jsfiddle.net/suanmei/u696xfmc/embed/html,css,result/"></script>
+
 <p>我们可以看到 <code>.inner1</code> 元素的 <code>z-index</code> 设置到了 9999 ，  <code>.inner2</code> 元素的 <code>z-index</code> 设置到了 0 ，但是后者就是覆盖了前者，为什么呢？为什么呢？</p>
 <p>我们前面说了，元素层叠顺序只能够在自身所处的层叠上下文中比较，那和其他上下文中的元素怎么比较呢？<strong>拼爹!!!</strong></p>
 <p>这确实是一个很有意思的词，我来解释一下，就是说，处于同一层叠上下文的 A,B 两个元素，它们都创建了各自的层叠上下文，如果 A 层叠等级高于 B ，那么 A 下面的所有元素在z轴上高于 B 下面的所有元素。</p>
 <h3 id="z-index-auto-与z-index-0-的异同"><a href="#z-index-auto-与z-index-0-的异同" class="headerlink" title="z-index:auto;与z-index:0;的异同"></a>z-index:auto;与z-index:0;的异同</h3><p>我们下面会介绍哪些元素会创建层叠上下文，但是不代表能够创建层叠上下文的元素就可以显式地设置 <code>z-index</code> 。这些元素中不能设置 <code>z-index</code> 的，他们最后的表现其实就是 <code>z-index:auto;</code> 。</p>
 <p>那 <code>z-index:auto;</code> 和 <code>z-index:0;</code> 的相同之处在于，计算层叠等级的时候指定为 <code>auto</code> 的 <code>index</code> 实际计算值就是 0 。不同之处在于， <code>z-index:auto;</code> 不能创建层叠上下文，但是 <code>z-index:0;</code> 却可以。</p>
-<!--<iframe width="100%" height="300" src="https://jsrun.net/XjKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>-->
+<script async src="//jsfiddle.net/suanmei/oy7a7q8u/embed/html,css,result/"></script>
+
 <p><code>position:relative;</code> 元素默认 <code>z-index:auto;</code> ，根据我们之前论证出来的，<strong>子层叠上下文无法比父层叠上下文低</strong>。上面的例子表明，<br> <code>z-index:auto;</code> 并不能创建层叠上下文。但是有个例外， <code>position:fixed;</code> 元素可以创建。</p>
-<!--<iframe width="100%" height="300" src="//jsrun.net/yjKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>-->
+<script async src="//jsfiddle.net/suanmei/4rwrzb1z/embed/html,css,result/"></script>
+
 <h2 id="哪些元素可以创建层叠上下文"><a href="#哪些元素可以创建层叠上下文" class="headerlink" title="哪些元素可以创建层叠上下文"></a>哪些元素可以创建层叠上下文</h2><p>我们在这里呢，把它们分成两部分，第一部分是 CSS2.1 中定义的可以创建的，第二部分是 CSS3 中新增的。</p>
 <h3 id="CSS2-1-中规定的"><a href="#CSS2-1-中规定的" class="headerlink" title="CSS2.1 中规定的"></a>CSS2.1 中规定的</h3><ul>
 <li>根元素 <code>HTML</code></li>
