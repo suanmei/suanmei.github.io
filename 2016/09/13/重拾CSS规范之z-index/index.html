@@ -95,7 +95,7 @@ What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠
 What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠等级？
 一个页面我们平时看到的是平面的，我们感觉它就是一个水平面（二维）的东西。但是为什么元素互相之间覆盖，这就说明，它们在垂直方向上是有顺序的。一个盒创建了层叠上下文，就是给它自己划了一片自治区，下面的盒无论是">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/z-index.png">
-<meta property="og:updated_time" content="2016-09-16T06:04:20.000Z">
+<meta property="og:updated_time" content="2016-11-07T14:37:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重拾CSS规范之z-index">
 <meta name="twitter:description" content="What’s z-indexz-index 会为当前的盒创建层叠上下文，也会指定该盒在父级层叠上下文中的层叠等级。
@@ -364,7 +364,7 @@ What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠
 </ol>
 <p>上面以及后面要讲的 “靠前” 就是z轴上越高，层叠顺序也越高。</p>
 <h2 id="极易混淆易错点"><a href="#极易混淆易错点" class="headerlink" title="极易混淆易错点"></a>极易混淆易错点</h2><h3 id="子层叠上下文无法比父层叠上下文低"><a href="#子层叠上下文无法比父层叠上下文低" class="headerlink" title="子层叠上下文无法比父层叠上下文低"></a>子层叠上下文无法比父层叠上下文低</h3><p>我们有时候会希望让子元素居于父元素下方，我们可能会立即想到给子元素设置一个比父元素更低的z-index，结果肯定得不到我们希望的效果。</p>
-<iframe width="100%" height="300" src="//jsrun.net/KjKKp/embedded/html,css,result/light/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+<script async src="//jsrun.net/ULpKp/embed/html,css,result/light/"></script>
 
 <p>回顾一下层叠七阶图，会发现，父层叠上下文的 <code>background</code> 处于第一阶，而子层叠上下文 <code>z-index</code> 为负，处在第二阶，子层叠上下文的层叠顺序在父层叠上下文之上！！！它们是父子层叠关系，不是兄弟层叠上下文，所以不能通过 <code>z-index</code> 来比较它们的层叠等级。</p>
 <p>那如何才能让子元素在父元素之下呢？让父元素不产生层叠上下文，并且让子元素 <code>z-index</code> 为负就可以了。</p>
