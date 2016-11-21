@@ -1,0 +1,886 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="javascript,执行上下文,作用域,闭包,with,构造函数," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="本来这篇文章是紧跟着 this 篇就要出来的，不想竟时隔近半年之期。从执行上下文，到作用域甚至闭包，这是一个小体系，缺了作用域以及闭包这部分，使我学习《Javascript Ninja》中设计函数式编程的的地方尤为吃力。遂补全这二章。
+
+作用域指定了变量或者函数的可用范围
+
+了解作用域，就是了解作用域链。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript深入浅出之作用域">
+<meta property="og:url" content="http://yoursite.com/2016/11/22/Javascript深入浅出之作用域/index.html">
+<meta property="og:site_name" content="拾邑">
+<meta property="og:description" content="本来这篇文章是紧跟着 this 篇就要出来的，不想竟时隔近半年之期。从执行上下文，到作用域甚至闭包，这是一个小体系，缺了作用域以及闭包这部分，使我学习《Javascript Ninja》中设计函数式编程的的地方尤为吃力。遂补全这二章。
+
+作用域指定了变量或者函数的可用范围
+
+了解作用域，就是了解作用域链。">
+<meta property="og:updated_time" content="2016-11-21T20:33:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Javascript深入浅出之作用域">
+<meta name="twitter:description" content="本来这篇文章是紧跟着 this 篇就要出来的，不想竟时隔近半年之期。从执行上下文，到作用域甚至闭包，这是一个小体系，缺了作用域以及闭包这部分，使我学习《Javascript Ninja》中设计函数式编程的的地方尤为吃力。遂补全这二章。
+
+作用域指定了变量或者函数的可用范围
+
+了解作用域，就是了解作用域链。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6289373511051904000',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/22/Javascript深入浅出之作用域/"/>
+
+
+  <title> Javascript深入浅出之作用域 | 拾邑 </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">拾邑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">读一书，增一智</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Javascript深入浅出之作用域
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-22T01:42:10+08:00" content="2016-11-22">
+              2016-11-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/22/Javascript深入浅出之作用域/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/22/Javascript深入浅出之作用域/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa">本文阅读量</i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本来这篇文章是紧跟着 <code>this</code> 篇就要出来的，不想竟时隔近半年之期。从执行上下文，到作用域甚至闭包，这是一个小体系，缺了作用域以及闭包这部分，使我学习《Javascript Ninja》中设计函数式编程的的地方尤为吃力。遂补全这二章。</p>
+<blockquote>
+<p>作用域指定了变量或者函数的可用范围</p>
+</blockquote>
+<p>了解作用域，就是了解作用域链。</p>
+<a id="more"></a>
+<h2 id="初探作用域链"><a href="#初探作用域链" class="headerlink" title="初探作用域链"></a>初探作用域链</h2><blockquote>
+<p>当 <strong>代码执行</strong> 时，会创建变量对象的一条作用域链。作用域链的前端，是当前执行上下文的变量对象（活动对象），作用域链的下一个变量对象来自外部的上下文，再下一个变量对象来自再下一个外部环境…作用域链的尾部则是全局上下文的变量对象。</p>
+</blockquote>
+<p>我们先来看一个栗子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> b = <span class="number">2</span>;</div><div class="line">	</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(a + b);</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  bar();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>bar</code> 的作用域链是 </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">  VO(bar), <span class="comment">// 作用域链的前端</span></div><div class="line">  VO(foo),</div><div class="line">  AO(global)</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>作用域链其实就是将自身上下文，父上下文，一直延展到全局上下文的变量对象用一条链子连接起来的。</p>
+<p>可能我们又要好奇了，作用域链是如何把它们串起来的呢？</p>
+<h2 id="详解作用域链"><a href="#详解作用域链" class="headerlink" title="详解作用域链"></a>详解作用域链</h2><h3 id="函数创建"><a href="#函数创建" class="headerlink" title="函数创建"></a>函数创建</h3><p>当函数刚创建的时候，函数就天生自带了一个属性 <code>[[scopes]]</code> ，它是所有父变量对象的层级链。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> b = <span class="number">2</span>;</div><div class="line">  <span class="built_in">console</span>.log(a, b); <span class="comment">// 1, 2</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当 <code>foo</code> 函数创建的时候，它就已经拥有 <code>[[scopes]]</code> 属性了。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">foo.[[scopes]] = [</div><div class="line">  gloabl.VO</div><div class="line">]</div></pre></td></tr></table></figure>
+<h3 id="函数调用"><a href="#函数调用" class="headerlink" title="函数调用"></a>函数调用</h3><p>当 <strong>函数被调用</strong> 时，会创建当前函数的上下文：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Context = &#123;</div><div class="line">  <span class="attr">AO</span>: &#123;...&#125;,</div><div class="line">  <span class="attr">this</span>: thisValue，</div><div class="line">  Scope: AO.concat([[scoopes]])</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>此时才会创建作用域链。</p>
+<p>我们在 <a href="https://suanmei.github.io/2016/06/14/Javascript%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E4%B9%8Bthis/" target="_blank" rel="external">Javascript深入浅出之this</a> 那一章中讲到的 <em>变量提升</em> 之所以存在，是因为在所有代码执行之前， js 引擎会进行一个 <em>标识符解析</em> 的过程。</p>
+<p>标示符解析是一个处理过程，用来确定一个变量（或函数声明）属于哪个变量对象。</p>
+<p>我们继续来看一个栗子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> b = <span class="number">2</span>;</div><div class="line">    </div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> c = <span class="number">3</span>;</div><div class="line">    <span class="built_in">console</span>.log(a + b + c); <span class="comment">// 6</span></div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  bar();</div><div class="line">&#125;</div><div class="line"></div><div class="line">foo();</div></pre></td></tr></table></figure>
+<p>全局上下文的变量对象是：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">globalContext.VO = &#123;</div><div class="line">  <span class="attr">a</span>: <span class="number">1</span>,</div><div class="line">  <span class="attr">foo</span>: &lt;reference to function&gt;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>当 <code>foo</code> 创建时， <code>foo</code> 的 <code>[[scopes]]</code> 属性为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">foo.[[scopes]] = [</div><div class="line">  globalContext.VO</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>当 <code>foo</code> 被调用时， <code>foo</code> 上下文的 活动对象 和 作用域链 为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">fooContext.AO = &#123;</div><div class="line">  <span class="attr">b</span>: <span class="number">2</span>,</div><div class="line">  <span class="attr">bar</span>: &lt;reference to function&gt;</div><div class="line">&#125;</div><div class="line"></div><div class="line">fooContext.Scope = [</div><div class="line">  fooContext.AO，</div><div class="line">  globalContext.VO</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>当 <code>bar</code> 创建时， <code>bar</code> 的 <code>[[scopes]]</code> 属性为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">bar.[[scopes]] = [</div><div class="line">  fooContext.AO，</div><div class="line">  globalContext.VO</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>当 <code>foo</code> 被调用时， <code>foo</code> 上下文的 活动对象 和 作用域链 为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">barContext.AO = &#123;</div><div class="line">  <span class="attr">c</span>: <span class="number">3</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">barContext.Scope = [</div><div class="line">  barContext.AO</div><div class="line">  fooContext.AO，</div><div class="line">  globalContext.VO</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>标识符解析结果：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">a</div><div class="line">-------------</div><div class="line">barContext.AO <span class="comment">// NOT FOUND</span></div><div class="line">fooContext.AO <span class="comment">// NOT FOUND</span></div><div class="line">globalContext.VO <span class="comment">// FOUND 1</span></div><div class="line"></div><div class="line">b</div><div class="line">-------------</div><div class="line">barContext.AO <span class="comment">// NOT FOUND</span></div><div class="line">fooContext.AO <span class="comment">// FOUND 2</span></div><div class="line"></div><div class="line">c</div><div class="line">-------------</div><div class="line">barContext.AO <span class="comment">// FOUND 3</span></div></pre></td></tr></table></figure>
+<h2 id="Some-Cases"><a href="#Some-Cases" class="headerlink" title="Some Cases"></a>Some Cases</h2><p>上面的例子展示的就是闭包的 <code>[[scopes]]</code> 特性，这里就不赘述了。</p>
+<h3 id="以构造函数创建的函数"><a href="#以构造函数创建的函数" class="headerlink" title="以构造函数创建的函数"></a>以构造函数创建的函数</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line">  <span class="keyword">var</span> bar = <span class="built_in">Function</span>(<span class="string">'console.log(a);'</span>);</div><div class="line">  </div><div class="line">  bar(); <span class="comment">// Uncaught ReferenceError: a is not defined</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">foo();</div></pre></td></tr></table></figure>
+<p>这里 <code>bar</code> 函数之所以无法解析找到 <code>a</code> ，是因为以构造函数创建的函数的 <code>[[scopes]]</code> 属性指向的是全局变量。</p>
+<p>这个还有一个延伸，就是严格模式下，是不允许使用 <code>with</code> 语句的，但是如果把语句放到 new Function 中，是被允许的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">"use strict"</span>;</div><div class="line"></div><div class="line"><span class="keyword">with</span>(&#123;<span class="attr">a</span>: <span class="number">2</span>&#125;) &#123;&#125; <span class="comment">// Uncaught SyntaxError: Strict mode code may not include a with statement</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line">  <span class="keyword">var</span> bar = <span class="built_in">Function</span>(<span class="string">'with(&#123;a: 2&#125;) &#123;&#125;'</span>); <span class="comment">// 正常</span></div><div class="line"></div><div class="line">  bar();</div><div class="line">&#125;</div><div class="line">foo();</div></pre></td></tr></table></figure>
+<p><code>new Function</code> 产生的是 <code>global</code> 作用域下的函数，而且默认是 <code>non-strict</code> 。</p>
+<h3 id="延伸作用域链"><a href="#延伸作用域链" class="headerlink" title="延伸作用域链"></a>延伸作用域链</h3><p>有两种方法，<code>with</code> 和 <code>try-catch</code> 语句。</p>
+<p>他们都遵循：<code>Scope = withObject|catchObject + AO|VO + [[Scope]]</code> 。</p>
+<p>这里拿 <code>with</code> 举例并且延伸一下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span></div><div class="line">  a = <span class="number">1</span>,</div><div class="line">  b = <span class="number">2</span>;</div><div class="line">  </div><div class="line"><span class="keyword">with</span>(&#123;<span class="attr">a</span>: <span class="number">10</span>&#125;) &#123;</div><div class="line">  a = b = <span class="number">20</span>;</div><div class="line">  <span class="built_in">console</span>.log(a, b); <span class="comment">// 20, 20</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(a, b); <span class="comment">// 1, 20</span></div></pre></td></tr></table></figure>
+<p>执行 <code>with</code> 语句时候，作用域最前端已经是 <code>{a: 10}</code> 了，我们在 <code>with</code> 语句里面改动的 <code>a</code><br>是在 <code>{a: 10}</code> 中找到了，所以，全局作用域中的 <code>a</code> 并没有被修改。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag">#javascript</a>
+          
+            <a href="/tags/执行上下文/" rel="tag">#执行上下文</a>
+          
+            <a href="/tags/作用域/" rel="tag">#作用域</a>
+          
+            <a href="/tags/闭包/" rel="tag">#闭包</a>
+          
+            <a href="/tags/with/" rel="tag">#with</a>
+          
+            <a href="/tags/构造函数/" rel="tag">#构造函数</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/11/重拾CSS规范之vertical-align/" rel="next" title="重拾CSS规范之vertical-align">
+                <i class="fa fa-chevron-left"></i> 重拾CSS规范之vertical-align
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/11/22/Javascript深入浅出之作用域/"
+           data-title="Javascript深入浅出之作用域" data-url="http://yoursite.com/2016/11/22/Javascript深入浅出之作用域/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o7nps5lzq.bkt.clouddn.com/avatar/avatar.jpg"
+               alt="酸梅先生" />
+          <p class="site-author-name" itemprop="name">酸梅先生</p>
+          <p class="site-description motion-element" itemprop="description">阅读，知识管理</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/suanmei" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/li-ruo-yu-34" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-code"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#初探作用域链"><span class="nav-number">1.</span> <span class="nav-text">初探作用域链</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#详解作用域链"><span class="nav-number">2.</span> <span class="nav-text">详解作用域链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数创建"><span class="nav-number">2.1.</span> <span class="nav-text">函数创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数调用"><span class="nav-number">2.2.</span> <span class="nav-text">函数调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Some-Cases"><span class="nav-number">3.</span> <span class="nav-text">Some Cases</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#以构造函数创建的函数"><span class="nav-number">3.1.</span> <span class="nav-text">以构造函数创建的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#延伸作用域链"><span class="nav-number">3.2.</span> <span class="nav-text">延伸作用域链</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">酸梅先生</span>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa">你是第</i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span>位访客</span>
+  
+
+  
+    <span class="site-pv"><i class="fa">本站总访问量</i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"suanmeixiansheng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = false;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = decodeURIComponent(data.url);
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title >= 0 || index_content >= 0 ){
+                                isMatch = true;
+								if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            } 
+							
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
