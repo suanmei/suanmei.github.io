@@ -99,7 +99,7 @@
 
 了解作用域，就是了解作用域链。">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/scope%EF%BC%8F%5B%5Bscopes%5D%5D&Scope.png">
-<meta property="og:updated_time" content="2016-11-22T03:00:54.000Z">
+<meta property="og:updated_time" content="2016-11-22T03:07:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript深入浅出之作用域">
 <meta name="twitter:description" content="本来这篇文章是紧跟着 this 篇就要出来的，不想竟时隔近半年之期。从执行上下文，到作用域甚至闭包，这是一个小体系，缺了作用域以及闭包这部分，使我学习《Javascript Ninja》中设计函数式编程的的地方尤为吃力。遂补全这二章。
@@ -406,6 +406,8 @@
 <p>这里拿 <code>with</code> 举例并且延伸一下。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span></div><div class="line">  a = <span class="number">1</span>,</div><div class="line">  b = <span class="number">2</span>;</div><div class="line">  </div><div class="line"><span class="keyword">with</span>(&#123;<span class="attr">a</span>: <span class="number">10</span>&#125;) &#123;</div><div class="line">  a = b = <span class="number">20</span>;</div><div class="line">  <span class="built_in">console</span>.log(a, b); <span class="comment">// 20, 20</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(a, b); <span class="comment">// 1, 20</span></div></pre></td></tr></table></figure>
 <p>执行 <code>with</code> 语句时候，作用域最前端已经是 <code>{a: 10}</code> 了，我们在 <code>with</code> 语句里面改动的 <code>a</code><br>是在 <code>{a: 10}</code> 中找到了，所以，全局作用域中的 <code>a</code> 并没有被修改。</p>
+<hr>
+<p>作用域写完了，有一些边边角角的东西没写，不然展开的话篇幅太大。下篇文章就是闭包了，闭包和作用域真的是基友到爆，所以作用域一定要好好看，好好理解，多敲代码，跑到 Chrome 里去打几个断点测一测，效果会好很多。</p>
 
       
     </div>
