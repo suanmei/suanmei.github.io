@@ -98,7 +98,8 @@
 作用域指定了变量或者函数的可用范围
 
 了解作用域，就是了解作用域链。">
-<meta property="og:updated_time" content="2016-11-21T20:33:31.000Z">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/scope%EF%BC%8F%5B%5Bscopes%5D%5D&Scope.png">
+<meta property="og:updated_time" content="2016-11-22T03:00:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript深入浅出之作用域">
 <meta name="twitter:description" content="本来这篇文章是紧跟着 this 篇就要出来的，不想竟时隔近半年之期。从执行上下文，到作用域甚至闭包，这是一个小体系，缺了作用域以及闭包这部分，使我学习《Javascript Ninja》中设计函数式编程的的地方尤为吃力。遂补全这二章。
@@ -106,6 +107,7 @@
 作用域指定了变量或者函数的可用范围
 
 了解作用域，就是了解作用域链。">
+<meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/scope%EF%BC%8F%5B%5Bscopes%5D%5D&Scope.png">
 
 
 
@@ -391,6 +393,8 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">barContext.AO = &#123;</div><div class="line">  <span class="attr">c</span>: <span class="number">3</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">barContext.Scope = [</div><div class="line">  barContext.AO</div><div class="line">  fooContext.AO，</div><div class="line">  globalContext.VO</div><div class="line">]</div></pre></td></tr></table></figure>
 <p>标识符解析结果：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">a</div><div class="line">-------------</div><div class="line">barContext.AO <span class="comment">// NOT FOUND</span></div><div class="line">fooContext.AO <span class="comment">// NOT FOUND</span></div><div class="line">globalContext.VO <span class="comment">// FOUND 1</span></div><div class="line"></div><div class="line">b</div><div class="line">-------------</div><div class="line">barContext.AO <span class="comment">// NOT FOUND</span></div><div class="line">fooContext.AO <span class="comment">// FOUND 2</span></div><div class="line"></div><div class="line">c</div><div class="line">-------------</div><div class="line">barContext.AO <span class="comment">// FOUND 3</span></div></pre></td></tr></table></figure>
+<p>我们借助 Chrome Develop Tools 看一下：（代码有很大改动）</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/scope%EF%BC%8F%5B%5Bscopes%5D%5D&amp;Scope.png" alt=" \[\[scopes\]\]属性以及 Scope "></p>
 <h2 id="Some-Cases"><a href="#Some-Cases" class="headerlink" title="Some Cases"></a>Some Cases</h2><p>上面的例子展示的就是闭包的 <code>[[scopes]]</code> 特性，这里就不赘述了。</p>
 <h3 id="以构造函数创建的函数"><a href="#以构造函数创建的函数" class="headerlink" title="以构造函数创建的函数"></a>以构造函数创建的函数</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line">  <span class="keyword">var</span> bar = <span class="built_in">Function</span>(<span class="string">'console.log(a);'</span>);</div><div class="line">  </div><div class="line">  bar(); <span class="comment">// Uncaught ReferenceError: a is not defined</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">foo();</div></pre></td></tr></table></figure>
 <p>这里 <code>bar</code> 函数之所以无法解析找到 <code>a</code> ，是因为以构造函数创建的函数的 <code>[[scopes]]</code> 属性指向的是全局变量。</p>
