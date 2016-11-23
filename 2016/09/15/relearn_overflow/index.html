@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="css,css规范,层叠上下文,z-index,css3," />
+  <meta name="keywords" content="javascript,css,css规范,position,overflow,padding,resize,文字溢出," />
 
 
 
@@ -84,24 +84,19 @@
 
 
 
-<meta name="description" content="What’s z-indexz-index 会为当前的盒创建层叠上下文，也会指定该盒在父级层叠上下文中的层叠等级。
-What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠等级？
-一个页面我们平时看到的是平面的，我们感觉它就是一个水平面（二维）的东西。但是为什么元素互相之间覆盖，这就说明，它们在垂直方向上是有顺序的。一个盒创建了层叠上下文，就是给它自己划了一片自治区，下面的盒无论是">
+<meta name="description" content="overflow 的知识点没有那么多，所以这篇文章里面概念性的东西只放了一个，干货实例反而很多，而且都是很多我们平时都必须要用的，也有一些可能容易被忽略的知识点本文都有提及。所以，不要没有耐心，这里都是你的菜！
+当然文章也从来不是科普文，了解 overflow 基本概念就点击 CSS overflow 。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="重拾CSS规范之z-index">
-<meta property="og:url" content="http://yoursite.com/2016/09/13/重拾CSS规范之z-index/index.html">
+<meta property="og:title" content="重拾CSS规范之overflow">
+<meta property="og:url" content="http://yoursite.com/2016/09/15/relearn_overflow/index.html">
 <meta property="og:site_name" content="拾邑">
-<meta property="og:description" content="What’s z-indexz-index 会为当前的盒创建层叠上下文，也会指定该盒在父级层叠上下文中的层叠等级。
-What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠等级？
-一个页面我们平时看到的是平面的，我们感觉它就是一个水平面（二维）的东西。但是为什么元素互相之间覆盖，这就说明，它们在垂直方向上是有顺序的。一个盒创建了层叠上下文，就是给它自己划了一片自治区，下面的盒无论是">
-<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/z-index.png">
-<meta property="og:updated_time" content="2016-11-07T15:22:39.000Z">
+<meta property="og:description" content="overflow 的知识点没有那么多，所以这篇文章里面概念性的东西只放了一个，干货实例反而很多，而且都是很多我们平时都必须要用的，也有一些可能容易被忽略的知识点本文都有提及。所以，不要没有耐心，这里都是你的菜！
+当然文章也从来不是科普文，了解 overflow 基本概念就点击 CSS overflow 。">
+<meta property="og:updated_time" content="2016-11-07T15:39:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="重拾CSS规范之z-index">
-<meta name="twitter:description" content="What’s z-indexz-index 会为当前的盒创建层叠上下文，也会指定该盒在父级层叠上下文中的层叠等级。
-What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠等级？
-一个页面我们平时看到的是平面的，我们感觉它就是一个水平面（二维）的东西。但是为什么元素互相之间覆盖，这就说明，它们在垂直方向上是有顺序的。一个盒创建了层叠上下文，就是给它自己划了一片自治区，下面的盒无论是">
-<meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/css/z-index.png">
+<meta name="twitter:title" content="重拾CSS规范之overflow">
+<meta name="twitter:description" content="overflow 的知识点没有那么多，所以这篇文章里面概念性的东西只放了一个，干货实例反而很多，而且都是很多我们平时都必须要用的，也有一些可能容易被忽略的知识点本文都有提及。所以，不要没有耐心，这里都是你的菜！
+当然文章也从来不是科普文，了解 overflow 基本概念就点击 CSS overflow 。">
 
 
 
@@ -122,10 +117,10 @@ What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/09/13/重拾CSS规范之z-index/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/09/15/relearn_overflow/"/>
 
 
-  <title> 重拾CSS规范之z-index | 拾邑 </title>
+  <title> 重拾CSS规范之overflow | 拾邑 </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -278,7 +273,7 @@ What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠
             
             
               
-                重拾CSS规范之z-index
+                重拾CSS规范之overflow
               
             
           </h1>
@@ -290,8 +285,8 @@ What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-13T00:49:58+08:00" content="2016-09-13">
-              2016-09-13
+            <time itemprop="dateCreated" datetime="2016-09-15T17:33:11+08:00" content="2016-09-15">
+              2016-09-15
             </time>
           </span>
 
@@ -320,8 +315,8 @@ What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/13/重拾CSS规范之z-index/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/13/重拾CSS规范之z-index/" itemprop="commentsCount"></span>
+                <a href="/2016/09/15/relearn_overflow/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/15/relearn_overflow/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -349,60 +344,71 @@ What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠
       
 
       
-        <h2 id="What’s-z-index"><a href="#What’s-z-index" class="headerlink" title="What’s z-index"></a>What’s z-index</h2><p><code>z-index</code> 会为当前的盒创建层叠上下文，也会指定该盒在父级层叠上下文中的层叠等级。</p>
-<p>What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠等级？</p>
-<p>一个页面我们平时看到的是平面的，我们感觉它就是一个水平面（二维）的东西。但是为什么元素互相之间覆盖，这就说明，它们在垂直方向上是有顺序的。一个盒创建了层叠上下文，就是给它自己划了一片自治区，下面的盒无论是排资论辈，抑或是创建了层叠上下文，都只能在这片区里面待着。</p>
+        <p><code>overflow</code> 的知识点没有那么多，所以这篇文章里面概念性的东西只放了一个，干货实例反而很多，而且都是很多我们平时都必须要用的，也有一些可能容易被忽略的知识点本文都有提及。所以，不要没有耐心，这里都是你的菜！</p>
+<p>当然文章也从来不是科普文，了解 <code>overflow</code> 基本概念就点击 <a href="&#39;http://www.w3school.com.cn/cssref/pr_pos_overflow.asp&#39;" title="w3cschool overflow">CSS overflow</a> 。</p>
 <a id="more"></a>
-<p>定位（<code>position</code> 不为 <code>static</code>）的盒和flex盒的子元素都会有一个层叠等级，这个层叠等级就是 <code>z-index</code> 值，默认值 <code>auto</code> 我们可以理解为 0 。这就是为什么其他的没有层叠等级，因为 <code>z-index</code> 对它们无作用。层叠等级就是用来排资论辈的，等级高的在上面，等级低的在下面。但是，同一父级层叠上下文的层叠等级才有意义。</p>
-<p>层叠等级只需要理解就好，真正的重点是<strong>层叠顺序</strong>。</p>
-<h2 id="层叠顺序"><a href="#层叠顺序" class="headerlink" title="层叠顺序"></a>层叠顺序</h2><p><img src="http://o7nps5lzq.bkt.clouddn.com/css/z-index.png" alt="层叠顺序七阶图" title="层叠顺序七阶图"></p>
-<p>页面中所有元素都脱离不开这张七阶图，有了它我们可以知道所有元素在z轴上的先后顺序。图中越是靠前的元素，它离我们的眼睛越近，覆盖其他元素的能力就越强。七阶层叠图示中的层叠顺序指的是<strong>同一层叠上下文中的元素</strong>的层叠顺序。</p>
-<p>当然，这里还有两点需要补充一下：</p>
+<h2 id="常识拓展"><a href="#常识拓展" class="headerlink" title="常识拓展"></a>常识拓展</h2><h3 id="浏览器滚动条的来历"><a href="#浏览器滚动条的来历" class="headerlink" title="浏览器滚动条的来历"></a>浏览器滚动条的来历</h3><p>我们都看过浏览器的滚动条，那浏览器的滚动条是从哪儿来的？答案是 <code>html</code> 而非是 <code>body</code> ，这里就不再去给例子论证了。</p>
+<p>那IE7和之前的浏览器右边会一直存在一条滚动条，即使没有滚动。IE8开始，还有其他的浏览器却不是，那造成这一切的源头是什么呢？我们来看一下浏览器默认样式。</p>
+<ul>
+<li>IE7浏览器默认： <code>html { overflow-y: scroll; }</code></li>
+<li>IE8+浏览器默认： <code>html { overflow: auto; }</code></li>
+</ul>
+<h3 id="overflow-x-overflow-y只设置一个"><a href="#overflow-x-overflow-y只设置一个" class="headerlink" title="overflow-x/overflow-y只设置一个"></a>overflow-x/overflow-y只设置一个</h3><p>如果 <code>overflow-x</code> 和 <code>overflow-y</code> 值不同，且其中一个值显式设置为 <code>visible</code> 或未设置而默认为 <code>visible</code> ，而另外一个值是非 <code>visible</code> 的值，则 <code>visible</code> 值会被重置为 <code>auto</code> 。</p>
+<script async src="//jsfiddle.net/suanmei/rzgpp0cn/embed/html,css,result/"></script>
+
+<p>按常理来说，我只给 <code>overflow-x</code> 设置了 <code>auto</code> ，那应该只生成横向滚动条。但恰恰是因为上面指出的特性， <code>.wrap</code> 元素的 <code>overflow-y</code> 也由 <code>visible</code> 变为了 <code>auto</code> 。</p>
+<h3 id="padding-bottom的缺失现象"><a href="#padding-bottom的缺失现象" class="headerlink" title="padding-bottom的缺失现象"></a>padding-bottom的缺失现象</h3><p>Chrome 支持，其他浏览器不支持 <code>padding-bottom</code> 。</p>
+<script async src="//jsfiddle.net/suanmei/s2o24v9j/embed/html,css,result/"></script>
+
+<p>在不同浏览器打开我的博客查看即可。</p>
+<p>所以以后想添加这种效果或者计算滚动高度的时候要注意各个浏览器的兼容性。</p>
+<h3 id="JS计算页面滚动高度"><a href="#JS计算页面滚动高度" class="headerlink" title="JS计算页面滚动高度"></a>JS计算页面滚动高度</h3><ul>
+<li>Chrome 浏览器： <code>document.body.scrollTop</code></li>
+<li>其他浏览器： <code>document.documentElement.scrollTop</code></li>
+</ul>
+<p>所以如果想要获取页面滚动高度，推荐这样写：<br> <code>var st = document.body.scrollTop || document.documentElement.scrollTop</code></p>
+<h3 id="水平居中跳动问题"><a href="#水平居中跳动问题" class="headerlink" title="水平居中跳动问题"></a>水平居中跳动问题</h3><p>我们是不是遇到过这么一种问题，本来页面高度不超过屏高，页面是没有滚动的，但是有一个展开的功能，把页面撑开了，滚动条就出来了。假设页面最外面的包裹元素是 <code>.container</code> 元素，它定宽且水平居中。在滚动条出现的这一刹那，它一定会被挤，向左偏移。因为是一下子偏移过去的，会有页面跳动的感觉。</p>
+<p>解决方法有两个：</p>
 <ol>
-<li>z-index越大，越靠前，这就是用层叠等级来排资论辈的。</li>
-<li>层叠顺序、层叠等级（如果有的话）相同的两个元素，后面的会覆盖前面的。</li>
+<li><p><code>html { overflow-y: scroll; }</code><br> 这样子又回到了IE7年代了，很不推荐</p>
+</li>
+<li><p><code>.container { padding-left: calc(100vw - 100%); }</code><br> 这样子就不会出现偏移跳动了，但是此时就算不上居中了。</p>
+</li>
 </ol>
-<p>上面以及后面要讲的 “靠前” 就是z轴上越高，层叠顺序也越高。</p>
-<h2 id="极易混淆易错点"><a href="#极易混淆易错点" class="headerlink" title="极易混淆易错点"></a>极易混淆易错点</h2><h3 id="子层叠上下文无法比父层叠上下文低"><a href="#子层叠上下文无法比父层叠上下文低" class="headerlink" title="子层叠上下文无法比父层叠上下文低"></a>子层叠上下文无法比父层叠上下文低</h3><p>我们有时候会希望让子元素居于父元素下方，我们可能会立即想到给子元素设置一个比父元素更低的z-index，结果肯定得不到我们希望的效果。</p>
-<script async src="//jsfiddle.net/suanmei/sy7xjpmk/4/embed/html,css,result/"></script>
+<h3 id="自定义滚动条样式"><a href="#自定义滚动条样式" class="headerlink" title="自定义滚动条样式"></a>自定义滚动条样式</h3><p>这里给出的是 <code>webkit</code> 内核的浏览器定义方式，IE的太丑就不介绍了。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="selector-pseudo">::-webkit-scrollbar</span> <span class="comment">/*整体部分*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-button</span> <span class="comment">/*两端按钮*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-track</span> <span class="comment">/*外层轨道*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-track-piece</span> <span class="comment">/*内层轨道*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-thumb</span> <span class="comment">/*滚动滑块*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-corner</span> <span class="comment">/*边角*/</span></div></pre></td></tr></table></figure>
+<p>实际开发常用的就下面几个：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">::-webkit-scrollbar &#123; /*滚动条宽高*/</div><div class="line">    width: 8px;</div><div class="line">    height: 8px;</div><div class="line">&#125;</div><div class="line">::-webkit-scrollbar-thumb &#123; /*滚动滑块*/</div><div class="line">    background-color: rgba(0,0,0,.3);</div><div class="line">    border-radius: 6px;</div><div class="line">&#125;</div><div class="line">::-webkit-scrollbar-track &#123; /*轨道背景*/</div><div class="line">    background-color: #ddd;</div><div class="line">    border-radius: 6px;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<script async src="//jsfiddle.net/suanmei/zd5f5kdq/embed/html,css,result/"></script>
 
-<p>回顾一下层叠七阶图，会发现，父层叠上下文的 <code>background</code> 处于第一阶，而子层叠上下文 <code>z-index</code> 为负，处在第二阶，子层叠上下文的层叠顺序在父层叠上下文之上！！！它们是父子层叠关系，不是兄弟层叠上下文，所以不能通过 <code>z-index</code> 来比较它们的层叠等级。</p>
-<p>那如何才能让子元素在父元素之下呢？让父元素不产生层叠上下文，并且让子元素 <code>z-index</code> 为负就可以了。</p>
-<script async src="//jsfiddle.net/suanmei/qc95v2pm/embed/html,css,result/"></script>
+<h2 id="absolute-溢出"><a href="#absolute-溢出" class="headerlink" title="absolute 溢出"></a>absolute 溢出</h2><script async src="//jsfiddle.net/suanmei/b2os8qjw/embed/html,css,result/"></script>
 
-<p>层叠上下文不关心父子元素关系，它只关心父子层叠上下文。</p>
-<h3 id="不同上下文中的元素的比较不取决于自身"><a href="#不同上下文中的元素的比较不取决于自身" class="headerlink" title="不同上下文中的元素的比较不取决于自身"></a>不同上下文中的元素的比较不取决于自身</h3><p>上面那句话可能看着拗口不好理解，那我们看一下下面的例子辅助理解一下。</p>
-<script async src="//jsfiddle.net/suanmei/u696xfmc/embed/html,css,result/"></script>
+<p>我勒个擦，不是已经设置了 <code>overflow: hidden</code> 了吗，怎么还能出去？绝对定位要上天了。。。 </p>
+<p>先找一下相关的官方解释：</p>
+<blockquote>
+<p>绝对定位元素不总是被父级 <code>overflow</code> 属性裁剪，尤其当 <code>overflow</code> 在绝对定位元素及其包含块之间的时候。<br>  【包含块】：此处的包含块指 <code>position</code> 不为 <code>static</code> 的元素</p>
+</blockquote>
+<p>哦，原来是这样， <code>overflow</code> 确实在绝对定位元素及其包含块（根元素）之间，所以压根管不住他。</p>
+<p>有问题就得解决问题啊！下面提供两种方法来解决这种问题。</p>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><ol>
+<li><p><code>overflow</code> 元素自身为包含块</p>
+</li>
+<li><p><code>overflow</code> 元素和绝对定位元素 中间的元素为包含块</p>
+</li>
+</ol>
+<p>设置非 <code>static</code> 的 <code>position</code> 即可。</p>
+<h3 id="实际案例"><a href="#实际案例" class="headerlink" title="实际案例"></a>实际案例</h3><p>下面是前两天leader要我们解决的一个案例的简化版。真实案例中，滚动窗中是一个表格，每一行中都有一个待提示字段，但是leader希望能够让出现的提示文本悬浮在滚动窗之上。</p>
+<script async src="//jsfiddle.net/suanmei/zv5fzqk7/embed/"></script>
 
-<p>我们可以看到 <code>.inner1</code> 元素的 <code>z-index</code> 设置到了 9999 ，  <code>.inner2</code> 元素的 <code>z-index</code> 设置到了 0 ，但是后者就是覆盖了前者，为什么呢？为什么呢？</p>
-<p>我们前面说了，元素层叠顺序只能够在自身所处的层叠上下文中比较，那和其他上下文中的元素怎么比较呢？<strong>拼爹!!!</strong></p>
-<p>这确实是一个很有意思的词，我来解释一下，就是说，处于同一层叠上下文的 A,B 两个元素，它们都创建了各自的层叠上下文，如果 A 层叠等级高于 B ，那么 A 下面的所有元素在z轴上高于 B 下面的所有元素。</p>
-<h3 id="z-index-auto-与z-index-0-的异同"><a href="#z-index-auto-与z-index-0-的异同" class="headerlink" title="z-index:auto;与z-index:0;的异同"></a>z-index:auto;与z-index:0;的异同</h3><p>我们下面会介绍哪些元素会创建层叠上下文，但是不代表能够创建层叠上下文的元素就可以显式地设置 <code>z-index</code> 。这些元素中不能设置 <code>z-index</code> 的，他们最后的表现其实就是 <code>z-index:auto;</code> 。</p>
-<p>那 <code>z-index:auto;</code> 和 <code>z-index:0;</code> 的相同之处在于，计算层叠等级的时候指定为 <code>auto</code> 的 <code>index</code> 实际计算值就是 0 。不同之处在于， <code>z-index:auto;</code> 不能创建层叠上下文，但是 <code>z-index:0;</code> 却可以。</p>
-<script async src="//jsfiddle.net/suanmei/oy7a7q8u/embed/html,css,result/"></script>
+<p>反正我到现在没找到实现的可能性，因为如果去除 <code>relative</code> ， 绝对定位元素将会跑到滚动窗外边去，不去除 <code>relative</code> ，就一定会被限制在里面。昂，就是无解喽！</p>
+<h2 id="配合-overflow-才能实现的效果"><a href="#配合-overflow-才能实现的效果" class="headerlink" title="配合 overflow 才能实现的效果"></a>配合 overflow 才能实现的效果</h2><h3 id="resize-拉伸"><a href="#resize-拉伸" class="headerlink" title="resize 拉伸"></a>resize 拉伸</h3><script async src="//jsfiddle.net/suanmei/uaek7pvt/embed/html,css,result/"></script>
 
-<p><code>position:relative;</code> 元素默认 <code>z-index:auto;</code> ，根据我们之前论证出来的，<strong>子层叠上下文无法比父层叠上下文低</strong>。上面的例子表明，<br> <code>z-index:auto;</code> 并不能创建层叠上下文。但是有个例外， <code>position:fixed;</code> 元素可以创建。</p>
-<script async src="//jsfiddle.net/suanmei/4rwrzb1z/embed/html,css,result/"></script>
+<p>必须配合非 <code>visible</code> 的 <code>resize</code> 才能实现。</p>
+<h3 id="文字溢出以-‘…’-显示"><a href="#文字溢出以-‘…’-显示" class="headerlink" title="文字溢出以 ‘…’ 显示"></a>文字溢出以 ‘…’ 显示</h3><script async src="//jsfiddle.net/suanmei/433b5bwc/embed/html,css,result/"></script>
 
-<h2 id="哪些元素可以创建层叠上下文"><a href="#哪些元素可以创建层叠上下文" class="headerlink" title="哪些元素可以创建层叠上下文"></a>哪些元素可以创建层叠上下文</h2><p>我们在这里呢，把它们分成两部分，第一部分是 CSS2.1 中定义的可以创建的，第二部分是 CSS3 中新增的。</p>
-<h3 id="CSS2-1-中规定的"><a href="#CSS2-1-中规定的" class="headerlink" title="CSS2.1 中规定的"></a>CSS2.1 中规定的</h3><ul>
-<li>根元素 <code>HTML</code></li>
-<li><code>z-index</code> 不为 <code>auto</code> 的定位元素——实际情况有出入，<code>z-index:auto;与z-index:0;的异同</code> 一节已经讲了</li>
-</ul>
-<h3 id="CSS3中新增的"><a href="#CSS3中新增的" class="headerlink" title="CSS3中新增的"></a>CSS3中新增的</h3><ul>
-<li><code>z-index</code> 值不为 <code>auto</code> 的 <code>flex</code> 项(父元素 <code>display:flex|inline-flex</code>)</li>
-<li>元素的 <code>opacity</code> 值不是 1</li>
-<li>元素的 <code>transform</code> 值不是 <code>none</code></li>
-<li>元素 <code>mix-blend-mode</code> 值不是 <code>normal</code></li>
-<li>元素的 <code>filter</code> 值不是 <code>none</code></li>
-<li>元素的 <code>isolation</code> 值是 <code>isolate</code></li>
-<li><code>will-change</code> 指定的属性值为上面任意一个</li>
-<li>元素的 <code>-webkit-overflow-scrolling</code> 设为 <code>touch</code></li>
-</ul>
-<p>这里除了 <code>flex</code> 项，其他的都不能设置 <code>z-index</code> ，实际表现就是 <code>z-index:0;</code>。</p>
 <hr>
-<p><code>z-index</code> 平时真是被我们滥用了，有时候为了做一个弹出层效果，就随便设置一个 <code>z-index:9999;</code> ，这是一个坏习惯，所以我们要尽可能的利用层叠顺序规则来更规范地实现效果。</p>
-<p>小小的一个属性牵扯了这么多内容，深入理解CSS，下节更精彩。</p>
+<p>之前讲解 <code>BFC</code> 的时候，详细分析了它的各项特性， <code>overflow</code> 恰恰能够触发它，所以如果记不太清就赶紧回去翻翻看昂。</p>
+<p>今天还找到了一种比较好的写博客的方法，一边学习的时候一边在新建文件中写下来，写博客的时候一是方便整理思路，而是省去了一些重复劳动力，速度上去了好多。</p>
 
       
     </div>
@@ -425,15 +431,21 @@ What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠
       
         <div class="post-tags">
           
+            <a href="/tags/javascript/" rel="tag">#javascript</a>
+          
             <a href="/tags/css/" rel="tag">#css</a>
           
             <a href="/tags/css规范/" rel="tag">#css规范</a>
           
-            <a href="/tags/层叠上下文/" rel="tag">#层叠上下文</a>
+            <a href="/tags/position/" rel="tag">#position</a>
           
-            <a href="/tags/z-index/" rel="tag">#z-index</a>
+            <a href="/tags/overflow/" rel="tag">#overflow</a>
           
-            <a href="/tags/css3/" rel="tag">#css3</a>
+            <a href="/tags/padding/" rel="tag">#padding</a>
+          
+            <a href="/tags/resize/" rel="tag">#resize</a>
+          
+            <a href="/tags/文字溢出/" rel="tag">#文字溢出</a>
           
         </div>
       
@@ -442,16 +454,16 @@ What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/06/重拾CSS规范之BFC&IFC/" rel="next" title="重拾CSS规范之BFC & IFC">
-                <i class="fa fa-chevron-left"></i> 重拾CSS规范之BFC & IFC
+              <a href="/2016/09/13/relearn_z-index/" rel="next" title="重拾CSS规范之z-index">
+                <i class="fa fa-chevron-left"></i> 重拾CSS规范之z-index
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/09/15/重拾CSS规范之overflow/" rel="prev" title="重拾CSS规范之overflow">
-                重拾CSS规范之overflow <i class="fa fa-chevron-right"></i>
+              <a href="/2016/09/16/relearn_line-height/" rel="prev" title="重拾CSS规范之line-height">
+                重拾CSS规范之line-height <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -481,8 +493,8 @@ What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/09/13/重拾CSS规范之z-index/"
-           data-title="重拾CSS规范之z-index" data-url="http://yoursite.com/2016/09/13/重拾CSS规范之z-index/">
+      <div class="ds-thread" data-thread-key="2016/09/15/relearn_overflow/"
+           data-title="重拾CSS规范之overflow" data-url="http://yoursite.com/2016/09/15/relearn_overflow/">
       </div>
     
   </div>
@@ -593,7 +605,7 @@ What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#What’s-z-index"><span class="nav-number">1.</span> <span class="nav-text">What’s z-index</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#层叠顺序"><span class="nav-number">2.</span> <span class="nav-text">层叠顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#极易混淆易错点"><span class="nav-number">3.</span> <span class="nav-text">极易混淆易错点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#子层叠上下文无法比父层叠上下文低"><span class="nav-number">3.1.</span> <span class="nav-text">子层叠上下文无法比父层叠上下文低</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同上下文中的元素的比较不取决于自身"><span class="nav-number">3.2.</span> <span class="nav-text">不同上下文中的元素的比较不取决于自身</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#z-index-auto-与z-index-0-的异同"><span class="nav-number">3.3.</span> <span class="nav-text">z-index:auto;与z-index:0;的异同</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哪些元素可以创建层叠上下文"><span class="nav-number">4.</span> <span class="nav-text">哪些元素可以创建层叠上下文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS2-1-中规定的"><span class="nav-number">4.1.</span> <span class="nav-text">CSS2.1 中规定的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS3中新增的"><span class="nav-number">4.2.</span> <span class="nav-text">CSS3中新增的</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常识拓展"><span class="nav-number">1.</span> <span class="nav-text">常识拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器滚动条的来历"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器滚动条的来历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#overflow-x-overflow-y只设置一个"><span class="nav-number">1.2.</span> <span class="nav-text">overflow-x/overflow-y只设置一个</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#padding-bottom的缺失现象"><span class="nav-number">1.3.</span> <span class="nav-text">padding-bottom的缺失现象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JS计算页面滚动高度"><span class="nav-number">1.4.</span> <span class="nav-text">JS计算页面滚动高度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#水平居中跳动问题"><span class="nav-number">1.5.</span> <span class="nav-text">水平居中跳动问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义滚动条样式"><span class="nav-number">1.6.</span> <span class="nav-text">自定义滚动条样式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#absolute-溢出"><span class="nav-number">2.</span> <span class="nav-text">absolute 溢出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法"><span class="nav-number">2.1.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实际案例"><span class="nav-number">2.2.</span> <span class="nav-text">实际案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配合-overflow-才能实现的效果"><span class="nav-number">3.</span> <span class="nav-text">配合 overflow 才能实现的效果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#resize-拉伸"><span class="nav-number">3.1.</span> <span class="nav-text">resize 拉伸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文字溢出以-‘…’-显示"><span class="nav-number">3.2.</span> <span class="nav-text">文字溢出以 ‘…’ 显示</span></a></li></ol></li></ol></div>
             
           </div>
         </section>

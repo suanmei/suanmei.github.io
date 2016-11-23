@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="css,css规范,盒类型,格式化模型," />
+  <meta name="keywords" content="css,css规范,层叠上下文,z-index,css3," />
 
 
 
@@ -84,21 +84,24 @@
 
 
 
-<meta name="description" content="今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！">
+<meta name="description" content="What’s z-indexz-index 会为当前的盒创建层叠上下文，也会指定该盒在父级层叠上下文中的层叠等级。
+What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠等级？
+一个页面我们平时看到的是平面的，我们感觉它就是一个水平面（二维）的东西。但是为什么元素互相之间覆盖，这就说明，它们在垂直方向上是有顺序的。一个盒创建了层叠上下文，就是给它自己划了一片自治区，下面的盒无论是">
 <meta property="og:type" content="article">
-<meta property="og:title" content="重拾CSS规范之从盒类型谈起">
-<meta property="og:url" content="http://yoursite.com/2016/09/02/重拾CSS规范之从盒类型谈起/index.html">
+<meta property="og:title" content="重拾CSS规范之z-index">
+<meta property="og:url" content="http://yoursite.com/2016/09/13/relearn_z-index/index.html">
 <meta property="og:site_name" content="拾邑">
-<meta property="og:description" content="今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！">
-<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/inlineBox_padding_margin.png">
-<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/block_error.png">
-<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/block_correct.png">
-<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/inline_line_box.png">
-<meta property="og:updated_time" content="2016-11-22T14:01:57.000Z">
+<meta property="og:description" content="What’s z-indexz-index 会为当前的盒创建层叠上下文，也会指定该盒在父级层叠上下文中的层叠等级。
+What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠等级？
+一个页面我们平时看到的是平面的，我们感觉它就是一个水平面（二维）的东西。但是为什么元素互相之间覆盖，这就说明，它们在垂直方向上是有顺序的。一个盒创建了层叠上下文，就是给它自己划了一片自治区，下面的盒无论是">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/z-index.png">
+<meta property="og:updated_time" content="2016-11-07T15:22:39.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="重拾CSS规范之从盒类型谈起">
-<meta name="twitter:description" content="今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！">
-<meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/css/inlineBox_padding_margin.png">
+<meta name="twitter:title" content="重拾CSS规范之z-index">
+<meta name="twitter:description" content="What’s z-indexz-index 会为当前的盒创建层叠上下文，也会指定该盒在父级层叠上下文中的层叠等级。
+What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠等级？
+一个页面我们平时看到的是平面的，我们感觉它就是一个水平面（二维）的东西。但是为什么元素互相之间覆盖，这就说明，它们在垂直方向上是有顺序的。一个盒创建了层叠上下文，就是给它自己划了一片自治区，下面的盒无论是">
+<meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/css/z-index.png">
 
 
 
@@ -119,10 +122,10 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/09/02/重拾CSS规范之从盒类型谈起/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/09/13/relearn_z-index/"/>
 
 
-  <title> 重拾CSS规范之从盒类型谈起 | 拾邑 </title>
+  <title> 重拾CSS规范之z-index | 拾邑 </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -275,7 +278,7 @@
             
             
               
-                重拾CSS规范之从盒类型谈起
+                重拾CSS规范之z-index
               
             
           </h1>
@@ -287,8 +290,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-02T21:23:07+08:00" content="2016-09-02">
-              2016-09-02
+            <time itemprop="dateCreated" datetime="2016-09-13T00:49:58+08:00" content="2016-09-13">
+              2016-09-13
             </time>
           </span>
 
@@ -317,8 +320,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/02/重拾CSS规范之从盒类型谈起/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/02/重拾CSS规范之从盒类型谈起/" itemprop="commentsCount"></span>
+                <a href="/2016/09/13/relearn_z-index/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/13/relearn_z-index/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -346,43 +349,60 @@
       
 
       
-        <p>今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！</p>
+        <h2 id="What’s-z-index"><a href="#What’s-z-index" class="headerlink" title="What’s z-index"></a>What’s z-index</h2><p><code>z-index</code> 会为当前的盒创建层叠上下文，也会指定该盒在父级层叠上下文中的层叠等级。</p>
+<p>What the fuck！ 怎么越说越乱！什么是层叠上下文？什么是层叠等级？</p>
+<p>一个页面我们平时看到的是平面的，我们感觉它就是一个水平面（二维）的东西。但是为什么元素互相之间覆盖，这就说明，它们在垂直方向上是有顺序的。一个盒创建了层叠上下文，就是给它自己划了一片自治区，下面的盒无论是排资论辈，抑或是创建了层叠上下文，都只能在这片区里面待着。</p>
 <a id="more"></a>
-<h2 id="术语普及"><a href="#术语普及" class="headerlink" title="术语普及"></a>术语普及</h2><blockquote>
-<p><strong>盒：</strong> 每个元素都会生成一个盒，用来容纳后代（生成的盒）和自己生成的内容(比如说一段文字)。所以我们可以把一个页面看做是由一个个的盒子堆砌而成的，只是这些盒子也分种类，就像这个社会在视觉上由男人和女人构成。<br><strong>块级元素：</strong> <code>display</code> 为 <code>block/table/list-item</code> 的元素。<br><strong>块级盒：</strong> 块级元素生成的盒<br><strong>块容器盒：</strong> 块级盒同时也是块容器盒，除了表格盒与可替换元素。顾名思义，块容器盒就是它要容纳后代和它自身的内容。这里面我发现了一个很有趣的事儿，可替换元素，所以它们都是通过 <code>value/src</code> 之类的属性来控制内容显示，可能正是因为它们 <em>无法添加后代元素（或者必须添加特定子元素）</em> 的特性所以才不算是块容器盒的。<br><strong>内联级元素：</strong> <code>display</code> 为 <code>inline/inline-block/inline-table</code> 的元素。<br><strong>内联级盒：</strong> 内联级元素生成的盒。但是只有 <code>inline</code> 元素生成的盒才叫做内联盒，它区别于 <code>inline-block</code> 元素的内联级块盒。<br><strong>行盒：</strong> 内联格式化上下文中，包含来自同一行的盒的矩形区域叫做行盒<br><strong>可替换元素：</strong> 浏览器根据元素的标签和它的属性来决定元素的具体显示内容。比如 <code>&lt;img&gt; &lt;input&gt; &lt;textarea&gt; &lt;select&gt; &lt;object&gt;</code>。</p>
-</blockquote>
-<h2 id="内联元素的一个小特性"><a href="#内联元素的一个小特性" class="headerlink" title="内联元素的一个小特性"></a>内联元素的一个小特性</h2><p>这里单独把内联元素给拿出来了，内联元素必须要区别于内联级元素，内联元素只是指 <code>diaplay</code> 为 <code>inline</code> 的元素。</p>
-<p><code>margin-top,margin-bottom</code> 对内联元素无效。<br><code>padding-top,padding-bottom</code> 对内联元素有效，但它们不能对布局产生任何影响。</p>
-<p>上面第一句话比较容易理解，第二句话可能需要通过例子辅助理解。</p>
-<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/inlineBox_padding_margin.png" alt="Image losted" title="padding-top,padding-bottom对block box 和 inline box的影响"></p>
-<p>上图中 <code>padding-top</code> 和 <code>padding-bottom</code> 会影响到块级元素 <code>content</code> 区域位置，会让块级元素的空间真正意义上的变大，进而影响其他元素的位置。但是再看内联元素这边，我们可以看出来 <code>padding</code> 确实存在，但是它没有起到任何影响，没有能够让内联元素占据的空间变大，布局上没有对元素自身起到任何影响，更别提对其他元素产生影响了。可能唯一的作用就是设置 <code>background</code> 的时候， <code>padding</code> 能起到作用。</p>
-<h2 id="匿名盒"><a href="#匿名盒" class="headerlink" title="匿名盒"></a>匿名盒</h2><p>CSS为了方便布局，它规定：一个块容器盒要么只包含块级盒，要么只包含内联级盒。</p>
-<h3 id="匿名块盒"><a href="#匿名块盒" class="headerlink" title="匿名块盒"></a>匿名块盒</h3><p>我们来看看CSS会如何对待这段代码：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>我是span内的文字<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>我是p内的文字<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">    我是没有任何标签包含的文字</div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>大家好，我是 <code>div</code> ，我是一个块容器盒，我发现我的儿子 <code>p</code> 生成了块级盒，那么我其他的儿子也必须都是块级盒。sorry， <code>span</code> 龟儿子，麻烦你变个身，变成块级盒。卧槽，’我是没有任何标签包含的文字’ 这段文本不太好处理啊，他又不是我儿子，不好直接命令他。</p>
-<p>幸好老子灵机一动，要不我干脆认他做个干儿子。</p>
-<p>div：“文本小孩儿，你愿意做我的干儿子吗？”</p>
-<p>文本：“我愿意，爸爸！”</p>
-<p>div：“真是个好孩子。但是呢，今天这情况，你们都必须要有一个块级盒，你其他的哥哥们自己会生产，看你小子啥也不会，爸爸就送你一个吧，不过这个盒子无名无分，我们就叫它匿名块盒”</p>
-<p>准备工作都做好了，再来看看他们家的家谱吧！</p>
-<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/block_error.png" alt="Image losted" title="block-box error"></p>
-<p>我们可以看到，上面 <code>span</code> 也变成块级盒了，那我们是不是像对待块级元素一样给它设置宽高呢？当然不能！！！所以说，<strong>上面的图片是错误的！！！</strong></p>
-<p>其实呢， <code>span</code> 这小子作弊了，它明明只是猴子派来的逗逼，当然不能像猴子一样变身，那层块级盒（block box）是它老爸发放的作战物资——匿名块盒。所以呢，真实的情况是：它自己本身只能产生内联盒，然后在它外面还会包裹着一个匿名块盒。</p>
-<p>那我们来看一看正确的家谱：</p>
-<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/block_correct.png" alt="Image losted" title="block-box correct"></p>
-<p>正是因为匿名盒的存在， <code>span</code> 和那段小文本也能够像块级元素一样，单独占据一整行。</p>
-<p>那再有一个问题，几个内联元素在一起，它们明明是同一行排列啊，并没有像块级元素一样换行显示。其实呢，多个内联元素在一起，匿名块盒会把相邻的内联盒“打包”，一起包裹起来。</p>
-<h3 id="匿名内联盒"><a href="#匿名内联盒" class="headerlink" title="匿名内联盒"></a>匿名内联盒</h3><p>任何被直接包含在一个<strong>块容器元素中（不在一个内联元素里面）</strong>的文本，必须视为一个匿名内联元素。</p>
-<p>再来看一段代码：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>我是span中的文字我是span中的文字我是span中的文字<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    我是没有任何标签包含的文字</div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>大家好，我是 <code>p</code> 元素，我今天看了看我的儿子们，不容易啊，一个块级盒也木有昂，按照CSS当年定下的规矩，这样的情况下，本王必须建立<strong>内联格式化上下文（IFC）</strong>来安置这群傻孩子。</p>
-<p><code>span</code> 好说啊，自己本身就生成了内联级盒，麻烦的就是这个没有任何标签包围的文本了。咱们还用老方法行不行(⊙v⊙)</p>
-<p>p：“文本小孩儿，你愿意做我的干儿子吗？”</p>
-<p>文本：“我愿意，爸爸！”</p>
-<p>p：“真是个好孩子。但是呢，今天这情况，你们都必须要有一个内联级盒，你其他的哥哥们自己会生产，看你小子啥也不会，爸爸就送你一个吧，不过这个盒子无名无分，我们就叫它匿名内联盒”</p>
-<p>闲话不多说，看家谱：</p>
-<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/inline_line_box.png" alt="Image losted" title="inline_line_box"></p>
-<p>我们可以看到如果一个行盒无法容纳下某个内联盒，这个内联盒就会分割开来放在多个行盒中。注意一下在换行（分割）的地方，是没有竖直线的，表示内联盒未结束，而且 <code>margin,padding</code> 值在这里是不会体现出来的， <code>margin-left,margin-right,padding-left,padding-right</code> 值只存在于内联盒的开始和结束的地方。</p>
+<p>定位（<code>position</code> 不为 <code>static</code>）的盒和flex盒的子元素都会有一个层叠等级，这个层叠等级就是 <code>z-index</code> 值，默认值 <code>auto</code> 我们可以理解为 0 。这就是为什么其他的没有层叠等级，因为 <code>z-index</code> 对它们无作用。层叠等级就是用来排资论辈的，等级高的在上面，等级低的在下面。但是，同一父级层叠上下文的层叠等级才有意义。</p>
+<p>层叠等级只需要理解就好，真正的重点是<strong>层叠顺序</strong>。</p>
+<h2 id="层叠顺序"><a href="#层叠顺序" class="headerlink" title="层叠顺序"></a>层叠顺序</h2><p><img src="http://o7nps5lzq.bkt.clouddn.com/css/z-index.png" alt="层叠顺序七阶图" title="层叠顺序七阶图"></p>
+<p>页面中所有元素都脱离不开这张七阶图，有了它我们可以知道所有元素在z轴上的先后顺序。图中越是靠前的元素，它离我们的眼睛越近，覆盖其他元素的能力就越强。七阶层叠图示中的层叠顺序指的是<strong>同一层叠上下文中的元素</strong>的层叠顺序。</p>
+<p>当然，这里还有两点需要补充一下：</p>
+<ol>
+<li>z-index越大，越靠前，这就是用层叠等级来排资论辈的。</li>
+<li>层叠顺序、层叠等级（如果有的话）相同的两个元素，后面的会覆盖前面的。</li>
+</ol>
+<p>上面以及后面要讲的 “靠前” 就是z轴上越高，层叠顺序也越高。</p>
+<h2 id="极易混淆易错点"><a href="#极易混淆易错点" class="headerlink" title="极易混淆易错点"></a>极易混淆易错点</h2><h3 id="子层叠上下文无法比父层叠上下文低"><a href="#子层叠上下文无法比父层叠上下文低" class="headerlink" title="子层叠上下文无法比父层叠上下文低"></a>子层叠上下文无法比父层叠上下文低</h3><p>我们有时候会希望让子元素居于父元素下方，我们可能会立即想到给子元素设置一个比父元素更低的z-index，结果肯定得不到我们希望的效果。</p>
+<script async src="//jsfiddle.net/suanmei/sy7xjpmk/4/embed/html,css,result/"></script>
+
+<p>回顾一下层叠七阶图，会发现，父层叠上下文的 <code>background</code> 处于第一阶，而子层叠上下文 <code>z-index</code> 为负，处在第二阶，子层叠上下文的层叠顺序在父层叠上下文之上！！！它们是父子层叠关系，不是兄弟层叠上下文，所以不能通过 <code>z-index</code> 来比较它们的层叠等级。</p>
+<p>那如何才能让子元素在父元素之下呢？让父元素不产生层叠上下文，并且让子元素 <code>z-index</code> 为负就可以了。</p>
+<script async src="//jsfiddle.net/suanmei/qc95v2pm/embed/html,css,result/"></script>
+
+<p>层叠上下文不关心父子元素关系，它只关心父子层叠上下文。</p>
+<h3 id="不同上下文中的元素的比较不取决于自身"><a href="#不同上下文中的元素的比较不取决于自身" class="headerlink" title="不同上下文中的元素的比较不取决于自身"></a>不同上下文中的元素的比较不取决于自身</h3><p>上面那句话可能看着拗口不好理解，那我们看一下下面的例子辅助理解一下。</p>
+<script async src="//jsfiddle.net/suanmei/u696xfmc/embed/html,css,result/"></script>
+
+<p>我们可以看到 <code>.inner1</code> 元素的 <code>z-index</code> 设置到了 9999 ，  <code>.inner2</code> 元素的 <code>z-index</code> 设置到了 0 ，但是后者就是覆盖了前者，为什么呢？为什么呢？</p>
+<p>我们前面说了，元素层叠顺序只能够在自身所处的层叠上下文中比较，那和其他上下文中的元素怎么比较呢？<strong>拼爹!!!</strong></p>
+<p>这确实是一个很有意思的词，我来解释一下，就是说，处于同一层叠上下文的 A,B 两个元素，它们都创建了各自的层叠上下文，如果 A 层叠等级高于 B ，那么 A 下面的所有元素在z轴上高于 B 下面的所有元素。</p>
+<h3 id="z-index-auto-与z-index-0-的异同"><a href="#z-index-auto-与z-index-0-的异同" class="headerlink" title="z-index:auto;与z-index:0;的异同"></a>z-index:auto;与z-index:0;的异同</h3><p>我们下面会介绍哪些元素会创建层叠上下文，但是不代表能够创建层叠上下文的元素就可以显式地设置 <code>z-index</code> 。这些元素中不能设置 <code>z-index</code> 的，他们最后的表现其实就是 <code>z-index:auto;</code> 。</p>
+<p>那 <code>z-index:auto;</code> 和 <code>z-index:0;</code> 的相同之处在于，计算层叠等级的时候指定为 <code>auto</code> 的 <code>index</code> 实际计算值就是 0 。不同之处在于， <code>z-index:auto;</code> 不能创建层叠上下文，但是 <code>z-index:0;</code> 却可以。</p>
+<script async src="//jsfiddle.net/suanmei/oy7a7q8u/embed/html,css,result/"></script>
+
+<p><code>position:relative;</code> 元素默认 <code>z-index:auto;</code> ，根据我们之前论证出来的，<strong>子层叠上下文无法比父层叠上下文低</strong>。上面的例子表明，<br> <code>z-index:auto;</code> 并不能创建层叠上下文。但是有个例外， <code>position:fixed;</code> 元素可以创建。</p>
+<script async src="//jsfiddle.net/suanmei/4rwrzb1z/embed/html,css,result/"></script>
+
+<h2 id="哪些元素可以创建层叠上下文"><a href="#哪些元素可以创建层叠上下文" class="headerlink" title="哪些元素可以创建层叠上下文"></a>哪些元素可以创建层叠上下文</h2><p>我们在这里呢，把它们分成两部分，第一部分是 CSS2.1 中定义的可以创建的，第二部分是 CSS3 中新增的。</p>
+<h3 id="CSS2-1-中规定的"><a href="#CSS2-1-中规定的" class="headerlink" title="CSS2.1 中规定的"></a>CSS2.1 中规定的</h3><ul>
+<li>根元素 <code>HTML</code></li>
+<li><code>z-index</code> 不为 <code>auto</code> 的定位元素——实际情况有出入，<code>z-index:auto;与z-index:0;的异同</code> 一节已经讲了</li>
+</ul>
+<h3 id="CSS3中新增的"><a href="#CSS3中新增的" class="headerlink" title="CSS3中新增的"></a>CSS3中新增的</h3><ul>
+<li><code>z-index</code> 值不为 <code>auto</code> 的 <code>flex</code> 项(父元素 <code>display:flex|inline-flex</code>)</li>
+<li>元素的 <code>opacity</code> 值不是 1</li>
+<li>元素的 <code>transform</code> 值不是 <code>none</code></li>
+<li>元素 <code>mix-blend-mode</code> 值不是 <code>normal</code></li>
+<li>元素的 <code>filter</code> 值不是 <code>none</code></li>
+<li>元素的 <code>isolation</code> 值是 <code>isolate</code></li>
+<li><code>will-change</code> 指定的属性值为上面任意一个</li>
+<li>元素的 <code>-webkit-overflow-scrolling</code> 设为 <code>touch</code></li>
+</ul>
+<p>这里除了 <code>flex</code> 项，其他的都不能设置 <code>z-index</code> ，实际表现就是 <code>z-index:0;</code>。</p>
+<hr>
+<p><code>z-index</code> 平时真是被我们滥用了，有时候为了做一个弹出层效果，就随便设置一个 <code>z-index:9999;</code> ，这是一个坏习惯，所以我们要尽可能的利用层叠顺序规则来更规范地实现效果。</p>
+<p>小小的一个属性牵扯了这么多内容，深入理解CSS，下节更精彩。</p>
 
       
     </div>
@@ -409,9 +429,11 @@
           
             <a href="/tags/css规范/" rel="tag">#css规范</a>
           
-            <a href="/tags/盒类型/" rel="tag">#盒类型</a>
+            <a href="/tags/层叠上下文/" rel="tag">#层叠上下文</a>
           
-            <a href="/tags/格式化模型/" rel="tag">#格式化模型</a>
+            <a href="/tags/z-index/" rel="tag">#z-index</a>
+          
+            <a href="/tags/css3/" rel="tag">#css3</a>
           
         </div>
       
@@ -420,16 +442,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/30/重拾CSS规范之margin/" rel="next" title="重拾CSS规范之margin">
-                <i class="fa fa-chevron-left"></i> 重拾CSS规范之margin
+              <a href="/2016/09/06/relearn_bfc_ifc/" rel="next" title="重拾CSS规范之BFC & IFC">
+                <i class="fa fa-chevron-left"></i> 重拾CSS规范之BFC & IFC
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/09/06/重拾CSS规范之BFC&IFC/" rel="prev" title="重拾CSS规范之BFC & IFC">
-                重拾CSS规范之BFC & IFC <i class="fa fa-chevron-right"></i>
+              <a href="/2016/09/15/relearn_overflow/" rel="prev" title="重拾CSS规范之overflow">
+                重拾CSS规范之overflow <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -459,8 +481,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/09/02/重拾CSS规范之从盒类型谈起/"
-           data-title="重拾CSS规范之从盒类型谈起" data-url="http://yoursite.com/2016/09/02/重拾CSS规范之从盒类型谈起/">
+      <div class="ds-thread" data-thread-key="2016/09/13/relearn_z-index/"
+           data-title="重拾CSS规范之z-index" data-url="http://yoursite.com/2016/09/13/relearn_z-index/">
       </div>
     
   </div>
@@ -571,7 +593,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#术语普及"><span class="nav-number">1.</span> <span class="nav-text">术语普及</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内联元素的一个小特性"><span class="nav-number">2.</span> <span class="nav-text">内联元素的一个小特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匿名盒"><span class="nav-number">3.</span> <span class="nav-text">匿名盒</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#匿名块盒"><span class="nav-number">3.1.</span> <span class="nav-text">匿名块盒</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#匿名内联盒"><span class="nav-number">3.2.</span> <span class="nav-text">匿名内联盒</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#What’s-z-index"><span class="nav-number">1.</span> <span class="nav-text">What’s z-index</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#层叠顺序"><span class="nav-number">2.</span> <span class="nav-text">层叠顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#极易混淆易错点"><span class="nav-number">3.</span> <span class="nav-text">极易混淆易错点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#子层叠上下文无法比父层叠上下文低"><span class="nav-number">3.1.</span> <span class="nav-text">子层叠上下文无法比父层叠上下文低</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同上下文中的元素的比较不取决于自身"><span class="nav-number">3.2.</span> <span class="nav-text">不同上下文中的元素的比较不取决于自身</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#z-index-auto-与z-index-0-的异同"><span class="nav-number">3.3.</span> <span class="nav-text">z-index:auto;与z-index:0;的异同</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哪些元素可以创建层叠上下文"><span class="nav-number">4.</span> <span class="nav-text">哪些元素可以创建层叠上下文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS2-1-中规定的"><span class="nav-number">4.1.</span> <span class="nav-text">CSS2.1 中规定的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS3中新增的"><span class="nav-number">4.2.</span> <span class="nav-text">CSS3中新增的</span></a></li></ol></li></ol></div>
             
           </div>
         </section>

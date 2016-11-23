@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="javascript,css,css规范,position,overflow,padding,resize,文字溢出," />
+  <meta name="keywords" content="css,css规范,BFC,margin,IE6,bug," />
 
 
 
@@ -84,19 +84,21 @@
 
 
 
-<meta name="description" content="overflow 的知识点没有那么多，所以这篇文章里面概念性的东西只放了一个，干货实例反而很多，而且都是很多我们平时都必须要用的，也有一些可能容易被忽略的知识点本文都有提及。所以，不要没有耐心，这里都是你的菜！
-当然文章也从来不是科普文，了解 overflow 基本概念就点击 CSS overflow 。">
+<meta name="description" content="好久没写博客了，甚是惭愧啊，md语法都快忘了。最近一直在忙着巩固基础，实在是厌倦那种似懂非懂的感觉。有的时候bug出来了，拿别人的代码可能一下子就解决了，可是知识面太零碎化。这篇文章不会涉及margin基本属性，因为这些网上都有。本文内容量不会特别大，但是里面的知识点很多人在实际开发中却会混淆。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="重拾CSS规范之overflow">
-<meta property="og:url" content="http://yoursite.com/2016/09/15/重拾CSS规范之overflow/index.html">
+<meta property="og:title" content="重拾CSS规范之margin">
+<meta property="og:url" content="http://yoursite.com/2016/07/30/relearn_margn/index.html">
 <meta property="og:site_name" content="拾邑">
-<meta property="og:description" content="overflow 的知识点没有那么多，所以这篇文章里面概念性的东西只放了一个，干货实例反而很多，而且都是很多我们平时都必须要用的，也有一些可能容易被忽略的知识点本文都有提及。所以，不要没有耐心，这里都是你的菜！
-当然文章也从来不是科普文，了解 overflow 基本概念就点击 CSS overflow 。">
-<meta property="og:updated_time" content="2016-11-07T15:39:11.000Z">
+<meta property="og:description" content="好久没写博客了，甚是惭愧啊，md语法都快忘了。最近一直在忙着巩固基础，实在是厌倦那种似懂非懂的感觉。有的时候bug出来了，拿别人的代码可能一下子就解决了，可是知识面太零碎化。这篇文章不会涉及margin基本属性，因为这些网上都有。本文内容量不会特别大，但是里面的知识点很多人在实际开发中却会混淆。">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/margin_collapse.jpg">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/margin_collapse_2.jpg">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/margin_collapse_3.jpg">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/margin_collapse_4.jpg">
+<meta property="og:updated_time" content="2016-11-07T16:00:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="重拾CSS规范之overflow">
-<meta name="twitter:description" content="overflow 的知识点没有那么多，所以这篇文章里面概念性的东西只放了一个，干货实例反而很多，而且都是很多我们平时都必须要用的，也有一些可能容易被忽略的知识点本文都有提及。所以，不要没有耐心，这里都是你的菜！
-当然文章也从来不是科普文，了解 overflow 基本概念就点击 CSS overflow 。">
+<meta name="twitter:title" content="重拾CSS规范之margin">
+<meta name="twitter:description" content="好久没写博客了，甚是惭愧啊，md语法都快忘了。最近一直在忙着巩固基础，实在是厌倦那种似懂非懂的感觉。有的时候bug出来了，拿别人的代码可能一下子就解决了，可是知识面太零碎化。这篇文章不会涉及margin基本属性，因为这些网上都有。本文内容量不会特别大，但是里面的知识点很多人在实际开发中却会混淆。">
+<meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/css/margin_collapse.jpg">
 
 
 
@@ -117,10 +119,10 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/09/15/重拾CSS规范之overflow/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/07/30/relearn_margn/"/>
 
 
-  <title> 重拾CSS规范之overflow | 拾邑 </title>
+  <title> 重拾CSS规范之margin | 拾邑 </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -273,7 +275,7 @@
             
             
               
-                重拾CSS规范之overflow
+                重拾CSS规范之margin
               
             
           </h1>
@@ -285,8 +287,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-15T17:33:11+08:00" content="2016-09-15">
-              2016-09-15
+            <time itemprop="dateCreated" datetime="2016-07-30T02:09:27+08:00" content="2016-07-30">
+              2016-07-30
             </time>
           </span>
 
@@ -315,8 +317,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/15/重拾CSS规范之overflow/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/15/重拾CSS规范之overflow/" itemprop="commentsCount"></span>
+                <a href="/2016/07/30/relearn_margn/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/30/relearn_margn/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -344,71 +346,76 @@
       
 
       
-        <p><code>overflow</code> 的知识点没有那么多，所以这篇文章里面概念性的东西只放了一个，干货实例反而很多，而且都是很多我们平时都必须要用的，也有一些可能容易被忽略的知识点本文都有提及。所以，不要没有耐心，这里都是你的菜！</p>
-<p>当然文章也从来不是科普文，了解 <code>overflow</code> 基本概念就点击 <a href="&#39;http://www.w3school.com.cn/cssref/pr_pos_overflow.asp&#39;" title="w3cschool overflow">CSS overflow</a> 。</p>
+        <p>好久没写博客了，甚是惭愧啊，md语法都快忘了。最近一直在忙着巩固基础，实在是厌倦那种似懂非懂的感觉。有的时候bug出来了，拿别人的代码可能一下子就解决了，可是知识面太零碎化。这篇文章不会涉及margin基本属性，因为这些网上都有。本文内容量不会特别大，但是里面的知识点很多人在实际开发中却会混淆。</p>
 <a id="more"></a>
-<h2 id="常识拓展"><a href="#常识拓展" class="headerlink" title="常识拓展"></a>常识拓展</h2><h3 id="浏览器滚动条的来历"><a href="#浏览器滚动条的来历" class="headerlink" title="浏览器滚动条的来历"></a>浏览器滚动条的来历</h3><p>我们都看过浏览器的滚动条，那浏览器的滚动条是从哪儿来的？答案是 <code>html</code> 而非是 <code>body</code> ，这里就不再去给例子论证了。</p>
-<p>那IE7和之前的浏览器右边会一直存在一条滚动条，即使没有滚动。IE8开始，还有其他的浏览器却不是，那造成这一切的源头是什么呢？我们来看一下浏览器默认样式。</p>
-<ul>
-<li>IE7浏览器默认： <code>html { overflow-y: scroll; }</code></li>
-<li>IE8+浏览器默认： <code>html { overflow: auto; }</code></li>
-</ul>
-<h3 id="overflow-x-overflow-y只设置一个"><a href="#overflow-x-overflow-y只设置一个" class="headerlink" title="overflow-x/overflow-y只设置一个"></a>overflow-x/overflow-y只设置一个</h3><p>如果 <code>overflow-x</code> 和 <code>overflow-y</code> 值不同，且其中一个值显式设置为 <code>visible</code> 或未设置而默认为 <code>visible</code> ，而另外一个值是非 <code>visible</code> 的值，则 <code>visible</code> 值会被重置为 <code>auto</code> 。</p>
-<script async src="//jsfiddle.net/suanmei/rzgpp0cn/embed/html,css,result/"></script>
-
-<p>按常理来说，我只给 <code>overflow-x</code> 设置了 <code>auto</code> ，那应该只生成横向滚动条。但恰恰是因为上面指出的特性， <code>.wrap</code> 元素的 <code>overflow-y</code> 也由 <code>visible</code> 变为了 <code>auto</code> 。</p>
-<h3 id="padding-bottom的缺失现象"><a href="#padding-bottom的缺失现象" class="headerlink" title="padding-bottom的缺失现象"></a>padding-bottom的缺失现象</h3><p>Chrome 支持，其他浏览器不支持 <code>padding-bottom</code> 。</p>
-<script async src="//jsfiddle.net/suanmei/s2o24v9j/embed/html,css,result/"></script>
-
-<p>在不同浏览器打开我的博客查看即可。</p>
-<p>所以以后想添加这种效果或者计算滚动高度的时候要注意各个浏览器的兼容性。</p>
-<h3 id="JS计算页面滚动高度"><a href="#JS计算页面滚动高度" class="headerlink" title="JS计算页面滚动高度"></a>JS计算页面滚动高度</h3><ul>
-<li>Chrome 浏览器： <code>document.body.scrollTop</code></li>
-<li>其他浏览器： <code>document.documentElement.scrollTop</code></li>
-</ul>
-<p>所以如果想要获取页面滚动高度，推荐这样写：<br> <code>var st = document.body.scrollTop || document.documentElement.scrollTop</code></p>
-<h3 id="水平居中跳动问题"><a href="#水平居中跳动问题" class="headerlink" title="水平居中跳动问题"></a>水平居中跳动问题</h3><p>我们是不是遇到过这么一种问题，本来页面高度不超过屏高，页面是没有滚动的，但是有一个展开的功能，把页面撑开了，滚动条就出来了。假设页面最外面的包裹元素是 <code>.container</code> 元素，它定宽且水平居中。在滚动条出现的这一刹那，它一定会被挤，向左偏移。因为是一下子偏移过去的，会有页面跳动的感觉。</p>
-<p>解决方法有两个：</p>
-<ol>
-<li><p><code>html { overflow-y: scroll; }</code><br> 这样子又回到了IE7年代了，很不推荐</p>
-</li>
-<li><p><code>.container { padding-left: calc(100vw - 100%); }</code><br> 这样子就不会出现偏移跳动了，但是此时就算不上居中了。</p>
-</li>
-</ol>
-<h3 id="自定义滚动条样式"><a href="#自定义滚动条样式" class="headerlink" title="自定义滚动条样式"></a>自定义滚动条样式</h3><p>这里给出的是 <code>webkit</code> 内核的浏览器定义方式，IE的太丑就不介绍了。</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="selector-pseudo">::-webkit-scrollbar</span> <span class="comment">/*整体部分*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-button</span> <span class="comment">/*两端按钮*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-track</span> <span class="comment">/*外层轨道*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-track-piece</span> <span class="comment">/*内层轨道*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-thumb</span> <span class="comment">/*滚动滑块*/</span></div><div class="line"><span class="selector-pseudo">::-webkit-scrollbar-corner</span> <span class="comment">/*边角*/</span></div></pre></td></tr></table></figure>
-<p>实际开发常用的就下面几个：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">::-webkit-scrollbar &#123; /*滚动条宽高*/</div><div class="line">    width: 8px;</div><div class="line">    height: 8px;</div><div class="line">&#125;</div><div class="line">::-webkit-scrollbar-thumb &#123; /*滚动滑块*/</div><div class="line">    background-color: rgba(0,0,0,.3);</div><div class="line">    border-radius: 6px;</div><div class="line">&#125;</div><div class="line">::-webkit-scrollbar-track &#123; /*轨道背景*/</div><div class="line">    background-color: #ddd;</div><div class="line">    border-radius: 6px;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<script async src="//jsfiddle.net/suanmei/zd5f5kdq/embed/html,css,result/"></script>
-
-<h2 id="absolute-溢出"><a href="#absolute-溢出" class="headerlink" title="absolute 溢出"></a>absolute 溢出</h2><script async src="//jsfiddle.net/suanmei/b2os8qjw/embed/html,css,result/"></script>
-
-<p>我勒个擦，不是已经设置了 <code>overflow: hidden</code> 了吗，怎么还能出去？绝对定位要上天了。。。 </p>
-<p>先找一下相关的官方解释：</p>
-<blockquote>
-<p>绝对定位元素不总是被父级 <code>overflow</code> 属性裁剪，尤其当 <code>overflow</code> 在绝对定位元素及其包含块之间的时候。<br>  【包含块】：此处的包含块指 <code>position</code> 不为 <code>static</code> 的元素</p>
+<h2 id="margin有效性"><a href="#margin有效性" class="headerlink" title="margin有效性"></a>margin有效性</h2><blockquote>
+<p>margin对 <code>display:table;</code> 系列（这其中不包含 table-caption， table 和 inline-table） 以外的所有元素有效</p>
+<p>margin-top 和 margin-bottom 对不可替换的内联元素无效</p>
 </blockquote>
-<p>哦，原来是这样， <code>overflow</code> 确实在绝对定位元素及其包含块（根元素）之间，所以压根管不住他。</p>
-<p>有问题就得解决问题啊！下面提供两种方法来解决这种问题。</p>
-<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><ol>
-<li><p><code>overflow</code> 元素自身为包含块</p>
+<h2 id="margin百分比值"><a href="#margin百分比值" class="headerlink" title="margin百分比值"></a>margin百分比值</h2><p><strong>百分比根据生成盒的包含块的width来计算。</strong></p>
+<p>我们来看看关于包含块的几种情况：</p>
+<p>如果该元素的position是 <code>relative</code> 或者 <code>static</code>，包含块由其最近的块容器祖先盒的content边形成</p>
+<p>如果元素具有 <code>position: fixed</code>，包含块由连续媒体的视口或者分页媒体的页区建立</p>
+<p>如果元素具有 <code>position: absolute</code>，包含块由最近的 <code>position</code>为 <code>absolute</code>，<code>relative</code>或者 <code>fixed</code> 的祖先建立，按照如下方式：   </p>
+<ol>
+<li>如果该祖先是一个内联元素，包含块就是环绕着为该元素生成的第一个和最后一个内联盒的 <code>padding box</code> 的边界框。    </li>
+<li>否则，包含块由该祖先的 <code>padding</code> 边形成</li>
+</ol>
+<h2 id="margin-auto探讨"><a href="#margin-auto探讨" class="headerlink" title="margin auto探讨"></a>margin auto探讨</h2><p>我们是否有想过一个有固定宽度的div元素设置了 <code>margin: auto;</code> 为什么可以水平居中显示？为什么有固定高度却无法垂直居中显示？</p>
+<h3 id="why-can-水平居中"><a href="#why-can-水平居中" class="headerlink" title="why can 水平居中"></a>why can 水平居中</h3><p>常规流中的块级不可替换元素的规则中包含这样两个规则：  </p>
+<ol>
+<li>‘margin-left’ + ‘border-left-width’ + ‘padding-left’ + ‘width’ + ‘padding-right’ + ‘border-right-width’ + ‘margin-right’ = 包含块的宽度  </li>
+<li>如果’margin-left’和’margin-right’都是’auto’，那么它们的应用值相等。</li>
+</ol>
+<p>举个栗子，假设 <code>div</code> 设置了固定宽度, <code>padding</code> 和 <code>border</code> 为零，当我们设置 <code>margin: auto;</code> 时，浏览器会设置 <code>margin-left</code> 等于 <code>margin-right</code>，并且解方程组求出正确的<code>margin-left</code> 和 <code>margin-right</code> 值。</p>
+<p>只要<strong>常规流中的div有固定宽度</strong>，并且 <strong><code>padding</code> 和 <code>border</code> 左右两边的数值大小一样</strong>，设置了 <strong><code>margin: 0 auto;</code></strong> 就能让其水平居中显示。</p>
+<h3 id="why-can’t-垂直居中"><a href="#why-can’t-垂直居中" class="headerlink" title="why can’t 垂直居中"></a>why can’t 垂直居中</h3><p>CSS2.1规范文档10.6.3节指出： ‘overflow’ 计算值为 ‘visible’ 时常规流中的块级不可替换元素</p>
+<blockquote>
+<p>如果’margin-top’或者’margin-bottom’为’auto’，其应用值为 0。</p>
+</blockquote>
+<p>所以说，管你有没有设定高度，你都会把你的 <code>margin</code> 上下值设置为 0。也就是垂直方向上 div 原地不动！</p>
+<h3 id="What-else-can-水平-垂直居中-by-‘margin-auto’"><a href="#What-else-can-水平-垂直居中-by-‘margin-auto’" class="headerlink" title="What else can 水平/垂直居中 by ‘margin: auto’"></a>What else can 水平/垂直居中 by ‘margin: auto’</h3><p>除了本节的第一种情况外，还有一种情况，那就是 <strong>绝对定位元素</strong> 。</p>
+<script async src="//jsfiddle.net/suanmei/77q5tss1/embed/html,css,result/"></script>
+
+<p>它不仅能够水平居中，同样能够垂直居中。</p>
+<p>上面 <code>top/bottom/left/right</code> 我都设置的 0 ，当然也可以设置成非零元素，只需要让数值两两对称就行了，但是这样不够安全。举个栗子，有人作死，<code>top/bottom</code> 的值放得太大了，top + bottom + height + border + padding 超过了 包含块的高度，那咋办呢？？？ <code>margin</code> 不就要变成负值了吗？？？ 不会的，这时候，浏览器会忽略 <code>bottom</code> 值， <code>margin-top/margin-bottom</code> 置 0，根据方程式重新计算合适的 <code>bottom</code> 值，而我们里面的 <code>div</code> 就不会垂直居中了，它会根据 <code>top</code> 来定位。</p>
+<p>所以么，能不作死就不要作死了，上面的代码示例又方便又安全。</p>
+<h2 id="margin合并"><a href="#margin合并" class="headerlink" title="margin合并"></a>margin合并</h2><p>margin合并也可以叫做外边距叠加，这是一个简单的概念，指的就是两个或者多个盒的相邻的margin可能会合并在一起。如果还不能理解的话，我们用图示来理解一下。</p>
+<p>当一个元素出现在另一个元素上面时，第一个元素的底外边距与第二个元素的顶外边距发生叠加。</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/margin_collapse.jpg" alt="Margin Collapse Losted" title="margin collapse"></p>
+<p>当一个元素包含在另一个元素中时，它们的顶外边距或者底外边距也会发生叠加。</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/margin_collapse_2.jpg" alt="Margin Collapse Losted" title="margin collapse"></p>
+<p>甚至外边距还能与自身进行叠加。如果一个空元素，上下方向有外边距，但没有边框和内边距，这时候，上下外边距就会相遇，自然而然的叠加了。</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/margin_collapse_3.jpg" alt="Margin Collapse Losted" title="margin collapse"></p>
+<p>如果这个外边距又遇到了其他元素的外边距（margin相邻），它们还能继续叠加。</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/margin_collapse_4.jpg" alt="Margin Collapse Losted" title="margin collapse"></p>
+<p>O__O “…看来margin的世界里也会有小三小四的存在。</p>
+<p>那我们有没有想过 CSS 工作组为什么会设立这么一个 bug 般的存在！这是为了服务段落元素 <code>p</code> 啊。</p>
+<p>我们常见的段落与其他元素都会有间距，这是因为，用户代理给他们设置了默认margin值。可那为什么两个段落相遇，间距却没有拉大呢？这就是用到了我们上面所说的前后两个div，它们的底外边距和顶外边距叠加在一起了，共享一个外边距，自然就不会拉大了。</p>
+<p><strong>不是所有相邻的margin相邻都可以合并！！！</strong></p>
+<h2 id="margin合并规则"><a href="#margin合并规则" class="headerlink" title="margin合并规则"></a>margin合并规则</h2><ol>
+<li><p>水平方向的 margin 不会合并</p>
 </li>
-<li><p><code>overflow</code> 元素和绝对定位元素 中间的元素为包含块</p>
+<li><p>一个浮动的盒与任何其它盒之间的 margin 不会合并（甚至一个浮动盒与它的流内子级之间也不会）</p>
+</li>
+<li><p>建立了新的块格式化上下文的元素（例如，浮动盒与 ‘overflow’ 不为 ‘visible’ 的元素）的 margin 不会与它们的流内子级合并</p>
+</li>
+<li><p>绝对定位的盒的 margin 不会合并（甚至与它们的流内子级也不会）</p>
+</li>
+<li><p>内联盒的 margin 不会合并（甚至与它们的流内子级也不会）</p>
+</li>
+<li><p>一个流内块级元素的 bottom margin 总会与它的下一个流内块级兄弟的 top margin 合并，除非兄弟有空隙</p>
+</li>
+<li><p>一个流内块级元素的 top margin 会与它的第一个流内块级子级的 top margin 合并，如果该元素没有 top border ，没有 top padding 并且该子级没有空隙</p>
+</li>
+<li><p>一个 ‘height’ 为 ‘auto’ 并且 ‘min-height’ 为 0 的流内块级盒的 bottom margin 会与它的最后一个流内块级子级的 bottom margin 合并，如果该盒没有 bottom padding 并且没有 bottom border</p>
+</li>
+<li><p>盒自身的 margin 也会合并，如果 ‘min-height’ 属性为 0 ，并且既没有 top 或者 bottom border ,也没有 top 或者 bottom padding ，并且其 ‘height’ 为 0 或者 ‘auto’</p>
 </li>
 </ol>
-<p>设置非 <code>static</code> 的 <code>position</code> 即可。</p>
-<h3 id="实际案例"><a href="#实际案例" class="headerlink" title="实际案例"></a>实际案例</h3><p>下面是前两天leader要我们解决的一个案例的简化版。真实案例中，滚动窗中是一个表格，每一行中都有一个待提示字段，但是leader希望能够让出现的提示文本悬浮在滚动窗之上。</p>
-<script async src="//jsfiddle.net/suanmei/zv5fzqk7/embed/"></script>
-
-<p>反正我到现在没找到实现的可能性，因为如果去除 <code>relative</code> ， 绝对定位元素将会跑到滚动窗外边去，不去除 <code>relative</code> ，就一定会被限制在里面。昂，就是无解喽！</p>
-<h2 id="配合-overflow-才能实现的效果"><a href="#配合-overflow-才能实现的效果" class="headerlink" title="配合 overflow 才能实现的效果"></a>配合 overflow 才能实现的效果</h2><h3 id="resize-拉伸"><a href="#resize-拉伸" class="headerlink" title="resize 拉伸"></a>resize 拉伸</h3><script async src="//jsfiddle.net/suanmei/uaek7pvt/embed/html,css,result/"></script>
-
-<p>必须配合非 <code>visible</code> 的 <code>resize</code> 才能实现。</p>
-<h3 id="文字溢出以-‘…’-显示"><a href="#文字溢出以-‘…’-显示" class="headerlink" title="文字溢出以 ‘…’ 显示"></a>文字溢出以 ‘…’ 显示</h3><script async src="//jsfiddle.net/suanmei/433b5bwc/embed/html,css,result/"></script>
-
-<hr>
-<p>之前讲解 <code>BFC</code> 的时候，详细分析了它的各项特性， <code>overflow</code> 恰恰能够触发它，所以如果记不太清就赶紧回去翻翻看昂。</p>
-<p>今天还找到了一种比较好的写博客的方法，一边学习的时候一边在新建文件中写下来，写博客的时候一是方便整理思路，而是省去了一些重复劳动力，速度上去了好多。</p>
+<p>当两个或者更多的 margin 合并时，产生的 margin 宽度为合并 margin 宽度中的最大值。至于负 margin ，就从正相邻 margin 的最大值中减去负相邻 margin 的绝对值的最大值。如果没有正 margin ，就用 0 减去相邻 margin 的绝对值的最大值。</p>
+<h2 id="margin常见bug"><a href="#margin常见bug" class="headerlink" title="margin常见bug"></a>margin常见bug</h2><h3 id="IE6双边距bug"><a href="#IE6双边距bug" class="headerlink" title="IE6双边距bug"></a>IE6双边距bug</h3><p>场景： 当给父元素内第一个浮动元素设置 margin-left 或 margin-right 时 margin 加倍。<br>解决办法：给第一个浮动元素设置属性 <code>display:inline</code>;</p>
+<h3 id="IE6中3px偏移bug"><a href="#IE6中3px偏移bug" class="headerlink" title="IE6中3px偏移bug"></a>IE6中3px偏移bug</h3><p>场景： 当一个非浮动元素与一个浮动元素相邻时，他们之间会多出 3px 的间隔。如果非浮动元素没有设置高度，将使非浮动元素中的内容与其多出 3px 间隔，如果设置了高度，则是 div 之间多出了 3px 间隔。<br>解决方法： 设置非浮动元素 <code>float:left;</code> 一起浮动；或者为右边元素添加 IE6 Hack——为非浮动元素设置高度 <code>_min-height:1%;</code>。这时文本3px偏移会消失，但时候出现元素盒偏移，只需要再为浮动元素设置 <code>_margin-right:-3px;</code>就可以了</p>
 
       
     </div>
@@ -431,21 +438,17 @@
       
         <div class="post-tags">
           
-            <a href="/tags/javascript/" rel="tag">#javascript</a>
-          
             <a href="/tags/css/" rel="tag">#css</a>
           
             <a href="/tags/css规范/" rel="tag">#css规范</a>
           
-            <a href="/tags/position/" rel="tag">#position</a>
+            <a href="/tags/BFC/" rel="tag">#BFC</a>
           
-            <a href="/tags/overflow/" rel="tag">#overflow</a>
+            <a href="/tags/margin/" rel="tag">#margin</a>
           
-            <a href="/tags/padding/" rel="tag">#padding</a>
+            <a href="/tags/IE6/" rel="tag">#IE6</a>
           
-            <a href="/tags/resize/" rel="tag">#resize</a>
-          
-            <a href="/tags/文字溢出/" rel="tag">#文字溢出</a>
+            <a href="/tags/bug/" rel="tag">#bug</a>
           
         </div>
       
@@ -454,16 +457,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/13/重拾CSS规范之z-index/" rel="next" title="重拾CSS规范之z-index">
-                <i class="fa fa-chevron-left"></i> 重拾CSS规范之z-index
+              <a href="/2016/06/14/deeply_understand_this/" rel="next" title="Javascript深入浅出之this">
+                <i class="fa fa-chevron-left"></i> Javascript深入浅出之this
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/09/16/重拾CSS规范之line-height/" rel="prev" title="重拾CSS规范之line-height">
-                重拾CSS规范之line-height <i class="fa fa-chevron-right"></i>
+              <a href="/2016/09/02/relearn_box_type/" rel="prev" title="重拾CSS规范之从盒类型谈起">
+                重拾CSS规范之从盒类型谈起 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -493,8 +496,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/09/15/重拾CSS规范之overflow/"
-           data-title="重拾CSS规范之overflow" data-url="http://yoursite.com/2016/09/15/重拾CSS规范之overflow/">
+      <div class="ds-thread" data-thread-key="2016/07/30/relearn_margn/"
+           data-title="重拾CSS规范之margin" data-url="http://yoursite.com/2016/07/30/relearn_margn/">
       </div>
     
   </div>
@@ -605,7 +608,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常识拓展"><span class="nav-number">1.</span> <span class="nav-text">常识拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器滚动条的来历"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器滚动条的来历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#overflow-x-overflow-y只设置一个"><span class="nav-number">1.2.</span> <span class="nav-text">overflow-x/overflow-y只设置一个</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#padding-bottom的缺失现象"><span class="nav-number">1.3.</span> <span class="nav-text">padding-bottom的缺失现象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JS计算页面滚动高度"><span class="nav-number">1.4.</span> <span class="nav-text">JS计算页面滚动高度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#水平居中跳动问题"><span class="nav-number">1.5.</span> <span class="nav-text">水平居中跳动问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义滚动条样式"><span class="nav-number">1.6.</span> <span class="nav-text">自定义滚动条样式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#absolute-溢出"><span class="nav-number">2.</span> <span class="nav-text">absolute 溢出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法"><span class="nav-number">2.1.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实际案例"><span class="nav-number">2.2.</span> <span class="nav-text">实际案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配合-overflow-才能实现的效果"><span class="nav-number">3.</span> <span class="nav-text">配合 overflow 才能实现的效果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#resize-拉伸"><span class="nav-number">3.1.</span> <span class="nav-text">resize 拉伸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文字溢出以-‘…’-显示"><span class="nav-number">3.2.</span> <span class="nav-text">文字溢出以 ‘…’ 显示</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#margin有效性"><span class="nav-number">1.</span> <span class="nav-text">margin有效性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#margin百分比值"><span class="nav-number">2.</span> <span class="nav-text">margin百分比值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#margin-auto探讨"><span class="nav-number">3.</span> <span class="nav-text">margin auto探讨</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#why-can-水平居中"><span class="nav-number">3.1.</span> <span class="nav-text">why can 水平居中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#why-can’t-垂直居中"><span class="nav-number">3.2.</span> <span class="nav-text">why can’t 垂直居中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-else-can-水平-垂直居中-by-‘margin-auto’"><span class="nav-number">3.3.</span> <span class="nav-text">What else can 水平/垂直居中 by ‘margin: auto’</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#margin合并"><span class="nav-number">4.</span> <span class="nav-text">margin合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#margin合并规则"><span class="nav-number">5.</span> <span class="nav-text">margin合并规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#margin常见bug"><span class="nav-number">6.</span> <span class="nav-text">margin常见bug</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IE6双边距bug"><span class="nav-number">6.1.</span> <span class="nav-text">IE6双边距bug</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IE6中3px偏移bug"><span class="nav-number">6.2.</span> <span class="nav-text">IE6中3px偏移bug</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
