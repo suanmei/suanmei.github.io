@@ -104,7 +104,7 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/translation/Element%E2%80%99s%20Outer%20Edges%20Relative%20To%20the%20Line%20Box%E2%80%99s%20Outer%20Edges.png">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/translation/vertical-align-example.png">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/translation/add%20auxiliary%20lines.png">
-<meta property="og:updated_time" content="2016-11-06T16:05:41.000Z">
+<meta property="og:updated_time" content="2016-11-22T14:04:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重拾CSS规范之vertical-align">
 <meta name="twitter:description" content="我经常需要让元素在垂直方向上对齐。
@@ -450,8 +450,12 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
 <pre><code>当给高元素设置 `vertical-align` 为其他值时，会有同样的表现。
 </code></pre><ul>
 <li><p>甚至将 <code>vertical-align</code> 设置成 <code>bottom</code> 和 <code>top</code> 也会移动基线，这很奇怪，因为不该波及基线。</p>
-  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;!-- left mark-up --&gt;</div><div class="line">&lt;span class="tall-box bottom"&gt;&lt;/span&gt;</div><div class="line">&lt;span class="short-box"&gt;&lt;/span&gt;</div><div class="line"></div><div class="line">&lt;!-- right mark-up --&gt;</div><div class="line">&lt;span class="tall-box top"&gt;&lt;/span&gt;</div><div class="line">&lt;span class="short-box"&gt;&lt;/span&gt;</div><div class="line"></div><div class="line">&lt;style type="text/css"&gt;</div><div class="line">  .tall-box,</div><div class="line">  .short-box &#123; display: inline-block;</div><div class="line">               /* size, color, etc. */ &#125;</div><div class="line"></div><div class="line">  .bottom    &#123; vertical-align: bottom; &#125;</div><div class="line">  .top       &#123; vertical-align: top; &#125;</div><div class="line">&lt;/style&gt;</div></pre></td></tr></table></figure></li>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;!-- left mark-up --&gt;</div><div class="line">&lt;span class="tall-box bottom"&gt;&lt;/span&gt;</div><div class="line">&lt;span class="short-box"&gt;&lt;/span&gt;</div><div class="line"></div><div class="line">&lt;!-- right mark-up --&gt;</div><div class="line">&lt;span class="tall-box top"&gt;&lt;/span&gt;</div><div class="line">&lt;span class="short-box"&gt;&lt;/span&gt;</div><div class="line"></div><div class="line">&lt;style type="text/css"&gt;</div><div class="line">  .tall-box,</div><div class="line">  .short-box &#123; display: inline-block;</div><div class="line">               /* size, color, etc. */ &#125;</div><div class="line"></div><div class="line">  .bottom    &#123; vertical-align: bottom; &#125;</div><div class="line">  .top       &#123; vertical-align: top; &#125;</div><div class="line">&lt;/style&gt;</div></pre></td></tr></table></figure>
+</li>
 </ul>
+<hr>
+<p>此文为译文，现在不想翻译了，以后会把它补全，并放到译文目录下，vertical-align 章节自己会写一篇文章推上来。</p>
+<p>就是这么任性。</p>
 
       
     </div>
@@ -576,7 +580,7 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -593,7 +597,7 @@ CSS 提供了很多可用的方法。有时候我用 float 解决问题，有时
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">38</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

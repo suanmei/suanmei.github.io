@@ -1,0 +1,893 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="javascript,执行上下文,作用域,闭包,this,函数重载,柯里化,arguments,IIFE,类库封装," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="每写15行代码，就会遇到一个闭包。这句话毫不夸张，因为理论上来说，每一个函数都是一个闭包。
+
+闭包是指那些能够访问独立(自由)变量的函数 (变量在本地使用，但定义在一个封闭的作用域中)。换句话说，这些函数可以“记忆”它被创建时候的环境。
+
+也正是由于它的特性，还有一种说法，就是：
+
+闭包是代码块和创建该代码块的上下文中数据的结合。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript深入浅出之闭包">
+<meta property="og:url" content="http://yoursite.com/2016/11/22/Javascript深入浅出之闭包/index.html">
+<meta property="og:site_name" content="拾邑">
+<meta property="og:description" content="每写15行代码，就会遇到一个闭包。这句话毫不夸张，因为理论上来说，每一个函数都是一个闭包。
+
+闭包是指那些能够访问独立(自由)变量的函数 (变量在本地使用，但定义在一个封闭的作用域中)。换句话说，这些函数可以“记忆”它被创建时候的环境。
+
+也正是由于它的特性，还有一种说法，就是：
+
+闭包是代码块和创建该代码块的上下文中数据的结合。">
+<meta property="og:updated_time" content="2016-11-23T18:26:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Javascript深入浅出之闭包">
+<meta name="twitter:description" content="每写15行代码，就会遇到一个闭包。这句话毫不夸张，因为理论上来说，每一个函数都是一个闭包。
+
+闭包是指那些能够访问独立(自由)变量的函数 (变量在本地使用，但定义在一个封闭的作用域中)。换句话说，这些函数可以“记忆”它被创建时候的环境。
+
+也正是由于它的特性，还有一种说法，就是：
+
+闭包是代码块和创建该代码块的上下文中数据的结合。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6289373511051904000',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/11/22/Javascript深入浅出之闭包/"/>
+
+
+  <title> Javascript深入浅出之闭包 | 拾邑 </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">拾邑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">读一书，增一智</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Javascript深入浅出之闭包
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-22T11:09:42+08:00" content="2016-11-22">
+              2016-11-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/22/Javascript深入浅出之闭包/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/22/Javascript深入浅出之闭包/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa">本文阅读量</i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>每写15行代码，就会遇到一个闭包。这句话毫不夸张，因为理论上来说，每一个函数都是一个闭包。</p>
+<blockquote>
+<p>闭包是指那些能够访问独立(自由)变量的函数 (变量在本地使用，但定义在一个封闭的作用域中)。换句话说，这些函数可以“记忆”它被创建时候的环境。</p>
+</blockquote>
+<p>也正是由于它的特性，还有一种说法，就是：</p>
+<blockquote>
+<p>闭包是代码块和创建该代码块的上下文中数据的结合。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="词法作用域"><a href="#词法作用域" class="headerlink" title="词法作用域"></a>词法作用域</h2><p>JavaScript 的作用域是词法作用域 (lexical scoping)。我们来解释一下，what’s this,顺便提一下动态作用域。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var a = 1;</div><div class="line"></div><div class="line">function foo() &#123;</div><div class="line">  console.log(a);</div><div class="line">&#125;</div><div class="line"></div><div class="line">function bar() &#123;</div><div class="line">  var a = 2;</div><div class="line">  foo();</div><div class="line">&#125;</div><div class="line"></div><div class="line">bar(); // 1</div></pre></td></tr></table></figure>
+<p>这就是词法作用域——在 JavaScript 中，变量的作用域是由它在源代码中所处位置决定的，并且嵌套的函数可以访问到其外层作用域中声明的变量。</p>
+<p>词法作用域是在定义时确定的，而动态作用域是在运行时确定的。上例代码在词法作用域中输出的应该是 2 。</p>
+<h2 id="什么是闭包"><a href="#什么是闭包" class="headerlink" title="什么是闭包"></a>什么是闭包</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(a);</div><div class="line">&#125;</div><div class="line">  </div><div class="line">foo(); <span class="comment">// 2</span></div></pre></td></tr></table></figure>
+<p>我要是拿这个例子出来说，肯定要有人不同意的。‘这不是上一篇里面说的作用域链的事情吗，关闭包什么事？’</p>
+<p>得了您呢，咱们换个例子瞄两眼。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line">  </div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(a);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> bar = foo();</div><div class="line"></div><div class="line">bar(); <span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<p>众所周知，外部是无法访问内部作用域的内容的。那 <code>bar</code> 缘何可以输出 <code>a</code> 变量。是的，闭包！！！</p>
+<p>我们来看一下第二段代码，其实 <code>bar</code> 被声明赋值的时候，就已经绑定了上下文环境了(函数内部所引用到的变量)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// bar 闭包</div><div class="line">barClosure = &#123;</div><div class="line">  call: bar // 引用到function</div><div class="line">  lexicalEnvironment: &#123;a: 1&#125; // 上下文环境</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>闭包已经形成了，我们下一次执行的时候，自由变量就可以直接从闭包里寻找了。</p>
+<p>第一段代码中的 <code>foo</code> 其实也已经产生闭包了，它绑定的是全局上下文中的自由变量。只不过没有通过 <code>return</code> 来进行一个返回，无法显示出闭包的特性。</p>
+<h2 id="共享作用域"><a href="#共享作用域" class="headerlink" title="共享作用域"></a>共享作用域</h2><p>通过前面几章的学习，我们应该清楚，如果两个函数是在同一个执行上下文中，实则是共享的同一个外部作用域，两个函数里的自由变量指向的是同一个 <code>[[scopes]]</code> 。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line">  </div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    <span class="attr">increase</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(++a) &#125;,</div><div class="line">    <span class="attr">decrease</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(--a) &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> bar = foo();</div><div class="line">bar.increase(); <span class="comment">// 2</span></div><div class="line">bar.decrease(); <span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<p>可以看到 <code>bar.increase</code> 和 <code>bar.decrease</code> 指向的是同一个 <code>[[scopes]]</code> 中的 <code>a</code> 。</p>
+<p>那我现在换一换。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line">  </div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(++a);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> bar1 = foo(); <span class="comment">// 2</span></div><div class="line"><span class="keyword">var</span> bar2 = foo(); <span class="comment">// 2</span></div></pre></td></tr></table></figure>
+<p>这个时候我门可以发现， <code>bar1</code> 的自由变量在第一次执行的 <code>foo</code> 产生的上下文中， <code>bar2</code> 的在第二次产生的上下文中。两者的 <code>[[scopes]]</code> 已经是不一样的了，所以所引用的自由变量 <code>a</code> 其实是不同的作用域中的，所以也就无法相互影响了。</p>
+<h3 id="循环中的错误"><a href="#循环中的错误" class="headerlink" title="循环中的错误"></a>循环中的错误</h3><p>这里就用 MDN 里面的例子吧。</p>
+<script async src="//jsfiddle.net/suanmei/vp6tczkb/embed/js,html,result/"></script>
+
+<p>这里之所以显示错误，原因在于三个事件响应函数（闭包）共享作用域了，这三者的 <code>[[scopes]]</code> 指向的是同一个 <em>父变量对象的层级链</em> 。 onfocus 的回调被执行时，循环已经完成，且此时 item 变量（由所有三个闭包所共享）已经指向了 helpText 列表中的最后一项。</p>
+<p>解决办法就是让三个闭包有各自的执行上下文。</p>
+<script async src="//jsfiddle.net/suanmei/wkxcbddw/embed/js,html,result/"></script>
+
+<h2 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h2><p>JavaScript 中没有函数虫灾，但是我门可以利用参数检测来实现伪函数重载。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">addMethod</span>(<span class="params">obj, name, fn</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> old = obj[name];</div><div class="line">  <span class="built_in">console</span>.log(old);</div><div class="line">  obj[name] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (fn.length === <span class="built_in">arguments</span>.length) &#123;</div><div class="line">      <span class="keyword">return</span> fn.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> old === <span class="string">"function"</span>) &#123;</div><div class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.old = old);</div><div class="line">      <span class="keyword">return</span> old.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">addMethod(ninjas, <span class="string">"find"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// statement</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">addMethod(ninjas, <span class="string">"find"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">first</span>) </span>&#123;</div><div class="line">  <span class="comment">// statement</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">addMethod(ninjas, <span class="string">"find"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">first, second</span>) </span>&#123;</div><div class="line">  <span class="comment">// statement</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>每一次执行 <code>addMethod</code> 添加方法的时候，都会产生新的执行上下文，同样的 fn 参数以及 old ，在每个新的执行上下文都有不同的值。这是重载能够实现的根本所在。每一个 <code>old</code> 的 <code>[[scopes]]</code> 都指向的是上一次执行 <code>addMethod</code> 产生的 <em>父变量对象的层级链</em> 。</p>
+<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><h2 id="替“内存泄漏”说句话"><a href="#替“内存泄漏”说句话" class="headerlink" title="替“内存泄漏”说句话"></a>替“内存泄漏”说句话</h2><p>很多文章，很多书里，都会讲闭包会带来 <em>内存泄漏</em> ，其实正相反，闭包是来消除内存泄漏的，如果产生了，对不起，那是使用者应该背的锅。正常来说，<em>内存泄漏</em> 是指 IE6 带来的 bug ，现代浏览器的引用计数来进行垃圾处理，几乎不会产生 <em>内存泄漏</em> 。</p>
+<p>关于 <em>内存泄漏</em> ，可以看我的下一篇文章。</p>
+<hr>
+<p>闭包带来的妙用，远不止文中所谈的这些，这些都是用来讲解闭包的基本知识并帮助深入一点理解的。打好基础，妙用无穷，后面的学习会水到渠成。一位追求框架，不打理基础，则如高屋建瓴，慎之。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag">#javascript</a>
+          
+            <a href="/tags/执行上下文/" rel="tag">#执行上下文</a>
+          
+            <a href="/tags/作用域/" rel="tag">#作用域</a>
+          
+            <a href="/tags/闭包/" rel="tag">#闭包</a>
+          
+            <a href="/tags/this/" rel="tag">#this</a>
+          
+            <a href="/tags/函数重载/" rel="tag">#函数重载</a>
+          
+            <a href="/tags/柯里化/" rel="tag">#柯里化</a>
+          
+            <a href="/tags/arguments/" rel="tag">#arguments</a>
+          
+            <a href="/tags/IIFE/" rel="tag">#IIFE</a>
+          
+            <a href="/tags/类库封装/" rel="tag">#类库封装</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/22/Javascript深入浅出之作用域/" rel="next" title="Javascript深入浅出之作用域">
+                <i class="fa fa-chevron-left"></i> Javascript深入浅出之作用域
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/11/22/Javascript深入浅出之闭包/"
+           data-title="Javascript深入浅出之闭包" data-url="http://yoursite.com/2016/11/22/Javascript深入浅出之闭包/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o7nps5lzq.bkt.clouddn.com/avatar/avatar.jpg"
+               alt="酸梅先生" />
+          <p class="site-author-name" itemprop="name">酸梅先生</p>
+          <p class="site-description motion-element" itemprop="description">阅读，知识管理</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/suanmei" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/li-ruo-yu-34" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-code"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#词法作用域"><span class="nav-number">1.</span> <span class="nav-text">词法作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是闭包"><span class="nav-number">2.</span> <span class="nav-text">什么是闭包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#共享作用域"><span class="nav-number">3.</span> <span class="nav-text">共享作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#循环中的错误"><span class="nav-number">3.1.</span> <span class="nav-text">循环中的错误</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数重载"><span class="nav-number">4.</span> <span class="nav-text">函数重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模块"><span class="nav-number">5.</span> <span class="nav-text">模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#替“内存泄漏”说句话"><span class="nav-number">6.</span> <span class="nav-text">替“内存泄漏”说句话</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">酸梅先生</span>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa">你是第</i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span>位访客</span>
+  
+
+  
+    <span class="site-pv"><i class="fa">本站总访问量</i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"suanmeixiansheng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = false;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = decodeURIComponent(data.url);
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title >= 0 || index_content >= 0 ){
+                                isMatch = true;
+								if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            } 
+							
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
