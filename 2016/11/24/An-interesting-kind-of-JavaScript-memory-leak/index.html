@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="css,css规范,盒类型,格式化模型," />
+  <meta name="keywords" content="闭包,javascipt,内存泄漏," />
 
 
 
@@ -84,21 +84,21 @@
 
 
 
-<meta name="description" content="今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！">
+<meta name="description" content="最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
+我在网上搜索关于 javascript 闭包内存泄漏的变化，网上并未提及相关事情，似乎在 JavaScript 主题下，这是一个鲜为人知的话题。（大多数你找到的谈论的是老版本IE的差劲的垃圾收集算法，但这个问题影">
 <meta property="og:type" content="article">
-<meta property="og:title" content="重拾CSS规范之从盒类型谈起">
-<meta property="og:url" content="http://yoursite.com/2016/09/02/relearn_box_type/index.html">
+<meta property="og:title" content="一种有趣的JavaScript内存泄漏">
+<meta property="og:url" content="http://yoursite.com/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/index.html">
 <meta property="og:site_name" content="拾邑">
-<meta property="og:description" content="今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！">
-<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/inlineBox_padding_margin.png">
-<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/block_error.png">
-<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/block_correct.png">
-<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/inline_line_box.png">
-<meta property="og:updated_time" content="2016-11-22T14:01:57.000Z">
+<meta property="og:description" content="最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
+我在网上搜索关于 javascript 闭包内存泄漏的变化，网上并未提及相关事情，似乎在 JavaScript 主题下，这是一个鲜为人知的话题。（大多数你找到的谈论的是老版本IE的差劲的垃圾收集算法，但这个问题影">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/closure/memory_leak.png">
+<meta property="og:updated_time" content="2016-11-24T17:02:21.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="重拾CSS规范之从盒类型谈起">
-<meta name="twitter:description" content="今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！">
-<meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/css/inlineBox_padding_margin.png">
+<meta name="twitter:title" content="一种有趣的JavaScript内存泄漏">
+<meta name="twitter:description" content="最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
+我在网上搜索关于 javascript 闭包内存泄漏的变化，网上并未提及相关事情，似乎在 JavaScript 主题下，这是一个鲜为人知的话题。（大多数你找到的谈论的是老版本IE的差劲的垃圾收集算法，但这个问题影">
+<meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/closure/memory_leak.png">
 
 
 
@@ -119,10 +119,10 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/09/02/relearn_box_type/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/"/>
 
 
-  <title> 重拾CSS规范之从盒类型谈起 | 拾邑 </title>
+  <title> 一种有趣的JavaScript内存泄漏 | 拾邑 </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -275,7 +275,7 @@
             
             
               
-                重拾CSS规范之从盒类型谈起
+                一种有趣的JavaScript内存泄漏
               
             
           </h1>
@@ -287,8 +287,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-02T21:23:07+08:00" content="2016-09-02">
-              2016-09-02
+            <time itemprop="dateCreated" datetime="2016-11-24T22:08:49+08:00" content="2016-11-24">
+              2016-11-24
             </time>
           </span>
 
@@ -301,8 +301,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/CSS/" itemprop="url" rel="index">
-                    <span itemprop="name">CSS</span>
+                  <a href="/categories/译文/" itemprop="url" rel="index">
+                    <span itemprop="name">译文</span>
                   </a>
                 </span>
 
@@ -317,8 +317,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/02/relearn_box_type/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/02/relearn_box_type/" itemprop="commentsCount"></span>
+                <a href="/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -346,43 +346,28 @@
       
 
       
-        <p>今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！</p>
-<a id="more"></a>
-<h2 id="术语普及"><a href="#术语普及" class="headerlink" title="术语普及"></a>术语普及</h2><blockquote>
-<p><strong>盒：</strong> 每个元素都会生成一个盒，用来容纳后代（生成的盒）和自己生成的内容(比如说一段文字)。所以我们可以把一个页面看做是由一个个的盒子堆砌而成的，只是这些盒子也分种类，就像这个社会在视觉上由男人和女人构成。<br><strong>块级元素：</strong> <code>display</code> 为 <code>block/table/list-item</code> 的元素。<br><strong>块级盒：</strong> 块级元素生成的盒<br><strong>块容器盒：</strong> 块级盒同时也是块容器盒，除了表格盒与可替换元素。顾名思义，块容器盒就是它要容纳后代和它自身的内容。这里面我发现了一个很有趣的事儿，可替换元素，所以它们都是通过 <code>value/src</code> 之类的属性来控制内容显示，可能正是因为它们 <em>无法添加后代元素（或者必须添加特定子元素）</em> 的特性所以才不算是块容器盒的。<br><strong>内联级元素：</strong> <code>display</code> 为 <code>inline/inline-block/inline-table</code> 的元素。<br><strong>内联级盒：</strong> 内联级元素生成的盒。但是只有 <code>inline</code> 元素生成的盒才叫做内联盒，它区别于 <code>inline-block</code> 元素的内联级块盒。<br><strong>行盒：</strong> 内联格式化上下文中，包含来自同一行的盒的矩形区域叫做行盒<br><strong>可替换元素：</strong> 浏览器根据元素的标签和它的属性来决定元素的具体显示内容。比如 <code>&lt;img&gt; &lt;input&gt; &lt;textarea&gt; &lt;select&gt; &lt;object&gt;</code>。</p>
-</blockquote>
-<h2 id="内联元素的一个小特性"><a href="#内联元素的一个小特性" class="headerlink" title="内联元素的一个小特性"></a>内联元素的一个小特性</h2><p>这里单独把内联元素给拿出来了，内联元素必须要区别于内联级元素，内联元素只是指 <code>diaplay</code> 为 <code>inline</code> 的元素。</p>
-<p><code>margin-top,margin-bottom</code> 对内联元素无效。<br><code>padding-top,padding-bottom</code> 对内联元素有效，但它们不能对布局产生任何影响。</p>
-<p>上面第一句话比较容易理解，第二句话可能需要通过例子辅助理解。</p>
-<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/inlineBox_padding_margin.png" alt="Image losted" title="padding-top,padding-bottom对block box 和 inline box的影响"></p>
-<p>上图中 <code>padding-top</code> 和 <code>padding-bottom</code> 会影响到块级元素 <code>content</code> 区域位置，会让块级元素的空间真正意义上的变大，进而影响其他元素的位置。但是再看内联元素这边，我们可以看出来 <code>padding</code> 确实存在，但是它没有起到任何影响，没有能够让内联元素占据的空间变大，布局上没有对元素自身起到任何影响，更别提对其他元素产生影响了。可能唯一的作用就是设置 <code>background</code> 的时候， <code>padding</code> 能起到作用。</p>
-<h2 id="匿名盒"><a href="#匿名盒" class="headerlink" title="匿名盒"></a>匿名盒</h2><p>CSS为了方便布局，它规定：一个块容器盒要么只包含块级盒，要么只包含内联级盒。</p>
-<h3 id="匿名块盒"><a href="#匿名块盒" class="headerlink" title="匿名块盒"></a>匿名块盒</h3><p>我们来看看CSS会如何对待这段代码：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>我是span内的文字<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>我是p内的文字<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">    我是没有任何标签包含的文字</div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>大家好，我是 <code>div</code> ，我是一个块容器盒，我发现我的儿子 <code>p</code> 生成了块级盒，那么我其他的儿子也必须都是块级盒。sorry， <code>span</code> 龟儿子，麻烦你变个身，变成块级盒。卧槽，’我是没有任何标签包含的文字’ 这段文本不太好处理啊，他又不是我儿子，不好直接命令他。</p>
-<p>幸好老子灵机一动，要不我干脆认他做个干儿子。</p>
-<p>div：“文本小孩儿，你愿意做我的干儿子吗？”</p>
-<p>文本：“我愿意，爸爸！”</p>
-<p>div：“真是个好孩子。但是呢，今天这情况，你们都必须要有一个块级盒，你其他的哥哥们自己会生产，看你小子啥也不会，爸爸就送你一个吧，不过这个盒子无名无分，我们就叫它匿名块盒”</p>
-<p>准备工作都做好了，再来看看他们家的家谱吧！</p>
-<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/block_error.png" alt="Image losted" title="block-box error"></p>
-<p>我们可以看到，上面 <code>span</code> 也变成块级盒了，那我们是不是像对待块级元素一样给它设置宽高呢？当然不能！！！所以说，<strong>上面的图片是错误的！！！</strong></p>
-<p>其实呢， <code>span</code> 这小子作弊了，它明明只是猴子派来的逗逼，当然不能像猴子一样变身，那层块级盒（block box）是它老爸发放的作战物资——匿名块盒。所以呢，真实的情况是：它自己本身只能产生内联盒，然后在它外面还会包裹着一个匿名块盒。</p>
-<p>那我们来看一看正确的家谱：</p>
-<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/block_correct.png" alt="Image losted" title="block-box correct"></p>
-<p>正是因为匿名盒的存在， <code>span</code> 和那段小文本也能够像块级元素一样，单独占据一整行。</p>
-<p>那再有一个问题，几个内联元素在一起，它们明明是同一行排列啊，并没有像块级元素一样换行显示。其实呢，多个内联元素在一起，匿名块盒会把相邻的内联盒“打包”，一起包裹起来。</p>
-<h3 id="匿名内联盒"><a href="#匿名内联盒" class="headerlink" title="匿名内联盒"></a>匿名内联盒</h3><p>任何被直接包含在一个<strong>块容器元素中（不在一个内联元素里面）</strong>的文本，必须视为一个匿名内联元素。</p>
-<p>再来看一段代码：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">span</span>&gt;</span>我是span中的文字我是span中的文字我是span中的文字<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    我是没有任何标签包含的文字</div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>大家好，我是 <code>p</code> 元素，我今天看了看我的儿子们，不容易啊，一个块级盒也木有昂，按照CSS当年定下的规矩，这样的情况下，本王必须建立<strong>内联格式化上下文（IFC）</strong>来安置这群傻孩子。</p>
-<p><code>span</code> 好说啊，自己本身就生成了内联级盒，麻烦的就是这个没有任何标签包围的文本了。咱们还用老方法行不行(⊙v⊙)</p>
-<p>p：“文本小孩儿，你愿意做我的干儿子吗？”</p>
-<p>文本：“我愿意，爸爸！”</p>
-<p>p：“真是个好孩子。但是呢，今天这情况，你们都必须要有一个内联级盒，你其他的哥哥们自己会生产，看你小子啥也不会，爸爸就送你一个吧，不过这个盒子无名无分，我们就叫它匿名内联盒”</p>
-<p>闲话不多说，看家谱：</p>
-<p><img src="http://o7nps5lzq.bkt.clouddn.com/css/inline_line_box.png" alt="Image losted" title="inline_line_box"></p>
-<p>我们可以看到如果一个行盒无法容纳下某个内联盒，这个内联盒就会分割开来放在多个行盒中。注意一下在换行（分割）的地方，是没有竖直线的，表示内联盒未结束，而且 <code>margin,padding</code> 值在这里是不会体现出来的， <code>margin-left,margin-right,padding-left,padding-right</code> 值只存在于内联盒的开始和结束的地方。</p>
+        <p>最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。</p>
+<p>我在网上搜索关于 javascript 闭包内存泄漏的变化，网上并未提及相关事情，似乎在 JavaScript 主题下，这是一个鲜为人知的话题。（大多数你找到的谈论的是老版本IE的差劲的垃圾收集算法，但这个问题影响甚至我目前的Chrome安装！）我后来发现了一个很棒的博客，由一个V8开发人员发布在此主题上，但似乎大多数 JavaScript 使用者还不知道他们必须注意这一点。</p>
+<p>JavaScript是一门神秘的函数式编程语言，而且他的函数就是闭包：函数对象有权访问定义在它们封闭范围内的变量，甚至在此范围已经结束的时候。一旦函数运行结束，闭包所捕获的局部变量就会被垃圾回收，所有定义在闭包范围内的函数都会自我进行垃圾回收。</p>
+<p>现在，考虑一下这段代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> theThing = <span class="literal">null</span>;</div><div class="line"><span class="keyword">var</span> replaceThing = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> originalThing = theThing;</div><div class="line">  theThing = &#123;</div><div class="line">    <span class="attr">longStr</span>: <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">1000000</span>).join(<span class="string">'*'</span>)</div><div class="line">  &#125;;</div><div class="line">&#125;;</div><div class="line">setInterval(replaceThing, <span class="number">1000</span>);</div></pre></td></tr></table></figure>
+<p>每一秒，我么都会执行 <code>replaceThing</code> 函数。他用包含新分配的巨型字符串的新的对象来替换 <code>theThing</code> ，把 <code>theThing</code> 的原始值保存在了局部变量 <code>originalThing</code> 中。在它返回后， <code>theThing</code> 的旧值会被垃圾回收，包括它里面的长字符串，因为没有任何东西一直指向它。所以，这段代码用到的内存大体上是恒定的：它会一直分配大字符串，但是每一次他都会删除先前的大字符串。</p>
+<p>但是如果我们有一个比 <code>replaceThing</code> 更长寿的闭包会怎么样？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> theThing = <span class="literal">null</span>;</div><div class="line"><span class="keyword">var</span> replaceThing = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> originalThing = theThing;</div><div class="line">  theThing = &#123;</div><div class="line">    <span class="attr">longStr</span>: <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">1000000</span>).join(<span class="string">'*'</span>),</div><div class="line">    <span class="attr">someMethod</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="built_in">console</span>.log(someMessage);</div><div class="line">    &#125;</div><div class="line">  &#125;;</div><div class="line">&#125;;</div><div class="line">setInterval(replaceThing, <span class="number">1000</span>);</div></pre></td></tr></table></figure>
+<p><code>someMethod</code> 理论上可以引用 <code>originalThing</code> ，所以只要 <code>someMethod</code> 存活着， <code>originalThing</code> 就应当被保留吗？这将导致无限的内存增长，因为每个版本的 <code>theThing</code> 都会抓住指向上一个版本的指针。</p>
+<p>幸运的是，现代的 JavaScript 实现（包括 Chrome 和 Node 中目前的 V8 ）足够聪明，能够注意到 <code>originalThing</code> 在闭包 <code>someMethod</code> 中未被实际应用，所以它没有被放到 <code>someMethod</code> 的词法环境中，所以当 <code>replaceThing</code> 结束时，是可以对之前的 <code>theThing</code> 进行垃圾回收的。</p>
+<p>（但是，等等，你可能会问！如果有人早先运行 <code>console.log = eval</code> ，那么看起来无害的 <code>console.log(someMessage)</code> 实际上是正 <code>eval</code> 一些引用了 <code>originalThing</code> 的代码？嗯， JavaScript 标准已经领先你一步了。如果你像这样偷偷摸摸地使用 <code>eval</code>（通过除了调用 <code>eval</code> 以外的任何方式），它被称为“间接 <code>eval</code> ”，实际上是不能访问词汇环境的！另一方面，如果 <code>someMethod</code> 确实包含了对使用了这个名称的 <code>eval</code> 的直接调用，它可能实际上访问了 <code>originalThing</code> ，JavaScript 环境禁止让 <code>originalThing</code> 一直在词法环境之外，这将导致泄露。）</p>
+<p>好，太棒了，JavaScript保护我们免受内存泄漏之扰，对吧？好，让我们试一下另一个版本，结合了前两个例子。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> theThing = <span class="literal">null</span>;</div><div class="line"><span class="keyword">var</span> replaceThing = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> originalThing = theThing;</div><div class="line">  <span class="keyword">var</span> unused = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (originalThing)</div><div class="line">      <span class="built_in">console</span>.log(<span class="string">"hi"</span>);</div><div class="line">  &#125;;</div><div class="line">  theThing = &#123;</div><div class="line">    <span class="attr">longStr</span>: <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">1000000</span>).join(<span class="string">'*'</span>),</div><div class="line">    <span class="attr">someMethod</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="built_in">console</span>.log(someMessage);</div><div class="line">    &#125;</div><div class="line">  &#125;;</div><div class="line">&#125;;</div><div class="line">setInterval(replaceThing, <span class="number">1000</span>);</div></pre></td></tr></table></figure>
+<p>在谷歌开发者工具中打开 ‘Timeline’ 标签，切换到 ‘内存’ 视图，然后点击 ‘记录’。</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/closure/memory_leak.png" alt="memory_leak" title="内存泄漏"></p>
+<p>看起来就像我们每秒使用一个额外的兆字节！甚至点击垃圾桶图标强制手动垃圾回收也没有帮助。所以就好像我们泄漏了 <code>longStr</code> 。</p>
+<p>但是这不是和以前一样的情况吗？ <code>originalThing</code> 仅在 <code>replaceThing</code> 的主体中引用，在 <code>unused</code> 中。 <code>replaceThing</code> 一结束， <code>unused</code> 本身（我们甚至不会运行！）就会被清理…从 <code>replaceThing</code> 中唯一逃脱的就是第二个闭包 <code>someMethod</code> 。而 <code>someMethod</code> 根本没有引用 <code>originalString</code> ！</p>
+<p>因此，即使任何代码都无法再次引用 <code>originalThing</code> ，它也从来没有被垃圾收集！为什么？是这样的，实现闭包的典型方式是每个函数对象都有一个链接，到代表它的词法作用域的字典式对象。如果 <code>replaceThing</code> 中定义的两个函数实际上都使用了 <code>originalThing</code> ，重要的是它们都获得了相同的对象，即使 <code>originalThing</code> 被重复分配，两个函数也共享相同的词法环境。现在，Chrome 的 V8 JavaScript引擎显然足够聪明，可以将变量放在词法环境之外，如果它们没有被任何闭包使用：这就是为什么第一个例子不泄漏。</p>
+<p>但是一旦某个变量被任何闭包使用，它最终会出现在该作用域内所有闭包共享的词法环境中。这可能导致内存泄漏。</p>
+<p>你可以想象一个更聪明的，可以避免这个问题的词汇环境的实现。每个闭包都可以有一本词典，里面包含着闭包实际读写的变量；这个词典中的值本身可能会是可以在多个闭包的词法环境间共享的可变单元。基于我对ECMAScript第5版标准的随意阅读，这是合法的：它对词法环境的描述将它们描述为“纯粹的规范机制，其不需要等同于任何 ECMAScript 实现的特定的伪现象”。也就是说，这个标准实际上并没有包含“垃圾”这个词，只是说了一次“内存”。（这里有一篇 <a href="http://flint.cs.yale.edu/flint/publications/escc.pdf" target="_blank" rel="external">关于这个问题的最佳实现的文章</a>，虽然不是 JavaScript 主题下的。其他一些语言实现确实有效，例如Go。）</p>
+<p>修复这种形式的内存泄漏，一旦你注意到它，是直接的，如 <a href="https://github.com/meteor/meteor/commit/49e9813" target="_blank" rel="external">the fix to the Meteor bug</a> 所示。只需添加 <code>originalThing = null</code> 到 <code>replaceThing</code> 的结尾。这样，即使名称 <code>originalThing</code> 仍在 <code>someMethod</code>的词法环境中，也不会有大的旧值的链接。</p>
+<p>所以总结一下：如果你有一个巨大的对象在被一些闭包使用，但不是你需要持续使用的任何闭包，只要确保局部变量不再指向它，一旦你用完它了。不幸的是，这些错误可能相当微妙;如果 JavaScript 引擎不要求你必须考虑这些，它将更好。</p>
 
       
     </div>
@@ -405,13 +390,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/css/" rel="tag">#css</a>
+            <a href="/tags/闭包/" rel="tag">#闭包</a>
           
-            <a href="/tags/css规范/" rel="tag">#css规范</a>
+            <a href="/tags/javascipt/" rel="tag">#javascipt</a>
           
-            <a href="/tags/盒类型/" rel="tag">#盒类型</a>
-          
-            <a href="/tags/格式化模型/" rel="tag">#格式化模型</a>
+            <a href="/tags/内存泄漏/" rel="tag">#内存泄漏</a>
           
         </div>
       
@@ -420,17 +403,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/30/relearn_margn/" rel="next" title="重拾CSS规范之margin">
-                <i class="fa fa-chevron-left"></i> 重拾CSS规范之margin
+              <a href="/2016/11/23/deeply_understand_closure/" rel="next" title="Javascript深入浅出之闭包">
+                <i class="fa fa-chevron-left"></i> Javascript深入浅出之闭包
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/06/relearn_bfc_ifc/" rel="prev" title="重拾CSS规范之BFC & IFC">
-                重拾CSS规范之BFC & IFC <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -459,8 +438,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/09/02/relearn_box_type/"
-           data-title="重拾CSS规范之从盒类型谈起" data-url="http://yoursite.com/2016/09/02/relearn_box_type/">
+      <div class="ds-thread" data-thread-key="2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/"
+           data-title="一种有趣的JavaScript内存泄漏" data-url="http://yoursite.com/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/">
       </div>
     
   </div>
@@ -571,7 +550,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#术语普及"><span class="nav-number">1.</span> <span class="nav-text">术语普及</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内联元素的一个小特性"><span class="nav-number">2.</span> <span class="nav-text">内联元素的一个小特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匿名盒"><span class="nav-number">3.</span> <span class="nav-text">匿名盒</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#匿名块盒"><span class="nav-number">3.1.</span> <span class="nav-text">匿名块盒</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#匿名内联盒"><span class="nav-number">3.2.</span> <span class="nav-text">匿名内联盒</span></a></li></ol></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
         </section>
