@@ -84,26 +84,23 @@
 
 
 
-<meta name="description" content="译者：拾邑
-原文链接：http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak
+<meta name="description" content="原文链接：http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak
 最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
-我在网上搜索关于 javascript 闭">
+我在网上搜索关于 javascript 闭包内存泄漏的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一种有趣的JavaScript内存泄漏">
+<meta property="og:title" content="一种有趣的JavaScript内存泄漏[译]">
 <meta property="og:url" content="http://yoursite.com/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/index.html">
 <meta property="og:site_name" content="拾邑">
-<meta property="og:description" content="译者：拾邑
-原文链接：http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak
+<meta property="og:description" content="原文链接：http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak
 最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
-我在网上搜索关于 javascript 闭">
+我在网上搜索关于 javascript 闭包内存泄漏的">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/closure/memory_leak.png">
-<meta property="og:updated_time" content="2016-11-24T17:28:50.000Z">
+<meta property="og:updated_time" content="2016-11-24T17:31:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一种有趣的JavaScript内存泄漏">
-<meta name="twitter:description" content="译者：拾邑
-原文链接：http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak
+<meta name="twitter:title" content="一种有趣的JavaScript内存泄漏[译]">
+<meta name="twitter:description" content="原文链接：http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak
 最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
-我在网上搜索关于 javascript 闭">
+我在网上搜索关于 javascript 闭包内存泄漏的">
 <meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/closure/memory_leak.png">
 
 
@@ -128,7 +125,7 @@
   <link rel="canonical" href="http://yoursite.com/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/"/>
 
 
-  <title> 一种有趣的JavaScript内存泄漏 | 拾邑 </title>
+  <title> 一种有趣的JavaScript内存泄漏[译] | 拾邑 </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -281,7 +278,7 @@
             
             
               
-                一种有趣的JavaScript内存泄漏
+                一种有趣的JavaScript内存泄漏[译]
               
             
           </h1>
@@ -307,7 +304,19 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/译文/" itemprop="url" rel="index">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/javascript/译文/" itemprop="url" rel="index">
                     <span itemprop="name">译文</span>
                   </a>
                 </span>
@@ -352,8 +361,7 @@
       
 
       
-        <p>译者：拾邑</p>
-<p>原文链接：<a href="http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak" target="_blank" rel="external">http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak</a></p>
+        <p>原文链接：<a href="http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak" target="_blank" rel="external">http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak</a></p>
 <p>最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。</p>
 <p>我在网上搜索关于 javascript 闭包内存泄漏的变化，网上并未提及相关事情，似乎在 JavaScript 主题下，这是一个鲜为人知的话题。（大多数你找到的谈论的是老版本IE的差劲的垃圾收集算法，但这个问题影响甚至我目前的Chrome安装！）我后来发现了一个很棒的博客，由一个V8开发人员发布在此主题上，但似乎大多数 JavaScript 使用者还不知道他们必须注意这一点。</p>
 <p>JavaScript是一门神秘的函数式编程语言，而且他的函数就是闭包：函数对象有权访问定义在它们封闭范围内的变量，甚至在此范围已经结束的时候。一旦函数运行结束，闭包所捕获的局部变量就会被垃圾回收，所有定义在闭包范围内的函数都会自我进行垃圾回收。</p>
@@ -448,7 +456,7 @@
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/"
-           data-title="一种有趣的JavaScript内存泄漏" data-url="http://yoursite.com/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/">
+           data-title="一种有趣的JavaScript内存泄漏[译]" data-url="http://yoursite.com/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/">
       </div>
     
   </div>
@@ -501,7 +509,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
