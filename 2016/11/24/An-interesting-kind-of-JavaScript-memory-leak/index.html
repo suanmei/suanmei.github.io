@@ -84,20 +84,23 @@
 
 
 
-<meta name="description" content="最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
-我在网上搜索关于 javascript 闭包内存泄漏的变化，网上并未提及相关事情，似乎在 JavaScript 主题下，这是一个鲜为人知的话题。（大多数你找到的谈论的是老版本IE的差劲的垃圾收集算法，但这个问题影">
+<meta name="description" content="原文链接：http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak
+最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
+我在网上搜索关于 javascript 闭包内存泄漏的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一种有趣的JavaScript内存泄漏">
 <meta property="og:url" content="http://yoursite.com/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/index.html">
 <meta property="og:site_name" content="拾邑">
-<meta property="og:description" content="最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
-我在网上搜索关于 javascript 闭包内存泄漏的变化，网上并未提及相关事情，似乎在 JavaScript 主题下，这是一个鲜为人知的话题。（大多数你找到的谈论的是老版本IE的差劲的垃圾收集算法，但这个问题影">
+<meta property="og:description" content="原文链接：http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak
+最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
+我在网上搜索关于 javascript 闭包内存泄漏的">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/closure/memory_leak.png">
-<meta property="og:updated_time" content="2016-11-24T17:20:55.000Z">
+<meta property="og:updated_time" content="2016-11-24T17:22:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一种有趣的JavaScript内存泄漏">
-<meta name="twitter:description" content="最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
-我在网上搜索关于 javascript 闭包内存泄漏的变化，网上并未提及相关事情，似乎在 JavaScript 主题下，这是一个鲜为人知的话题。（大多数你找到的谈论的是老版本IE的差劲的垃圾收集算法，但这个问题影">
+<meta name="twitter:description" content="原文链接：http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak
+最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
+我在网上搜索关于 javascript 闭包内存泄漏的">
 <meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/closure/memory_leak.png">
 
 
@@ -346,9 +349,11 @@
       
 
       
-        <p>最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。</p>
+        <p>原文链接：<a href="http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak" target="_blank" rel="external">http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak</a></p>
+<p>最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。</p>
 <p>我在网上搜索关于 javascript 闭包内存泄漏的变化，网上并未提及相关事情，似乎在 JavaScript 主题下，这是一个鲜为人知的话题。（大多数你找到的谈论的是老版本IE的差劲的垃圾收集算法，但这个问题影响甚至我目前的Chrome安装！）我后来发现了一个很棒的博客，由一个V8开发人员发布在此主题上，但似乎大多数 JavaScript 使用者还不知道他们必须注意这一点。</p>
 <p>JavaScript是一门神秘的函数式编程语言，而且他的函数就是闭包：函数对象有权访问定义在它们封闭范围内的变量，甚至在此范围已经结束的时候。一旦函数运行结束，闭包所捕获的局部变量就会被垃圾回收，所有定义在闭包范围内的函数都会自我进行垃圾回收。</p>
+<a id="more"></a>
 <p>现在，考虑一下这段代码：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> theThing = <span class="literal">null</span>;</div><div class="line"><span class="keyword">var</span> replaceThing = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> originalThing = theThing;</div><div class="line">  theThing = &#123;</div><div class="line">    <span class="attr">longStr</span>: <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">1000000</span>).join(<span class="string">'*'</span>)</div><div class="line">  &#125;;</div><div class="line">&#125;;</div><div class="line">setInterval(replaceThing, <span class="number">1000</span>);</div></pre></td></tr></table></figure>
 <p>每一秒，我么都会执行 <code>replaceThing</code> 函数。他用包含新分配的巨型字符串的新的对象来替换 <code>theThing</code> ，把 <code>theThing</code> 的原始值保存在了局部变量 <code>originalThing</code> 中。在它返回后， <code>theThing</code> 的旧值会被垃圾回收，包括它里面的长字符串，因为没有任何东西一直指向它。所以，这段代码用到的内存大体上是恒定的：它会一直分配大字符串，但是每一次他都会删除先前的大字符串。</p>
