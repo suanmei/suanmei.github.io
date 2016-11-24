@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="javascript,闭包,执行上下文,函数重载,变量对象,作用域,this,arguments,IIFE,类库封装," />
+  <meta name="keywords" content="闭包,javascript,执行上下文,函数重载,变量对象,作用域,this,arguments,IIFE,类库封装," />
 
 
 
@@ -102,7 +102,7 @@
 也正是由于它的特性，还有一种说法，就是：
 
 闭包是代码块和创建该代码块的上下文中数据的结合。">
-<meta property="og:updated_time" content="2016-11-23T19:14:10.000Z">
+<meta property="og:updated_time" content="2016-11-24T17:44:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript深入浅出之闭包">
 <meta name="twitter:description" content="每写15行代码，就会遇到一个闭包。这句话毫不夸张，因为理论上来说，每一个函数都是一个闭包。
@@ -399,7 +399,7 @@
 <p>每一次执行 <code>addMethod</code> 添加方法的时候，都会产生新的执行上下文，同样的 fn 参数以及 old ，在每个新的执行上下文都有不同的值。这是重载能够实现的根本所在。每一个 <code>old</code> 的 <code>[[scopes]]</code> 都指向的是上一次执行 <code>addMethod</code> 产生的 <em>父变量对象的层级链</em> 。</p>
 <p>而 <code>this</code> 和 <code>arguments</code> 则是当前函数执行时所指向的当前值。</p>
 <h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><h2 id="替“内存泄漏”说句话"><a href="#替“内存泄漏”说句话" class="headerlink" title="替“内存泄漏”说句话"></a>替“内存泄漏”说句话</h2><p>很多文章，很多书里，都会讲闭包会带来 <em>内存泄漏</em> ，其实正相反，闭包是来消除内存泄漏的，如果产生了，对不起，那是使用者应该背的锅。正常来说，<em>内存泄漏</em> 是指 IE6 带来的 bug ，现代浏览器的引用计数来进行垃圾处理，几乎不会产生 <em>内存泄漏</em> 。</p>
-<p>关于 <em>内存泄漏</em> ，可以看我的下一篇文章。</p>
+<p>关于 <em>内存泄漏</em> ，可以看我的 <a href="http://suanmei.github.io/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/" target="_blank" rel="external">一种有趣的JavaScript内存泄漏[译]</a>。</p>
 <hr>
 <p>闭包带来的妙用，远不止文中所谈的这些，这些都是用来讲解闭包的基本知识并帮助深入一点理解的。打好基础，妙用无穷，后面的学习会水到渠成。一位追求框架，不打理基础，则如高屋建瓴，慎之。</p>
 
@@ -424,9 +424,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/javascript/" rel="tag">#javascript</a>
-          
             <a href="/tags/闭包/" rel="tag">#闭包</a>
+          
+            <a href="/tags/javascript/" rel="tag">#javascript</a>
           
             <a href="/tags/执行上下文/" rel="tag">#执行上下文</a>
           
@@ -544,7 +544,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
