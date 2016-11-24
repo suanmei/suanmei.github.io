@@ -272,6 +272,147 @@
             
               
                 
+                <a class="post-title-link" href="/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/" itemprop="url">
+                  一种有趣的JavaScript内存泄漏
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-24T22:08:49+08:00" content="2016-11-24">
+              2016-11-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/译文/" itemprop="url" rel="index">
+                    <span itemprop="name">译文</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。</p>
+<p>我在网上搜索关于 javascript 闭包内存泄漏的变化，网上并未提及相关事情，似乎在 JavaScript 主题下，这是一个鲜为人知的话题。（大多数你找到的谈论的是老版本IE的差劲的垃圾收集算法，但这个问题影响甚至我目前的Chrome安装！）我后来发现了一个很棒的博客，由一个V8开发人员发布在此主题上，但似乎大多数 JavaScript 使用者还不知道他们必须注意这一点。</p>
+<p>JavaScript是一门神秘的函数式编程语言，而且他的函数就是闭包：函数对象有权访问定义在它们封闭范围内的变量，甚至在此范围已经结束的时候。一旦函数运行结束，闭包所捕获的局部变量就会被垃圾回收，所有定义在闭包范围内的函数都会自我进行垃圾回收。</p>
+<p>现在，考虑一下这段代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> theThing = <span class="literal">null</span>;</div><div class="line"><span class="keyword">var</span> replaceThing = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> originalThing = theThing;</div><div class="line">  theThing = &#123;</div><div class="line">    <span class="attr">longStr</span>: <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">1000000</span>).join(<span class="string">'*'</span>)</div><div class="line">  &#125;;</div><div class="line">&#125;;</div><div class="line">setInterval(replaceThing, <span class="number">1000</span>);</div></pre></td></tr></table></figure>
+<p>每一秒，我么都会执行 <code>replaceThing</code> 函数。他用包含新分配的巨型字符串的新的对象来替换 <code>theThing</code> ，把 <code>theThing</code> 的原始值保存在了局部变量 <code>originalThing</code> 中。在它返回后， <code>theThing</code> 的旧值会被垃圾回收，包括它里面的长字符串，因为没有任何东西一直指向它。所以，这段代码用到的内存大体上是恒定的：它会一直分配大字符串，但是每一次他都会删除先前的大字符串。</p>
+<p>但是如果我们有一个比 <code>replaceThing</code> 更长寿的闭包会怎么样？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> theThing = <span class="literal">null</span>;</div><div class="line"><span class="keyword">var</span> replaceThing = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> originalThing = theThing;</div><div class="line">  theThing = &#123;</div><div class="line">    <span class="attr">longStr</span>: <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">1000000</span>).join(<span class="string">'*'</span>),</div><div class="line">    <span class="attr">someMethod</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="built_in">console</span>.log(someMessage);</div><div class="line">    &#125;</div><div class="line">  &#125;;</div><div class="line">&#125;;</div><div class="line">setInterval(replaceThing, <span class="number">1000</span>);</div></pre></td></tr></table></figure>
+<p><code>someMethod</code> 理论上可以引用 <code>originalThing</code> ，所以只要 <code>someMethod</code> 存活着， <code>originalThing</code> 就应当被保留吗？这将导致无限的内存增长，因为每个版本的 <code>theThing</code> 都会抓住指向上一个版本的指针。</p>
+<p>幸运的是，现代的 JavaScript 实现（包括 Chrome 和 Node 中目前的 V8 ）足够聪明，能够注意到 <code>originalThing</code> 在闭包 <code>someMethod</code> 中未被实际应用，所以它没有被放到 <code>someMethod</code> 的词法环境中，所以当 <code>replaceThing</code> 结束时，是可以对之前的 <code>theThing</code> 进行垃圾回收的。</p>
+<p>（但是，等等，你可能会问！如果有人早先运行 <code>console.log = eval</code> ，那么看起来无害的 <code>console.log(someMessage)</code> 实际上是正 <code>eval</code> 一些引用了 <code>originalThing</code> 的代码？嗯， JavaScript 标准已经领先你一步了。如果你像这样偷偷摸摸地使用 <code>eval</code>（通过除了调用 <code>eval</code> 以外的任何方式），它被称为“间接 <code>eval</code> ”，实际上是不能访问词汇环境的！另一方面，如果 <code>someMethod</code> 确实包含了对使用了这个名称的 <code>eval</code> 的直接调用，它可能实际上访问了 <code>originalThing</code> ，JavaScript 环境禁止让 <code>originalThing</code> 一直在词法环境之外，这将导致泄露。）</p>
+<p>好，太棒了，JavaScript保护我们免受内存泄漏之扰，对吧？好，让我们试一下另一个版本，结合了前两个例子。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> theThing = <span class="literal">null</span>;</div><div class="line"><span class="keyword">var</span> replaceThing = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> originalThing = theThing;</div><div class="line">  <span class="keyword">var</span> unused = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (originalThing)</div><div class="line">      <span class="built_in">console</span>.log(<span class="string">"hi"</span>);</div><div class="line">  &#125;;</div><div class="line">  theThing = &#123;</div><div class="line">    <span class="attr">longStr</span>: <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">1000000</span>).join(<span class="string">'*'</span>),</div><div class="line">    <span class="attr">someMethod</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="built_in">console</span>.log(someMessage);</div><div class="line">    &#125;</div><div class="line">  &#125;;</div><div class="line">&#125;;</div><div class="line">setInterval(replaceThing, <span class="number">1000</span>);</div></pre></td></tr></table></figure>
+<p>在谷歌开发者工具中打开 ‘Timeline’ 标签，切换到 ‘内存’ 视图，然后点击 ‘记录’。</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/closure/memory_leak.png" alt="memory_leak" title="内存泄漏"></p>
+<p>看起来就像我们每秒使用一个额外的兆字节！甚至点击垃圾桶图标强制手动垃圾回收也没有帮助。所以就好像我们泄漏了 <code>longStr</code> 。</p>
+<p>但是这不是和以前一样的情况吗？ <code>originalThing</code> 仅在 <code>replaceThing</code> 的主体中引用，在 <code>unused</code> 中。 <code>replaceThing</code> 一结束， <code>unused</code> 本身（我们甚至不会运行！）就会被清理…从 <code>replaceThing</code> 中唯一逃脱的就是第二个闭包 <code>someMethod</code> 。而 <code>someMethod</code> 根本没有引用 <code>originalString</code> ！</p>
+<p>因此，即使任何代码都无法再次引用 <code>originalThing</code> ，它也从来没有被垃圾收集！为什么？是这样的，实现闭包的典型方式是每个函数对象都有一个链接，到代表它的词法作用域的字典式对象。如果 <code>replaceThing</code> 中定义的两个函数实际上都使用了 <code>originalThing</code> ，重要的是它们都获得了相同的对象，即使 <code>originalThing</code> 被重复分配，两个函数也共享相同的词法环境。现在，Chrome 的 V8 JavaScript引擎显然足够聪明，可以将变量放在词法环境之外，如果它们没有被任何闭包使用：这就是为什么第一个例子不泄漏。</p>
+<p>但是一旦某个变量被任何闭包使用，它最终会出现在该作用域内所有闭包共享的词法环境中。这可能导致内存泄漏。</p>
+<p>你可以想象一个更聪明的，可以避免这个问题的词汇环境的实现。每个闭包都可以有一本词典，里面包含着闭包实际读写的变量；这个词典中的值本身可能会是可以在多个闭包的词法环境间共享的可变单元。基于我对ECMAScript第5版标准的随意阅读，这是合法的：它对词法环境的描述将它们描述为“纯粹的规范机制，其不需要等同于任何 ECMAScript 实现的特定的伪现象”。也就是说，这个标准实际上并没有包含“垃圾”这个词，只是说了一次“内存”。（这里有一篇 <a href="http://flint.cs.yale.edu/flint/publications/escc.pdf" target="_blank" rel="external">关于这个问题的最佳实现的文章</a>，虽然不是 JavaScript 主题下的。其他一些语言实现确实有效，例如Go。）</p>
+<p>修复这种形式的内存泄漏，一旦你注意到它，是直接的，如 <a href="https://github.com/meteor/meteor/commit/49e9813" target="_blank" rel="external">the fix to the Meteor bug</a> 所示。只需添加 <code>originalThing = null</code> 到 <code>replaceThing</code> 的结尾。这样，即使名称 <code>originalThing</code> 仍在 <code>someMethod</code>的词法环境中，也不会有大的旧值的链接。</p>
+<p>所以总结一下：如果你有一个巨大的对象在被一些闭包使用，但不是你需要持续使用的任何闭包，只要确保局部变量不再指向它，一旦你用完它了。不幸的是，这些错误可能相当微妙;如果 JavaScript 引擎不要求你必须考虑这些，它将更好。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/11/23/deeply_understand_closure/" itemprop="url">
                   Javascript深入浅出之闭包
                 </a>
@@ -1124,128 +1265,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/02/relearn_box_type/" itemprop="url">
-                  重拾CSS规范之从盒类型谈起
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-02T21:23:07+08:00" content="2016-09-02">
-              2016-09-02
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/CSS/" itemprop="url" rel="index">
-                    <span itemprop="name">CSS</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/02/relearn_box_type/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/02/relearn_box_type/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/09/02/relearn_box_type/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1291,7 +1310,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1299,7 +1318,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1308,7 +1327,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

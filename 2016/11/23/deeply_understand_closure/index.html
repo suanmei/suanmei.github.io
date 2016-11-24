@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="javascript,闭包,执行上下文,函数重载,作用域,柯里化,this,arguments,IIFE,类库封装," />
+  <meta name="keywords" content="闭包,javascript,执行上下文,函数重载,变量对象,作用域,this,arguments,IIFE,类库封装," />
 
 
 
@@ -102,7 +102,7 @@
 也正是由于它的特性，还有一种说法，就是：
 
 闭包是代码块和创建该代码块的上下文中数据的结合。">
-<meta property="og:updated_time" content="2016-11-23T19:01:31.000Z">
+<meta property="og:updated_time" content="2016-11-23T19:14:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript深入浅出之闭包">
 <meta name="twitter:description" content="每写15行代码，就会遇到一个闭包。这句话毫不夸张，因为理论上来说，每一个函数都是一个闭包。
@@ -397,6 +397,7 @@
 <h2 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h2><p>JavaScript 中没有函数虫灾，但是我门可以利用参数检测来实现伪函数重载。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">addMethod</span>(<span class="params">obj, name, fn</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> old = obj[name];</div><div class="line">  <span class="built_in">console</span>.log(old);</div><div class="line">  obj[name] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (fn.length === <span class="built_in">arguments</span>.length) &#123;</div><div class="line">      <span class="keyword">return</span> fn.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> old === <span class="string">"function"</span>) &#123;</div><div class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.old = old);</div><div class="line">      <span class="keyword">return</span> old.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">addMethod(ninjas, <span class="string">"find"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// statement</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">addMethod(ninjas, <span class="string">"find"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">first</span>) </span>&#123;</div><div class="line">  <span class="comment">// statement</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line">addMethod(ninjas, <span class="string">"find"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">first, second</span>) </span>&#123;</div><div class="line">  <span class="comment">// statement</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>每一次执行 <code>addMethod</code> 添加方法的时候，都会产生新的执行上下文，同样的 fn 参数以及 old ，在每个新的执行上下文都有不同的值。这是重载能够实现的根本所在。每一个 <code>old</code> 的 <code>[[scopes]]</code> 都指向的是上一次执行 <code>addMethod</code> 产生的 <em>父变量对象的层级链</em> 。</p>
+<p>而 <code>this</code> 和 <code>arguments</code> 则是当前函数执行时所指向的当前值。</p>
 <h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><h2 id="替“内存泄漏”说句话"><a href="#替“内存泄漏”说句话" class="headerlink" title="替“内存泄漏”说句话"></a>替“内存泄漏”说句话</h2><p>很多文章，很多书里，都会讲闭包会带来 <em>内存泄漏</em> ，其实正相反，闭包是来消除内存泄漏的，如果产生了，对不起，那是使用者应该背的锅。正常来说，<em>内存泄漏</em> 是指 IE6 带来的 bug ，现代浏览器的引用计数来进行垃圾处理，几乎不会产生 <em>内存泄漏</em> 。</p>
 <p>关于 <em>内存泄漏</em> ，可以看我的下一篇文章。</p>
 <hr>
@@ -423,17 +424,17 @@
       
         <div class="post-tags">
           
-            <a href="/tags/javascript/" rel="tag">#javascript</a>
-          
             <a href="/tags/闭包/" rel="tag">#闭包</a>
+          
+            <a href="/tags/javascript/" rel="tag">#javascript</a>
           
             <a href="/tags/执行上下文/" rel="tag">#执行上下文</a>
           
             <a href="/tags/函数重载/" rel="tag">#函数重载</a>
           
-            <a href="/tags/作用域/" rel="tag">#作用域</a>
+            <a href="/tags/变量对象/" rel="tag">#变量对象</a>
           
-            <a href="/tags/柯里化/" rel="tag">#柯里化</a>
+            <a href="/tags/作用域/" rel="tag">#作用域</a>
           
             <a href="/tags/this/" rel="tag">#this</a>
           
@@ -457,6 +458,10 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/" rel="prev" title="一种有趣的JavaScript内存泄漏">
+                一种有趣的JavaScript内存泄漏 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -531,7 +536,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -539,7 +544,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -548,7 +553,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">39</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
