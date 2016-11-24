@@ -85,22 +85,25 @@
 
 
 <meta name="description" content="原文链接：http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak
+译者：拾邑
 最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
-我在网上搜索关于 javascript 闭包内存泄漏的">
+我在网上搜索关于 javascript 闭">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一种有趣的JavaScript内存泄漏">
 <meta property="og:url" content="http://yoursite.com/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/index.html">
 <meta property="og:site_name" content="拾邑">
 <meta property="og:description" content="原文链接：http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak
+译者：拾邑
 最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
-我在网上搜索关于 javascript 闭包内存泄漏的">
+我在网上搜索关于 javascript 闭">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/closure/memory_leak.png">
-<meta property="og:updated_time" content="2016-11-24T17:23:30.000Z">
+<meta property="og:updated_time" content="2016-11-24T17:27:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一种有趣的JavaScript内存泄漏">
 <meta name="twitter:description" content="原文链接：http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak
+译者：拾邑
 最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。
-我在网上搜索关于 javascript 闭包内存泄漏的">
+我在网上搜索关于 javascript 闭">
 <meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/closure/memory_leak.png">
 
 
@@ -350,6 +353,7 @@
 
       
         <p>原文链接：<a href="http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak" target="_blank" rel="external">http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak</a></p>
+<p>译者：拾邑</p>
 <p>最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。</p>
 <p>我在网上搜索关于 javascript 闭包内存泄漏的变化，网上并未提及相关事情，似乎在 JavaScript 主题下，这是一个鲜为人知的话题。（大多数你找到的谈论的是老版本IE的差劲的垃圾收集算法，但这个问题影响甚至我目前的Chrome安装！）我后来发现了一个很棒的博客，由一个V8开发人员发布在此主题上，但似乎大多数 JavaScript 使用者还不知道他们必须注意这一点。</p>
 <p>JavaScript是一门神秘的函数式编程语言，而且他的函数就是闭包：函数对象有权访问定义在它们封闭范围内的变量，甚至在此范围已经结束的时候。一旦函数运行结束，闭包所捕获的局部变量就会被垃圾回收，所有定义在闭包范围内的函数都会自我进行垃圾回收。</p>
