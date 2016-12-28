@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="javascript,setTimeout,setInterval,单线程," />
+  <meta name="keywords" content="javascript,setTimeout,setInterval,单线程,异步," />
 
 
 
@@ -92,11 +92,14 @@
 <meta property="og:site_name" content="拾邑">
 <meta property="og:description" content="在 CSS3 出来以前，我们通过 setTimeout 和 setInterval 来实现动画，我们熟悉并且热衷于它们的使用，但它背后的原理却未深究。把握核心，深究问题的根本，永远是我们的核心，今天我们了解一下定时器背后的男人——单线程。
 12345setTimeout(function() &amp;#123;  console.log(&apos;0&apos;);&amp;#125;, 0);console.log(&apos;1&apos;);">
-<meta property="og:updated_time" content="2016-12-27T18:46:25.000Z">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/timer/event_loop.png">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/timer/single_thread_time.png">
+<meta property="og:updated_time" content="2016-12-28T05:46:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript深入浅出之单线程">
 <meta name="twitter:description" content="在 CSS3 出来以前，我们通过 setTimeout 和 setInterval 来实现动画，我们熟悉并且热衷于它们的使用，但它背后的原理却未深究。把握核心，深究问题的根本，永远是我们的核心，今天我们了解一下定时器背后的男人——单线程。
 12345setTimeout(function() &amp;#123;  console.log(&apos;0&apos;);&amp;#125;, 0);console.log(&apos;1&apos;);">
+<meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/timer/event_loop.png">
 
 
 
@@ -361,7 +364,9 @@
 <p>任务队列就是由这些异步事件或者异步请求的回调函数组成的，JS 线程最后执行的异步任务，其实就是这些回调函数。</p>
 <p>任务队列是一个先进先出（FIFO）的队列，排在前面的事件，会最先被读取执行。然后再创建执行上下文，推入栈中，依此循环往复。</p>
 <p>借助下面的图片来看一下，仿照的 <a href="http://vimeo.com/96425312" target="_blank" rel="external">《Help, I’m stuck in an event-loop》</a> 中的图片。</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/timer/event_loop.png" alt="Event_loop.png失踪了" title="Event Loop"></p>
 <h2 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h2><p><code>setTimeout</code> 和 <code>setInterval</code> 是通过定时器线程进行处理的，它会在指定时间之后将回调函数放入任务队列中。我们来看一下下面这张图（来自于《JavaScript忍者秘籍》）。</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/timer/single_thread_time.png" alt="single_thread_time.png失踪了" title="js单线程带来的时间轴"></p>
 <p>由于在 0-10ms 期间触发了 <code>click</code> 事件，所以事件处理函数被放置在了任务队列，并且处于任务队列最前端，但是由于当前代码还未执行完毕，所以不能立即读取执行 <code>click</code> 事件回调函数。10ms 的时候 <code>setTimeout</code> 和 <code>setInterval</code> 的回调函数被放置到任务队列，紧随 <code>click</code> 事件。</p>
 <p>到了 18ms 的时候，js 线程的代码执行完毕，先执行任务队列最前端的 <code>click</code> 事件回调函数，在其执行期间，20ms 处，<code>setInterval</code> 第二次想要插入队列尾部，但是由于拥有相同回调函数的 <code>setInterval</code> 实例已经存在了，所以这次的将被废弃，不能继续插入到队列中。</p>
 <p>在 27ms 处， <code>click</code> 事件结束，相应地开始执行 <code>setTimeout</code> 的回调函数，在其执行期间，30ms 处，<code>setInterval</code> 第三次想要插入队列尾部，同理，不能继续插入到队列中。</p>
@@ -412,6 +417,8 @@
           
             <a href="/tags/单线程/" rel="tag">#单线程</a>
           
+            <a href="/tags/异步/" rel="tag">#异步</a>
+          
         </div>
       
 
@@ -426,6 +433,10 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/28/deeply_understand_timer/" rel="prev" title="Javascript深入浅出之定时器">
+                Javascript深入浅出之定时器 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -500,7 +511,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -517,7 +528,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">43</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
