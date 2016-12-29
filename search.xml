@@ -3,6 +3,13 @@
   
     
     <entry>
+      <title><![CDATA[函数节流和函数防抖的区别[译]]]></title>
+      <url>%2F2016%2F12%2F29%2FThe-Difference-Between-Throttling-and-Debouncing%2F</url>
+      <content type="text"></content>
+    </entry>
+
+    
+    <entry>
       <title><![CDATA[Javascript深入浅出之定时器]]></title>
       <url>%2F2016%2F12%2F28%2Fdeeply_understand_timer%2F</url>
       <content type="text"></content>
