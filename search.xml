@@ -3,6 +3,13 @@
   
     
     <entry>
+      <title><![CDATA[Javascript深入浅出之原型]]></title>
+      <url>%2F2017%2F01%2F02%2Fdeeply_understand_prototype%2F</url>
+      <content type="text"></content>
+    </entry>
+
+    
+    <entry>
       <title><![CDATA[函数节流和函数去抖之差异[译]]]></title>
       <url>%2F2016%2F12%2F29%2FThe-Difference-Between-Throttling-and-Debouncing%2F</url>
       <content type="text"><![CDATA[原文链接：https://css-tricks.com/the-difference-between-throttling-and-debouncing/ 在我有这些疑惑的某个日子，有人指点了我。所以，我把它们放到了博客文章里以及这个网站。两者都是为了性能而限制基于DOM事件执行的Javascript的数量的方法。但是它们，是的你猜到了，不一样。 函数节流强行限制一个函数某段时间能被调用的最大次数。比如“每 100ms 最多能执行这个函数一次。”一般情况下来说，你可能会在 10 秒内调用这个函数 1000 次。如果你节流让它每 100ms 一次，这个函数最多能够执行 100 次。 (10s * 1,000) = 10,000ms10,000ms / 100ms throttling = 100 maximum calls 函数去抖强行限制，一个函数，除非在一定时间之内没有被调用过，否则不执行。比如“仅在 100ms 内函数未被调用时才执行此函数。”可能一个函数急速突发之中被调用 1000 次，在三秒之内，然后停止被调用。如果你是 100ms 去抖，这个函数只有在本次突发结束后，在 3.1s 时被调用一次。在这里突发中每次函数被调用，他都将重置被去抖的定时器。 重点是什么？这些概念的一个主要用例是某些 DOM 事件，比如滚动和调整大小。比如，如果你将一个滚动处理程序绑定到一个元素，并且将该元素向下滚动 5000px，那么你可能会看到 100 多个事件被触发。如果你的事件处理程序做了一大堆的工作（就像繁重的计算和其他的 DOM 操作），你可能会看到性能问题。如果你能够凭借经验，少执行这段程序几次，没有太多中断，从而脱身开来，这也许是值得的。 如何实现？这两种函数都被内置在 Underscore 和 Lodash 中。甚至你不想整个的使用这些库的话，你可以从它们之中将这些函数提取出来供你使用。 简单的被节流的滚动事件: 123$(&quot;body&quot;).on(&apos;scroll&apos;, _.throttle(function() &#123; // Do expensive things&#125;, 100)); 简单的去抖的调整大小: 123$(window).on(&apos;resize&apos;, _.debounce(function() &#123; // Do expensive things&#125;, 100)); 从这里开始要升级了，你可能需要使用 requestAnimationFrame 来工作，所以即使函数正被执行，浏览器也会根据它自己的理想时机来实现。这在 this Paul Lewis tutorial 一文中有提及。 Demo简单的小实例这样你们就能体会到不同了: 这里还有一个更详实的介绍：More demos!]]></content>
