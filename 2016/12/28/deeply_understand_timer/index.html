@@ -85,21 +85,18 @@
 
 
 <meta name="description" content="前一篇文章聊单线程的时候，简要的提到了定时器的执行情况。这里我们将对其进行更多的探讨。
-setTimeout 和 setInterval 的区别可能看到这个小标题大家第一时间想到的都是，setTimeout 只执行一次，而 setInterval 则是重复执行。Oh,no!我们今天当然不能讲的这么浅，我们需要谈到的是 迭代setTimeout 和 setInterval 的区别。
-12345678">
+setTimeout 和 setInterval 的区别可能看到这个小标题大家第一时间想到的都是，setTimeout 只执行一次，而 setInterval 则是重复执行。Oh,no!我们今天当然不能讲的这么浅，我们需要谈到的是 迭代setTimeout 和 setInterval 的区别。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Javascript深入浅出之定时器">
 <meta property="og:url" content="http://yoursite.com/2016/12/28/deeply_understand_timer/index.html">
 <meta property="og:site_name" content="拾邑">
 <meta property="og:description" content="前一篇文章聊单线程的时候，简要的提到了定时器的执行情况。这里我们将对其进行更多的探讨。
-setTimeout 和 setInterval 的区别可能看到这个小标题大家第一时间想到的都是，setTimeout 只执行一次，而 setInterval 则是重复执行。Oh,no!我们今天当然不能讲的这么浅，我们需要谈到的是 迭代setTimeout 和 setInterval 的区别。
-12345678">
-<meta property="og:updated_time" content="2017-01-01T18:03:48.000Z">
+setTimeout 和 setInterval 的区别可能看到这个小标题大家第一时间想到的都是，setTimeout 只执行一次，而 setInterval 则是重复执行。Oh,no!我们今天当然不能讲的这么浅，我们需要谈到的是 迭代setTimeout 和 setInterval 的区别。">
+<meta property="og:updated_time" content="2017-01-01T18:05:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript深入浅出之定时器">
 <meta name="twitter:description" content="前一篇文章聊单线程的时候，简要的提到了定时器的执行情况。这里我们将对其进行更多的探讨。
-setTimeout 和 setInterval 的区别可能看到这个小标题大家第一时间想到的都是，setTimeout 只执行一次，而 setInterval 则是重复执行。Oh,no!我们今天当然不能讲的这么浅，我们需要谈到的是 迭代setTimeout 和 setInterval 的区别。
-12345678">
+setTimeout 和 setInterval 的区别可能看到这个小标题大家第一时间想到的都是，setTimeout 只执行一次，而 setInterval 则是重复执行。Oh,no!我们今天当然不能讲的这么浅，我们需要谈到的是 迭代setTimeout 和 setInterval 的区别。">
 
 
 
@@ -349,6 +346,7 @@ setTimeout 和 setInterval 的区别可能看到这个小标题大家第一时�
       
         <p>前一篇文章聊单线程的时候，简要的提到了定时器的执行情况。这里我们将对其进行更多的探讨。</p>
 <h2 id="setTimeout-和-setInterval-的区别"><a href="#setTimeout-和-setInterval-的区别" class="headerlink" title="setTimeout 和 setInterval 的区别"></a>setTimeout 和 setInterval 的区别</h2><p>可能看到这个小标题大家第一时间想到的都是，setTimeout 只执行一次，而 setInterval 则是重复执行。Oh,no!我们今天当然不能讲的这么浅，我们需要谈到的是 <strong>迭代setTimeout</strong> 和 setInterval 的区别。</p>
+<a id="more"></a>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo1</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// statement1</span></div><div class="line">  </div><div class="line">  setTimeout(<span class="function"><span class="keyword">function</span> <span class="title">bar1</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// statement2</span></div><div class="line">  &#125;, <span class="number">100</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  setTimeout(<span class="function"><span class="keyword">function</span> <span class="title">bar2</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// statement2</span></div><div class="line">  &#125;, <span class="number">100</span>);</div><div class="line">  </div><div class="line">  <span class="comment">// statement1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>我们思考一下，上面这段代码，同样的两个 <code>setTimeout</code> 在 <code>foo1</code> 和 <code>foo2</code> 中执行情况会一样吗？如果不一样，为什么？</p>
 <p>答案是——不一样！很简单，<code>setTimeout</code> 执行时机就不一样， <code>bar1</code>  会早于 <code>bar2</code> 进入任务队列。现在我们要来细细地看一下它们的执行时间相差几何。</p>

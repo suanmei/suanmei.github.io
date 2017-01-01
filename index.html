@@ -464,32 +464,13 @@
 
       
         
-          
-            <p>前一篇文章聊单线程的时候，简要的提到了定时器的执行情况。这里我们将对其进行更多的探讨。</p>
+          <p>前一篇文章聊单线程的时候，简要的提到了定时器的执行情况。这里我们将对其进行更多的探讨。</p>
 <h2 id="setTimeout-和-setInterval-的区别"><a href="#setTimeout-和-setInterval-的区别" class="headerlink" title="setTimeout 和 setInterval 的区别"></a>setTimeout 和 setInterval 的区别</h2><p>可能看到这个小标题大家第一时间想到的都是，setTimeout 只执行一次，而 setInterval 则是重复执行。Oh,no!我们今天当然不能讲的这么浅，我们需要谈到的是 <strong>迭代setTimeout</strong> 和 setInterval 的区别。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo1</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// statement1</span></div><div class="line">  </div><div class="line">  setTimeout(<span class="function"><span class="keyword">function</span> <span class="title">bar1</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// statement2</span></div><div class="line">  &#125;, <span class="number">100</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  setTimeout(<span class="function"><span class="keyword">function</span> <span class="title">bar2</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// statement2</span></div><div class="line">  &#125;, <span class="number">100</span>);</div><div class="line">  </div><div class="line">  <span class="comment">// statement1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>我们思考一下，上面这段代码，同样的两个 <code>setTimeout</code> 在 <code>foo1</code> 和 <code>foo2</code> 中执行情况会一样吗？如果不一样，为什么？</p>
-<p>答案是——不一样！很简单，<code>setTimeout</code> 执行时机就不一样， <code>bar1</code>  会早于 <code>bar2</code> 进入任务队列。现在我们要来细细地看一下它们的执行时间相差几何。</p>
-<p>假设任务队列为空，这是我们的理想环境，就像物理课上我们假设小木块与冰面的摩擦力为 0 。</p>
-<p>如果继续假设 <code>statement1</code> 的执行时间为 50ms ，<code>foo1</code> 中，会于 500ms 时启动定时器，并于 120ms 时将 <code>bar1</code> 插入任务队列并立即被读取执行， <code>foo2</code> 会于 0ms 处启动定时器，但是需要 100ms 处才能被插入任务队列，此时 <code>statement1</code> 已经执行完了，所以可以立即读取。他们相差 50ms 。</p>
-<p>如果假设 <code>statement1</code> 的执行时间为 200ms ，<code>foo1</code> 中，会于 200ms 时启动定时器，并于 300ms 时将 <code>bar1</code> 插入任务队列并立即被读取执行， <code>foo2</code> 会于 0ms 处启动定时器，但是需要 100ms 处才能被插入任务队列。此时 <code>statement1</code> 还没有执行完毕，需要继续等到，到 200ms 时可以读取任务队列中的 <code>bar2</code>。他们相差 100ms 。</p>
-<p>所以我们可以得出结论，<code>bar1</code> 和 <code>bar2</code> 的执行时间相差的是 statement1执行时间 和 定时器设定时间 两者中较小的那个。</p>
-<p>而我们使用迭代定时器的时候大多是像 <code>foo1</code> 那样使用，因为在进行下一次的 <code>setTimeout</code> 之前，我们会有一些必要的操作以及判断。而这也就代表着，两次  <code>setTimeout</code> 之间的间隔是 &gt;= 指定时间的。</p>
-<p><code>setInterval</code> 则不然，它不管你的回调函数里面都需要怎样的操作，它会很准时的每隔指定的时间就去向任务队列中添加任务的。</p>
-<h2 id="setInterval-的缺点"><a href="#setInterval-的缺点" class="headerlink" title="setInterval 的缺点"></a>setInterval 的缺点</h2><p><code>setInterval</code> 的定时的准确性，看似完美，实则不然。我们回顾一下上一篇文章中展示的例子，首先，如果当前队列中有相同的 <code>setInterval</code> 实例，则无法继续添加，也就是说，可能会造成 <code>setInterval</code> 的执行次数的遗漏。再者，如果 <code>setinterval</code> 之前被阻塞了，那么则会造成接下来的两次 <code>setinterval</code> 的执行间隔时间小于指定时间。</p>
-<p>因为这两个特性，所以很多人都会建议说少用 <code>setInterval</code> ，改用迭代 <code>setTimeout</code> 。但是诚如上面我们看到的， <code>setTimeout</code> 也不如我们所想象的那么完美，那么我们有没有什么更好的解决方法呢？</p>
-<h2 id="requestAnimationFrame"><a href="#requestAnimationFrame" class="headerlink" title="requestAnimationFrame"></a>requestAnimationFrame</h2><p>大多显示器的显示频率是 60HZ ，也就是每次刷新间隔 16.7ms ，如果我们使用 <code>setTimeout/setInterval</code> 的间隔小于 16.7ms ，这就要造成显示器重绘的堵塞压力，每隔一段时间就会丢失掉一次定时器的执行绘制。这也就是为何 <code>setTimeout</code> 的定时器推荐最小使用 16.7ms 。</p>
-<p><code>requestAnimationFrame</code> 及时顺应时代的浪潮而出生的，它和上面那两位最大的区别是，它的执行间隔时间是不由我们来控制的，只跟着显示器的绘制间隔走，显示器多久绘制一次，它就多久执行一次。</p>
-<p>当然，它的妙用可不仅仅只是这些，如果同时有几个 <code>requestAnimationFrame</code> ，页面重绘之前，会通知浏览器把需要执行的几个函数执行一下（它们可能在不同的 <code>requestAnimationFrame</code> 中），执行好了之后一并绘制，而在 <code>setTimeout</code> 中则不行，大家排队，挨个执行然后重绘。</p>
-<p>而且如果页面最小化了，或者被切换到其他 Tab 了， <code>requestAnimationFrame</code> 会暂停执行，优化资源的利用。</p>
-<p>但是它不支持 IE9 及之前的版本哦～</p>
-<p>最后我们就放个实例吧。</p>
-<script async src="//jsfiddle.net/suanmei/1ecfea9u/embed/js,html,result/"></script>
-
-<hr>
-<p>定时器东西不多，这就讲完了，下一篇文章可以看一下定时器的一些应用～</p>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/12/28/deeply_understand_timer/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
