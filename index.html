@@ -341,67 +341,15 @@
 
       
         
-          
-            <p>这是很出名的一道题，我们分成两部分来看这道题：<strong>网络通信</strong>和<strong>浏览器渲染</strong>。本篇将只介绍网络通信，浏览器渲染留待下文。</p>
+          <p>这是很出名的一道题，我们分成两部分来看这道题：<strong>网络通信</strong>和<strong>浏览器渲染</strong>。本篇将只介绍网络通信，浏览器渲染留待下文。</p>
 <h2 id="TCP-IP-协议族"><a href="#TCP-IP-协议族" class="headerlink" title="TCP/IP 协议族"></a>TCP/IP 协议族</h2><p>计算机与网络设备要互相通信，双方就必须基本相同的规则。比如如何探测通信目标、由哪一边先发起通信、用哪种语言进行通信、硬件如何通信，所有的一切都需要有一个规则。我们把这种规则称为协议（protocol）。</p>
 <p>需要建立规则的事务很多，每种事务都有其对应的规则（协议）。而这所有互联网相关的协议集合我们称作 <code>TCP/IP</code> 协议族。</p>
 <p><img src="http://o7nps5lzq.bkt.clouddn.com/url2render/protocol-group.jpg" alt="TCP/IP是互联网相关的各类协议族的总称" title="TCP/IP是互联网相关的各类协议族的总称"></p>
-<h2 id="TCP-IP-通信传输流"><a href="#TCP-IP-通信传输流" class="headerlink" title="TCP/IP 通信传输流"></a>TCP/IP 通信传输流</h2><p><code>TCP/IP</code> 分为四层： 应用层、传输层、网络层、数据链路层。发送端从应用层往下走，接收端则从链路层往上走。</p>
-<p>从下面这张图我们可以看出 <code>TCP/IP</code> 协议族中包含着 <code>HTTP、TCP、IP</code> 协议，其实还有很多。我们网页从输入 <code>URL</code> 到浏览器能渲染这中间的通信过程就是以下图传输流进行通信的。</p>
-<p><img src="http://o7nps5lzq.bkt.clouddn.com/url2render/TCP:IP.jpg" alt="TCP/IP 通信传输流" title="TCP/IP 通信传输流"></p>
-<p>好了，说了这么多，我们来逐步了解一下通信过程。</p>
-<h2 id="通信过程"><a href="#通信过程" class="headerlink" title="通信过程"></a>通信过程</h2><ol>
-<li><p><strong>在浏览器中输入URL</strong>。  </p>
-<p> 好，在这里我们有必要了解一下 <code>URI</code> 和 <code>URL</code> 的区别。</p>
-</li>
-</ol>
-<pre><code>`URI` 全称： `Uniform Resource Identifier`，就是说用某种协议来表示资源的定位标识符。 `URL` 表示资源的位置。所以说 `URL` 只是 `URI` 的一部分。
-
-
-我们再来看一下 `URI` 的格式。
-
-![URI 的格式](http://o7nps5lzq.bkt.clouddn.com/url2render/URI.jpeg &apos;URI 的格式&apos;)
-</code></pre><ol>
-<li><p><strong>应用层DNS进行域名解析</strong></p>
-<p> <code>DNS</code> 和 HTTP 协议一样，也处于应用层。它负责将域名解析成 <code>IP地址</code> 。</p>
-<p> <code>DNS</code> 查询的顺序如下: 浏览器缓存 –&gt; 系统缓存 –&gt; 路由器缓存 –&gt; <code>ISP</code>(网络服务提供商) <code>DNS</code> 缓存 (第一次访问服务商 <code>DNS</code> 服务器查询 <code>IP</code> 地址时会有一个缓存) –&gt; 递归搜索</p>
-<p> <img src="http://o7nps5lzq.bkt.clouddn.com/url2render/DNS%20services.jpg" alt="DNS 通过域名解析IP" title="DNS 通过域名解析IP"></p>
-</li>
-<li><p><strong>应用层客户端发送一个想看某页面的HTTP请求</strong></p>
-<p> <code>HTTP</code> 请求分为请求头和请求主体。请求主体就是客户端要发送给服务器或者服务器返回给客户端的内容，请求头包含 通信方式(POST/GET/INPUT/DELETE…)、URI、协议版本号以及请求首部方法（Accept、Cache-Control…）。</p>
-<p> 如果是响应的话，响应头就由 协议版本号、状态码、状态码原因短语以及首部方法(Set-Cookie、Allow…)组成。</p>
-</li>
-<li><p><strong>传输层TCP传输报文</strong></p>
-<p> 为了传输方便，在传输层（TCP协议）把从应用层处接收到的数据（HTTP请求报文）进行分割，并在各个报文上打上标记序号以及端口号（默认80）后转发给网络层。</p>
-<p> <code>TCP</code> 为了确认无误地将数据送达目标处，采用了三次握手(three-way handshaking)策略。发送端想送一个带 SYN 标志的数据包给对方，接收端收到后，会穿一个带有 SYN/ACK 标志的数据包来传达确认信息。最后，发送端再回传一个带有 ACK 标志的数据包，代表 “握手” 结束。</p>
-<p> <img src="http://o7nps5lzq.bkt.clouddn.com/url2render/three-way%20handshaking.jpg" alt="TCP 三次握手" title="TCP 三次握手"></p>
-</li>
-<li><p><strong>网络层IP协议查询MAC地址进行数据包的传输</strong></p>
-<p> IP协议负责把各种数据包传送给对方。如果要保证确实能传输到对方，需要确定接收方的 <code>MAC地址</code>。<code>IP地址</code> 是指节点被分配到的地址，可变， <code>MAC地址</code> 是指网卡所属的固定地址，一般不会变。<code>IP地址</code> 可以和 <code>MAC地址</code> 通过映射表一一配对上的，而 <code>IP</code> 到 <code>MAC</code> 的解析过程则依赖于 ARP 协议，它可以根据通信方的 <code>IP地址</code> 反查出对应的 <code>MAC地址</code>。</p>
-<p> 而一般通信双方是无法直接进行通信的（除非在同一局域网），会经过多台计算机或路由器来进行中转，所以也就需要 <code>ARP</code> 来一路确认下一个中转站，协助数据包的传输。</p>
-<p> <img src="http://o7nps5lzq.bkt.clouddn.com/url2render/ARP.jpg" alt="ARP传输" title="ARP传输"></p>
-</li>
-<li><p>链路层进行数据传输</p>
-<p> 找到对方的 <code>MAC地址</code> 后，就会将数据发送到链路层，通过链路层来进行数据最终传输。此时，客户端发送请求阶段结束。</p>
-</li>
-<li><p>服务器接收数据</p>
-<p> 接收端的服务器在链路层接收到数据包，再层层向上直到应用层。这过程中包括在运输层通过TCP协议将分段的数据包重新组成原来的HTTP请求报文（发送端TCP分割数据时打上的序号就是用来还原的）。</p>
-</li>
-<li><p>服务器响应请求</p>
-<p> 前面说过，响应请求头包括 协议版本号、状态码、状态码原因短语以及响应首部方法。状态码分为五类：</p>
-<p> <img src="http://o7nps5lzq.bkt.clouddn.com/url2render/status-code.jpg" alt="状态码" title="状态码"></p>
-<p> 其中常见的包括 200 OK——成功， 301 (URL)——重定向， 404 Not Found——客户请求资源找不到。</p>
-<p> 值得一提的是，目前很多网站都会有一个重定向功能，比如你省去了 <code>www.</code>，它会给你重定向来添加上。这也就意味着初次请求 <code>HTML</code> 的过程中我们需要发起两次请求。</p>
-<p> 这样做的原因在于搜索引擎会认为 <code>www.xx.com</code> 和 <code>xx.com</code> 是两个网站，从而造成网站排名下降。还有如果两个地址都有打开过，会造成多余（双倍）的浏览器缓存。</p>
-</li>
-<li><p>服务器返回相应文件</p>
-<p>请求成功后，服务器会返回相应的HTML文件</p>
-</li>
-</ol>
-<hr>
-<p>接下来就到了页面的渲染阶段了。</p>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/02/11/url2render-part1/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>

@@ -96,11 +96,12 @@ TCP/IP 协议族计算机与网络设备要互相通信，双方就必须基本�
 需要建立规则的事务很多，每种事务都有其对应的规则（协议）。而这所">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/protocol-group.jpg">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/TCP:IP.jpg">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/URI.jpeg">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/DNS%20services.jpg">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/three-way%20handshaking.jpg">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/ARP.jpg">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/status-code.jpg">
-<meta property="og:updated_time" content="2017-02-11T08:23:42.000Z">
+<meta property="og:updated_time" content="2017-02-11T10:58:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从输入url到浏览器显示页面，发生了什么？（网络通信篇）">
 <meta name="twitter:description" content="这是很出名的一道题，我们分成两部分来看这道题：网络通信和浏览器渲染。本篇将只介绍网络通信，浏览器渲染留待下文。
@@ -358,6 +359,7 @@ TCP/IP 协议族计算机与网络设备要互相通信，双方就必须基本�
 <h2 id="TCP-IP-协议族"><a href="#TCP-IP-协议族" class="headerlink" title="TCP/IP 协议族"></a>TCP/IP 协议族</h2><p>计算机与网络设备要互相通信，双方就必须基本相同的规则。比如如何探测通信目标、由哪一边先发起通信、用哪种语言进行通信、硬件如何通信，所有的一切都需要有一个规则。我们把这种规则称为协议（protocol）。</p>
 <p>需要建立规则的事务很多，每种事务都有其对应的规则（协议）。而这所有互联网相关的协议集合我们称作 <code>TCP/IP</code> 协议族。</p>
 <p><img src="http://o7nps5lzq.bkt.clouddn.com/url2render/protocol-group.jpg" alt="TCP/IP是互联网相关的各类协议族的总称" title="TCP/IP是互联网相关的各类协议族的总称"></p>
+<a id="more"></a>
 <h2 id="TCP-IP-通信传输流"><a href="#TCP-IP-通信传输流" class="headerlink" title="TCP/IP 通信传输流"></a>TCP/IP 通信传输流</h2><p><code>TCP/IP</code> 分为四层： 应用层、传输层、网络层、数据链路层。发送端从应用层往下走，接收端则从链路层往上走。</p>
 <p>从下面这张图我们可以看出 <code>TCP/IP</code> 协议族中包含着 <code>HTTP、TCP、IP</code> 协议，其实还有很多。我们网页从输入 <code>URL</code> 到浏览器能渲染这中间的通信过程就是以下图传输流进行通信的。</p>
 <p><img src="http://o7nps5lzq.bkt.clouddn.com/url2render/TCP:IP.jpg" alt="TCP/IP 通信传输流" title="TCP/IP 通信传输流"></p>
@@ -365,15 +367,10 @@ TCP/IP 协议族计算机与网络设备要互相通信，双方就必须基本�
 <h2 id="通信过程"><a href="#通信过程" class="headerlink" title="通信过程"></a>通信过程</h2><ol>
 <li><p><strong>在浏览器中输入URL</strong>。  </p>
 <p> 好，在这里我们有必要了解一下 <code>URI</code> 和 <code>URL</code> 的区别。</p>
+<p> <code>URI</code> 全称： <code>Uniform Resource Identifier</code>，就是说用某种协议来表示资源的定位标识符。 <code>URL</code> 表示资源的位置。所以说 <code>URL</code> 只是 <code>URI</code> 的一部分。</p>
+<p> 我们再来看一下 <code>URI</code> 的格式。</p>
+<p> <img src="http://o7nps5lzq.bkt.clouddn.com/url2render/URI.jpeg" alt="URI 的格式" title="URI 的格式"></p>
 </li>
-</ol>
-<pre><code>`URI` 全称： `Uniform Resource Identifier`，就是说用某种协议来表示资源的定位标识符。 `URL` 表示资源的位置。所以说 `URL` 只是 `URI` 的一部分。
-
-
-我们再来看一下 `URI` 的格式。
-
-![URI 的格式](http://o7nps5lzq.bkt.clouddn.com/url2render/URI.jpeg &apos;URI 的格式&apos;)
-</code></pre><ol>
 <li><p><strong>应用层DNS进行域名解析</strong></p>
 <p> <code>DNS</code> 和 HTTP 协议一样，也处于应用层。它负责将域名解析成 <code>IP地址</code> 。</p>
 <p> <code>DNS</code> 查询的顺序如下: 浏览器缓存 –&gt; 系统缓存 –&gt; 路由器缓存 –&gt; <code>ISP</code>(网络服务提供商) <code>DNS</code> 缓存 (第一次访问服务商 <code>DNS</code> 服务器查询 <code>IP</code> 地址时会有一个缓存) –&gt; 递归搜索</p>
