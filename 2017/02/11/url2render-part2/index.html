@@ -84,15 +84,41 @@
 
 
 
-<meta name="description" content="阅读，知识管理">
-<meta property="og:type" content="website">
-<meta property="og:title" content="拾壹小筑">
-<meta property="og:url" content="http://yoursite.com/archives/2017/index.html">
+<meta name="description" content="我们今天来了解一下浏览器工作原理，它是由呈现引擎（也就是各位道友常说的内核）来完成的。我们今天主要借助 webkit  来看一下。
+渲染流程呈现引擎一开始会从网络层获取请求文档的内容，内容的大小一般限制在 8000 个块以内。
+然后开始进行下面的这个流程：
+
+我们可以看出到如下几个点：
+
+浏览器解析HTML／CSS：
+ 解析 HTML ，生成 DOM Tree。 解析 CSS ，生成 Style">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇）">
+<meta property="og:url" content="http://yoursite.com/2017/02/11/url2render-part2/index.html">
 <meta property="og:site_name" content="拾壹小筑">
-<meta property="og:description" content="阅读，知识管理">
+<meta property="og:description" content="我们今天来了解一下浏览器工作原理，它是由呈现引擎（也就是各位道友常说的内核）来完成的。我们今天主要借助 webkit  来看一下。
+渲染流程呈现引擎一开始会从网络层获取请求文档的内容，内容的大小一般限制在 8000 个块以内。
+然后开始进行下面的这个流程：
+
+我们可以看出到如下几个点：
+
+浏览器解析HTML／CSS：
+ 解析 HTML ，生成 DOM Tree。 解析 CSS ，生成 Style">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/webkit-render.jpg">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/renderTree&domTree.jpg">
+<meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/script-load.jpg">
+<meta property="og:updated_time" content="2017-02-12T18:10:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="拾壹小筑">
-<meta name="twitter:description" content="阅读，知识管理">
+<meta name="twitter:title" content="从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇）">
+<meta name="twitter:description" content="我们今天来了解一下浏览器工作原理，它是由呈现引擎（也就是各位道友常说的内核）来完成的。我们今天主要借助 webkit  来看一下。
+渲染流程呈现引擎一开始会从网络层获取请求文档的内容，内容的大小一般限制在 8000 个块以内。
+然后开始进行下面的这个流程：
+
+我们可以看出到如下几个点：
+
+浏览器解析HTML／CSS：
+ 解析 HTML ，生成 DOM Tree。 解析 CSS ，生成 Style">
+<meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/webkit-render.jpg">
 
 
 
@@ -113,10 +139,10 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2017/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/02/11/url2render-part2/"/>
 
 
-  <title> 归档 | 拾壹小筑 </title>
+  <title> 从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇） | 拾壹小筑 </title>
 </head>
 
 <body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
@@ -137,7 +163,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
@@ -248,147 +274,187 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      嗯..! 目前共计 19 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
-
-      
-      
-      
-
-      
-        
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2017">2017</h2>
-        </div>
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/02/11/url2render-part2/" itemprop="url">
-              
-                <span itemprop="name">从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇）</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-02-11T23:07:45+08:00"
-              content="2017-02-11" >
-          02-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/02/11/url2render-part1/" itemprop="url">
-              
-                <span itemprop="name">从输入url到浏览器显示页面，发生了什么？（网络通信篇）</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-02-11T13:16:05+08:00"
-              content="2017-02-11" >
-          02-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="//schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/01/02/deeply_understand_prototype/" itemprop="url">
-              
-                <span itemprop="name">Javascript深入浅出之原型</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-01-02T02:16:22+08:00"
-              content="2017-01-02" >
-          01-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-  </section>
 
   
+  
 
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-02-11T23:07:45+08:00" content="2017-02-11">
+              2017-02-11
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/11/url2render-part2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/11/url2render-part2/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa">本文阅读量</i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们今天来了解一下浏览器工作原理，它是由呈现引擎（也就是各位道友常说的内核）来完成的。我们今天主要借助 <code>webkit</code>  来看一下。</p>
+<h2 id="渲染流程"><a href="#渲染流程" class="headerlink" title="渲染流程"></a>渲染流程</h2><p>呈现引擎一开始会从网络层获取请求文档的内容，内容的大小一般限制在 8000 个块以内。</p>
+<p>然后开始进行下面的这个流程：</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/url2render/webkit-render.jpg" alt="渲染引擎流程-webkit" title="渲染引擎流程-webkit"></p>
+<p>我们可以看出到如下几个点：</p>
+<ol>
+<li><p>浏览器解析HTML／CSS：</p>
+<p> 解析 HTML ，生成 DOM Tree。<br> 解析 CSS ，生成 Style Rules（样式规则）。<br> Javascript 的解析主要是通过 JavaScript 解释器来进行的，不是呈现引擎的事。它主要是通过 DOM API 和 CSSOM API 来分别操作 DOM Tree 和 Style Rules。</p>
+</li>
+<li><p>解析完成后，浏览器引擎会通过 DOM Tree 和 Style Rules 来构造 Rendering Tree。</p>
+<p> 当文档被解析并且添加 DOM 节点时，在 DOM 节点上调用称为 attach 的方法来创建渲染器。</p>
+<p> Rendering Tree 渲染树并不等同于 DOM Tree，因为 attach 方法会计算样式信息，一些像 <code>head</code> 或 <code>display:none</code> 的元素就没必要放在渲染树中了。</p>
+<p> WebKit 支持的每一个 CSS 属性都可以通过 RenderStyles (所有的样式信息都存储在上面)查询。如果 DOM 节点创建了一个渲染器，那么它使用渲染器上的 setStyle 方法将该样式信息连接到该渲染器。而火狐是通过生成 规则树 和 样式上下文树 ，来进行与 DOM Tree 的匹配。最后生成 Render Tree。</p>
+<p> <img src="http://o7nps5lzq.bkt.clouddn.com/url2render/renderTree&amp;domTree.jpg" alt="DOM Tree 和 Render Tree" title="DOM Tree 和 Render Tree"></p>
+</li>
+<li><p>计算每个 <code>frame</code> (元素) 的位置，进行 layout 。</p>
+</li>
+<li><p>呈现引擎遍历呈现树，由用户界面后端层将每个节点绘制出来。绘制的顺序是：</p>
+<ul>
+<li>背景颜色</li>
+<li>背景图片</li>
+<li>边框</li>
+<li>子代</li>
+<li>轮廓</li>
+</ul>
+</li>
+</ol>
+<p>总结一下工作原理：HTML/CSS parse —&gt; Render Tree —&gt; layout —&gt; paint 。</p>
+<p>需要着重指出的是，这是一个渐进的过程。为达到更好的用户体验，呈现引擎会力求尽快将内容显示在屏幕上。它不必等到整个 HTML 文档解析完毕，就会开始构建呈现树和设置布局。在不断接收和处理来自网络的其余内容的同时，呈现引擎会将已解析的内容显示出来。</p>
+<h2 id="DOM-阻塞"><a href="#DOM-阻塞" class="headerlink" title="DOM 阻塞"></a>DOM 阻塞</h2><h3 id="JS-阻塞文档解析"><a href="#JS-阻塞文档解析" class="headerlink" title="JS 阻塞文档解析"></a>JS 阻塞文档解析</h3><p>当遇到 <code>&lt;script&gt;</code> 标签时，会立即解析并执行脚本。如果脚本时外部的，则会立即停止解析，直到脚本下载下来之后继续解析脚本。这样做是有原因的，因为 javascript 可能会有诸如 document.write 的操作，这样的话，后续所有资源的加载都是无意义的。</p>
+<p>JS 有 defer 属性， es5还新增了一个 async 属性。他们都可以实现异步加载，不会阻塞文档解析。他们的区别就是 async 下载完了之后会立即执行，而 defer 是在遇到 <code>&lt;/html&gt;</code> 才会执行（先于 DOMContentLoaded 事件）。</p>
+<p><img src="http://o7nps5lzq.bkt.clouddn.com/url2render/script-load.jpg" alt="script 正常加载与 defer、async 的区别" title="script 正常加载与 defer、async 的区别"></p>
+<p>还有一个同样可以实现异步加载，通过 DOM 动态添加。它的执行顺序排在 defer 之后，DOMContentLoaded 事件之前。</p>
+<p>根据上面的特性我们可以发掘出的优化js的方法有：</p>
+<ul>
+<li>合理使用 defer 和 async 或者 DOM 动态添加</li>
+<li>合并 js 文件，或者适当的内嵌，减少请求–&gt;减少请求时间–&gt;减少阻塞时间</li>
+<li>Minify Javascript</li>
+</ul>
+<h3 id="CSS-阻塞-JS"><a href="#CSS-阻塞-JS" class="headerlink" title="CSS 阻塞 JS"></a>CSS 阻塞 JS</h3><p>如果 js 去请求 css 的信息，这个时候 css 还没加载完毕，就会导致取到的信息错误。为了防止这一点，css 会阻塞 js 的解析。谷歌做了优化，只有脚本去访问的样式会受到尚未加载解析的 css 影响时，才会禁止此脚本。</p>
+<h3 id="预解析"><a href="#预解析" class="headerlink" title="预解析"></a>预解析</h3><p>在执行脚本时，其他线程会解析剩余文档，找出并提前下载好其他资源，但是不执行。这不会更新 DOM 树，这项工作会留给主解析器来完成。</p>
+<p>因为浏览器是有并行下载限制的，所以我们能够尽可能的减少图片等的体积，还是需要尽量减小。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/11/url2render-part1/" rel="next" title="从输入url到浏览器显示页面，发生了什么？（网络通信篇）">
+                <i class="fa fa-chevron-left"></i> 从输入url到浏览器显示页面，发生了什么？（网络通信篇）
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
           
 
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/11/url2render-part2/"
+           data-title="从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇）" data-url="http://yoursite.com/2017/02/11/url2render-part2/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -408,8 +474,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://o7nps5lzq.bkt.clouddn.com/avatar/avatar.jpg"
@@ -479,6 +554,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#渲染流程"><span class="nav-number">1.</span> <span class="nav-text">渲染流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DOM-阻塞"><span class="nav-number">2.</span> <span class="nav-text">DOM 阻塞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JS-阻塞文档解析"><span class="nav-number">2.1.</span> <span class="nav-text">JS 阻塞文档解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS-阻塞-JS"><span class="nav-number">2.2.</span> <span class="nav-text">CSS 阻塞 JS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预解析"><span class="nav-number">2.3.</span> <span class="nav-text">预解析</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -587,11 +673,9 @@
 
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
 
 
   
