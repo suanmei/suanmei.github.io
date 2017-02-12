@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="javascript,resize,重绘,HTML,css,DOM,回流," />
+  <meta name="keywords" content="resize,javascript,重绘,HTML,css,DOM,回流," />
 
 
 
@@ -84,22 +84,16 @@
 
 
 
-<meta name="description" content="前文 《从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇）》 中讲到了，页面需要根据 Render Tree 来进行布局与绘制。今天我们就基于它来理解一下 回流 与 重绘。
-回流与重绘
-当render tree中的一部分(或全部)因为元素的规模尺寸，布局，隐藏等改变而需要重新构建。这就称为回流(reflow)。每个页面至少需要一次回流，就是在页面第一次加载的时候。在回流的时候，浏览器会使渲">
+<meta name="description" content="前文 《从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇）》 中讲到了，页面需要根据 Render Tree 来进行布局与绘制。今天我们就基于它来理解一下 回流 与 重绘。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="回流与重绘及优化">
 <meta property="og:url" content="http://yoursite.com/2017/02/13/reflow-repaint/index.html">
 <meta property="og:site_name" content="拾壹小筑">
-<meta property="og:description" content="前文 《从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇）》 中讲到了，页面需要根据 Render Tree 来进行布局与绘制。今天我们就基于它来理解一下 回流 与 重绘。
-回流与重绘
-当render tree中的一部分(或全部)因为元素的规模尺寸，布局，隐藏等改变而需要重新构建。这就称为回流(reflow)。每个页面至少需要一次回流，就是在页面第一次加载的时候。在回流的时候，浏览器会使渲">
-<meta property="og:updated_time" content="2017-02-12T19:47:41.000Z">
+<meta property="og:description" content="前文 《从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇）》 中讲到了，页面需要根据 Render Tree 来进行布局与绘制。今天我们就基于它来理解一下 回流 与 重绘。">
+<meta property="og:updated_time" content="2017-02-12T19:48:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="回流与重绘及优化">
-<meta name="twitter:description" content="前文 《从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇）》 中讲到了，页面需要根据 Render Tree 来进行布局与绘制。今天我们就基于它来理解一下 回流 与 重绘。
-回流与重绘
-当render tree中的一部分(或全部)因为元素的规模尺寸，布局，隐藏等改变而需要重新构建。这就称为回流(reflow)。每个页面至少需要一次回流，就是在页面第一次加载的时候。在回流的时候，浏览器会使渲">
+<meta name="twitter:description" content="前文 《从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇）》 中讲到了，页面需要根据 Render Tree 来进行布局与绘制。今天我们就基于它来理解一下 回流 与 重绘。">
 
 
 
@@ -348,6 +342,7 @@
 
       
         <p>前文 <a href="http://suanmei.github.io/2017/02/11/url2render-part2/" target="_blank" rel="external">《从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇）》</a> 中讲到了，页面需要根据 Render Tree 来进行布局与绘制。今天我们就基于它来理解一下 <strong>回流</strong> 与 <strong>重绘</strong>。</p>
+<a id="more"></a>
 <h2 id="回流与重绘"><a href="#回流与重绘" class="headerlink" title="回流与重绘"></a>回流与重绘</h2><ol>
 <li><p>当render tree中的一部分(或全部)因为元素的规模尺寸，布局，隐藏等改变而需要重新构建。这就称为回流(reflow)。每个页面至少需要一次回流，就是在页面第一次加载的时候。在回流的时候，浏览器会使渲染树中受到影响的部分失效，并重新构造这部分渲染树，完成回流后，浏览器会重新绘制受影响的部分到屏幕中，该过程成为重绘。</p>
 </li>
@@ -413,9 +408,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/javascript/" rel="tag">#javascript</a>
-          
             <a href="/tags/resize/" rel="tag">#resize</a>
+          
+            <a href="/tags/javascript/" rel="tag">#javascript</a>
           
             <a href="/tags/重绘/" rel="tag">#重绘</a>
           
