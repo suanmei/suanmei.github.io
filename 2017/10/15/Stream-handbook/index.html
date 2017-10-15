@@ -94,7 +94,7 @@
 <meta property="og:description" content="原文链接：https://github.com/substack/stream-handbook#duplex
 简介
 “We should have some ways of connecting programs like garden hose–screw inanother segment when it becomes necessary to massage data inanother">
-<meta property="og:updated_time" content="2017-10-15T14:25:00.000Z">
+<meta property="og:updated_time" content="2017-10-15T14:33:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Stream 手册[译]">
 <meta name="twitter:description" content="原文链接：https://github.com/substack/stream-handbook#duplex
@@ -352,6 +352,7 @@
 <p>“We should have some ways of connecting programs like garden hose–screw in<br>another segment when it becomes necessary to massage data in<br>another way. This is the way of IO also.”<br>— Doug McIlroy. October 11, 1964</p>
 </blockquote>
 <p>Streams在Unix早期就来到我们身边，并且在过去的几十年已经证明了它们是一个可信的方式–通过小部件来组成大系统，小部件只需要做好某一件事。在Unix中，Streams由shell用<code>|</code>管道实现。在node中，内置的stream模块由核心库使用并且可以供user-space模块使用。和Unix类似，node中Stream模块的主要组成运算符名为<code>pipe()</code>,你也可以免费获得一个背压机制来节流对一个缓慢接收者的写入。</p>
+<a id="more"></a>
 <p>流可以帮你免受困扰，因为它们将实现方式限制为可以重复使用的一致的接口。然后，您可以将一个流的输出插入另一个流的输入，并使用对流进行抽象运算的库来进行更高级别的流控制。</p>
 <p>Stream是小程序设计和unix哲学的重要组成部分，但还有许多其他重要的抽象概念值得考虑。只要记住，技术债务是敌人，并寻求解决问题的最佳抽象方法。</p>
 <h1 id="为什么你需要使用-streams"><a href="#为什么你需要使用-streams" class="headerlink" title="为什么你需要使用 streams"></a>为什么你需要使用 streams</h1><p>node中I/O是异步的，所以与磁盘和网络交互涉及将回调传递给函数。</p>
