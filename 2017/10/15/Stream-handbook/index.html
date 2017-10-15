@@ -1,0 +1,942 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="node,stream,pipe," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="原文链接：https://github.com/substack/stream-handbook#duplex
+简介
+“We should have some ways of connecting programs like garden hose–screw inanother segment when it becomes necessary to massage data inanother">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Stream 手册[译]">
+<meta property="og:url" content="http://yoursite.com/2017/10/15/Stream-handbook/index.html">
+<meta property="og:site_name" content="拾壹小筑">
+<meta property="og:description" content="原文链接：https://github.com/substack/stream-handbook#duplex
+简介
+“We should have some ways of connecting programs like garden hose–screw inanother segment when it becomes necessary to massage data inanother">
+<meta property="og:updated_time" content="2017-10-15T14:25:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Stream 手册[译]">
+<meta name="twitter:description" content="原文链接：https://github.com/substack/stream-handbook#duplex
+简介
+“We should have some ways of connecting programs like garden hose–screw inanother segment when it becomes necessary to massage data inanother">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6289373511051904000',
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/15/Stream-handbook/"/>
+
+
+  <title> Stream 手册[译] | 拾壹小筑 </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">拾壹小筑</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">读一书，增一智</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Stream 手册[译]
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-10-15T22:11:49+08:00" content="2017-10-15">
+              2017-10-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/译de文/" itemprop="url" rel="index">
+                    <span itemprop="name">译de文</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/10/15/Stream-handbook/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/10/15/Stream-handbook/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa">本文阅读量</i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>原文链接：<a href="https://github.com/substack/stream-handbook#duplex" target="_blank" rel="external">https://github.com/substack/stream-handbook#duplex</a></p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><blockquote>
+<p>“We should have some ways of connecting programs like garden hose–screw in<br>another segment when it becomes necessary to massage data in<br>another way. This is the way of IO also.”<br>— Doug McIlroy. October 11, 1964</p>
+</blockquote>
+<p>Streams在Unix早期就来到我们身边，并且在过去的几十年已经证明了它们是一个可信的方式–通过小部件来组成大系统，小部件只需要做好某一件事。在Unix中，Streams由shell用<code>|</code>管道实现。在node中，内置的stream模块由核心库使用并且可以供user-space模块使用。和Unix类似，node中Stream模块的主要组成运算符名为<code>pipe()</code>,你也可以免费获得一个背压机制来节流对一个缓慢接收者的写入。</p>
+<p>流可以帮你免受困扰，因为它们将实现方式限制为可以重复使用的一致的接口。然后，您可以将一个流的输出插入另一个流的输入，并使用对流进行抽象运算的库来进行更高级别的流控制。</p>
+<p>Stream是小程序设计和unix哲学的重要组成部分，但还有许多其他重要的抽象概念值得考虑。只要记住，技术债务是敌人，并寻求解决问题的最佳抽象方法。</p>
+<h1 id="为什么你需要使用-streams"><a href="#为什么你需要使用-streams" class="headerlink" title="为什么你需要使用 streams"></a>为什么你需要使用 streams</h1><p>node中I/O是异步的，所以与磁盘和网络交互涉及将回调传递给函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var http = require(&apos;http&apos;);</div><div class="line">var fs = require(&apos;fs&apos;);</div><div class="line"></div><div class="line">var server = http.createServer(function (req, res) &#123;</div><div class="line">    fs.readFile(__dirname + &apos;/data.txt&apos;, function (err, data) &#123;</div><div class="line">        res.end(data);</div><div class="line">    &#125;);</div><div class="line">&#125;);</div><div class="line">server.listen(8000);</div></pre></td></tr></table></figure>
+<p>这段代码可以生效但是太笨重了，在将结果写回客户端之前，它会为每个请求缓存 <code>data.txt</code> 到内存中。如果 <code>data.txt</code> 非常大，你的程序可能会很吃内存，因为它同时服务于大量用户，特别是对于慢速连接的用户。</p>
+<p>这样的用户体验极其糟糕，因为在用户可以接收到任何内容之前，需要等待整个文件缓存至内存。</p>
+<p>幸运的是，这两个参数<code>(req,res)</code>都是流，这意味着我们可以用更好的方式来书写代码，通过使用<code>fs.createReadStream()</code>代替 <code>fs.readFile()</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var http = require(&apos;http&apos;);</div><div class="line">var fs = require(&apos;fs&apos;);</div><div class="line"></div><div class="line">var server = http.createServer(function (req, res) &#123;</div><div class="line">    var stream = fs.createReadStream(__dirname + &apos;/data.txt&apos;);</div><div class="line">    stream.pipe(res);</div><div class="line">&#125;);</div><div class="line">server.listen(8000);</div></pre></td></tr></table></figure>
+<p>这里<code>pipe()</code>关心的是监听<code>fs.createReadStream()</code>的<code>data</code>和<code>end</code>事件。这段代码不仅更干净，而且现在<code>data.txt</code>文件将被从磁盘接收一次写入客户端一次。</p>
+<p>使用<code>.pipe()</code>也具有其他好处，例如自动处理背压，以便当远程客户端处于非常慢或高延迟的连接时，node不必将块缓存到内存中。</p>
+<p>想压缩？还有流模块呢！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var http = require(&apos;http&apos;);</div><div class="line">var fs = require(&apos;fs&apos;);</div><div class="line">var oppressor = require(&apos;oppressor&apos;);</div><div class="line"></div><div class="line">var server = http.createServer(function (req, res) &#123;</div><div class="line">    var stream = fs.createReadStream(__dirname + &apos;/data.txt&apos;);</div><div class="line">    stream.pipe(oppressor(req)).pipe(res);</div><div class="line">&#125;);</div><div class="line">server.listen(8000);</div></pre></td></tr></table></figure>
+<p>现在我们的文件已经为浏览器进行压缩了，它支持gzip和deflate。我们可以让oppressor处理所有内容编码的东西。</p>
+<p>一旦你学习了 stream 的 api，你就能像拼接乐高积木和橡胶软管一样组合这些流模块，而不是记住如何通过不靠谱的非流式的自定义 API 来传递数据。</p>
+<p>Streams 使得在node中变成更简单，优雅，可组合(自由)。</p>
+<h1 id="basics"><a href="#basics" class="headerlink" title="basics"></a>basics</h1><p>这里有5种流：可读，可写，转换，双工和“经典”。</p>
+<h2 id="pipe"><a href="#pipe" class="headerlink" title="pipe"></a>pipe</h2><p>所有的不同类型的流都通过<code>pipe()</code>来配对输入与输出。</p>
+<p><code>pipe()</code>只是一个获取可读源流<code>src</code>并将输出挂接到一个目标可写流<code>dst</code>的函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">src.pipe(dst)</div></pre></td></tr></table></figure>
+<p><code>.pipe(dst)</code>返回<code>dst</code>以便你可以将多个<code>pipe()</code>连接在一起。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a.pipe(b).pipe(c).pipe(d)</div></pre></td></tr></table></figure>
+<p>就像这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">a.pipe(b);</div><div class="line">b.pipe(c);</div><div class="line">c.pipe(d);</div></pre></td></tr></table></figure>
+<p>这个非常像你可能会通过命令行一起管理程序的方式:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a | b | c | d</div></pre></td></tr></table></figure>
+<p>node 除外而不是shell！</p>
+<h2 id="可读流"><a href="#可读流" class="headerlink" title="可读流"></a>可读流</h2><p>可读流提供一个可以通过调用<code>.pipe()</code>转换成可写，转换，双工流的数据。</p>
+<h3 id="创建一个可读流"><a href="#创建一个可读流" class="headerlink" title="创建一个可读流"></a>创建一个可读流</h3><p>让我们来创造一个可读流！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var Readable = require(&apos;stream&apos;).Readable;</div><div class="line"></div><div class="line">var rs = new Readable;</div><div class="line">rs.push(&apos;beep &apos;);</div><div class="line">rs.push(&apos;boop\n&apos;);</div><div class="line">rs.push(null);</div><div class="line"></div><div class="line">rs.pipe(process.stdout);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ node read0.js</div><div class="line">beep boop</div></pre></td></tr></table></figure>
+<p><code>rs.push(null)</code>告诉接收者<code>rs</code>已经完成了数据输出。</p>
+<p>注意，我们在将可读流<code>rs</code>传输到<code>process.stdout</code>前将内容内容推送到<code>rs</code>，但完整的消息仍能写入。</p>
+<p>这是因为当你.push()到可读流时，你推送的那些块都被缓存了，直到接收者准备好读取它们。</p>
+<p>但是，如果我们能够避免将数据一起缓存并且只在接收者需要的时候再生成数据，很多时候会更好。</p>
+<p>我们可以通过定义一个<code>._read</code>函数来按需推送块：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var Readable = require(&apos;stream&apos;).Readable;</div><div class="line">var rs = Readable();</div><div class="line"></div><div class="line">var c = 97;</div><div class="line">rs._read = function () &#123;</div><div class="line">    rs.push(String.fromCharCode(c++));</div><div class="line">    if (c &gt; &apos;z&apos;.charCodeAt(0)) rs.push(null);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">rs.pipe(process.stdout);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ node read1.js</div><div class="line">abcdefghijklmnopqrstuvwxyz</div></pre></td></tr></table></figure>
+<p>这里我们传递了字母<code>a</code>到<code>z</code>，但是只在接收者准备接受它们的时候。</p>
+<p><code>_read</code>函数同样会接手一个临时的<code>size</code>参数作为他的第一个入参来指定接收者想要读取多少个字节，但是你的可读流可以忽略<code>size</code>，只要它想。</p>
+<p>注意，你同样可以使用<code>util.inherits()</code>子类化一个可读流，但是该方法并没有一个可以很好理解它的例子。</p>
+<p>为了展示我们的 <code>_read</code> 函数只在被接收者请求时才调用，我们可以稍微修改一下我们的可读流代码来添加一个延迟：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">var Readable = require(&apos;stream&apos;).Readable;</div><div class="line">var rs = Readable();</div><div class="line"></div><div class="line">var c = 97 - 1;</div><div class="line"></div><div class="line">rs._read = function () &#123;</div><div class="line">    if (c &gt;= &apos;z&apos;.charCodeAt(0)) return rs.push(null);</div><div class="line">    </div><div class="line">    setTimeout(function () &#123;</div><div class="line">        rs.push(String.fromCharCode(++c));</div><div class="line">    &#125;, 100);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">rs.pipe(process.stdout);</div><div class="line"></div><div class="line">process.on(&apos;exit&apos;, function () &#123;</div><div class="line">    console.error(&apos;\n_read() called &apos; + (c - 97) + &apos; times&apos;);</div><div class="line">&#125;);</div><div class="line">process.stdout.on(&apos;error&apos;, process.exit);</div></pre></td></tr></table></figure>
+<p>运行这个程序我们可以看到，当我们只请求5个字节的输出时，<code>_read()</code>被调用了五次。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ node read2.js | head -c5</div><div class="line">abcde</div><div class="line">_read() called 5 times</div></pre></td></tr></table></figure>
+<p><code>setTimeout</code>延迟是必须的，因为操作系统需要一点时间来向我们发送一些相关信号以关闭管道。</p>
+<p><code>process.stdout.on(&#39;error&#39;, fn)</code>处理器也是必要的，因为当<code>head</code>对我们的程序输出不再有兴趣时，操作系统发送一个 SIGPIPE 我们的进程，在<code>process.stdout</code>上作为EPIPE错误被发出</p>
+<p>当与外部操作系统管道交互时，这些额外的复杂性是必需的，但是当我们与node流直接交互时，它们是自动的。</p>
+<p>如果要创建一个可读取的流，可以推送任意值而不是仅仅是字符串和缓存，请确保使用<code>Readable({ objectMode: true })</code>来创建可读流 。</p>
+<h3 id="使用可读流"><a href="#使用可读流" class="headerlink" title="使用可读流"></a>使用可读流</h3><p>大多数时候，传输一个可读流转换成其他的流或者一个由类似 through or concat-stream 的模块创建的流是很容易的，但有时候直接使用可读流是有用的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">process.stdin.on(&apos;readable&apos;, function () &#123;</div><div class="line">    var buf = process.stdin.read();</div><div class="line">    console.dir(buf);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ (echo abc; sleep 1; echo def; sleep 1; echo ghi) | node consume0.js </div><div class="line">&lt;Buffer 61 62 63 0a&gt;</div><div class="line">&lt;Buffer 64 65 66 0a&gt;</div><div class="line">&lt;Buffer 67 68 69 0a&gt;</div><div class="line">null</div></pre></td></tr></table></figure>
+<p>当数据可用时，’readable’事件触发，你可以调用<code>.read()</code> 从缓冲区中获取一些数据。</p>
+<p>当流完成后，<code>.read()</code>返回null，因为没有更多的字节可获取了。</p>
+<p>您还可以告诉<code>.read(n)</code>返回n字节的数据。读取多个字节只是建议，对于对象流不起作用，但所有核心流都支持它。</p>
+<p>以下是使用<code>.read(n)</code>将标准输入缓存为3字节块的示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">process.stdin.on(&apos;readable&apos;, function () &#123;</div><div class="line">    var buf = process.stdin.read(3);</div><div class="line">    console.dir(buf);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>运行这个例子，它会给我们提供不完整的数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ (echo abc; sleep 1; echo def; sleep 1; echo ghi) | node consume1.js </div><div class="line">&lt;Buffer 61 62 63&gt;</div><div class="line">&lt;Buffer 0a 64 65&gt;</div><div class="line">&lt;Buffer 66 0a 67&gt;</div></pre></td></tr></table></figure>
+<p>这是因为内部缓存区有额外的数据留存。我们需要给节点一个“kick”来告诉它，我们对已读取的3个字节以外的更多数据感兴趣。一个简单的<code>.read(0)</code>可以达成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">process.stdin.on(&apos;readable&apos;, function () &#123;</div><div class="line">    var buf = process.stdin.read(3);</div><div class="line">    console.dir(buf);</div><div class="line">    process.stdin.read(0);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>现在我们的代码如我们预期的一样以3字节的块在运行！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ (echo abc; sleep 1; echo def; sleep 1; echo ghi) | node consume2.js </div><div class="line">&lt;Buffer 61 62 63&gt;</div><div class="line">&lt;Buffer 0a 64 65&gt;</div><div class="line">&lt;Buffer 66 0a 67&gt;</div><div class="line">&lt;Buffer 68 69 0a&gt;</div></pre></td></tr></table></figure>
+<p>你同样可以使用<code>.unshift()</code>放回数据，这样的话当<code>.read()</code>给到更多你想要的数据时，相同的读取逻辑就会触发。</p>
+<p>使用<code>.unshift()</code>使我们避免生成不必要的缓冲区副本。在这里我们可以构建一个可读的解析器来分割换行符：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">var offset = 0;</div><div class="line"></div><div class="line">process.stdin.on(&apos;readable&apos;, function () &#123;</div><div class="line">    var buf = process.stdin.read();</div><div class="line">    if (!buf) return;</div><div class="line">    for (; offset &lt; buf.length; offset++) &#123;</div><div class="line">        if (buf[offset] === 0x0a) &#123;</div><div class="line">            console.dir(buf.slice(0, offset).toString());</div><div class="line">            buf = buf.slice(offset + 1);</div><div class="line">            offset = 0;</div><div class="line">            process.stdin.unshift(buf);</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    process.stdin.unshift(buf);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ tail -n +50000 /usr/share/dict/american-english | head -n10 | node lines.js </div><div class="line">&apos;hearties&apos;</div><div class="line">&apos;heartiest&apos;</div><div class="line">&apos;heartily&apos;</div><div class="line">&apos;heartiness&apos;</div><div class="line">&apos;heartiness\&apos;s&apos;</div><div class="line">&apos;heartland&apos;</div><div class="line">&apos;heartland\&apos;s&apos;</div><div class="line">&apos;heartlands&apos;</div><div class="line">&apos;heartless&apos;</div><div class="line">&apos;heartlessly&apos;</div></pre></td></tr></table></figure>
+<p>但是，你应该使用node中诸如 split 此类的模块而不是驱动你自己的行解析逻辑。</p>
+<h2 id="可写流"><a href="#可写流" class="headerlink" title="可写流"></a>可写流</h2><p>一个可写流是一个你可以传输进的流而不是传输出去的流：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">src.pipe(writableStream)</div></pre></td></tr></table></figure>
+<h3 id="创建一个可写流"><a href="#创建一个可写流" class="headerlink" title="创建一个可写流"></a>创建一个可写流</h3><p>只需定义一个<code>._write(chunk, enc, next)</code>函数，然后您可以传输可读流进来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var Writable = require(&apos;stream&apos;).Writable;</div><div class="line">var ws = Writable();</div><div class="line">ws._write = function (chunk, enc, next) &#123;</div><div class="line">    console.dir(chunk);</div><div class="line">    next();</div><div class="line">&#125;;</div><div class="line"></div><div class="line">process.stdin.pipe(ws);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ (echo beep; sleep 1; echo boop) | node write0.js </div><div class="line">&lt;Buffer 62 65 65 70 0a&gt;</div><div class="line">&lt;Buffer 62 6f 6f 70 0a&gt;</div></pre></td></tr></table></figure>
+<p>第一个参数，<code>chunk</code> 是一个被提供者写入的数据。</p>
+<p>第二个参数<code>enc</code>是一个带有字符串编码的字符串，但只有当 <code>opts.decodeString</code> 是 <code>false</code>且已经写入了一个字符串时才这样。</p>
+<p>第三个参数，<code>next(err)</code> 是告诉使用者他们可以写入更多数据的回调。你可以选择传入一个可以在流的实例中触发 <code>error</code> 事件的 error 对象<code>err</code>。</p>
+<p>如果你正在传递的可读流在写入字符串，它们将被转换为缓存，除非你使用 <code>Writable({ decodeStrings: false })</code> 创建了你的可写流。</p>
+<p>如果你正在传递的可读流在写入对象，请使用 <code>Writable({ objectMode: true })</code> 创建了你的可写流。</p>
+<h3 id="写入一个可写流"><a href="#写入一个可写流" class="headerlink" title="写入一个可写流"></a>写入一个可写流</h3><p>如果你想写入一个可写流，只需要用你想写入的 <code>data</code> 调用 <code>.write(data)</code> 就行了。</p>
+<p>To tell the destination writable stream that you’re done writing, just call .end(). You can also give .end(data) some data to write before ending:</p>
+<pre><code>process.stdout.write(&apos;beep boop\n&apos;);
+</code></pre><p>为了告诉目标可写流你已经写入完成，只需调用 <code>.end()</code>。你同样可以给 <code>.end(data)</code> 一些数据在结束之前写入。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var fs = require(&apos;fs&apos;);</div><div class="line">var ws = fs.createWriteStream(&apos;message.txt&apos;);</div><div class="line"></div><div class="line">ws.write(&apos;beep &apos;);</div><div class="line"></div><div class="line">setTimeout(function () &#123;</div><div class="line">    ws.end(&apos;boop\n&apos;);</div><div class="line">&#125;, 1000);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ node writing1.js </div><div class="line">$ cat message.txt</div><div class="line">beep boop</div></pre></td></tr></table></figure>
+<p>如果你关心高水位和缓存区，当在接下来的缓存中有比 <code>pts.highWaterMark</code> 传递给 <code>Writable()</code> 还要多的数据时， <code>.write()</code> 会返回 <code>false</code>。</p>
+<p>If you want to wait for the buffer to empty again, listen for a ‘drain’ event.</p>
+<p>如果你想等待缓存再次清空，监听 <code>drain</code> 事件即可。</p>
+<h2 id="转换"><a href="#转换" class="headerlink" title="转换"></a>转换</h2><p>转换流是双工流的一种类型（可读可写）。区别在于，在转换流中，输出是输入以某种方式计算得出的。</p>
+<p>你可能也听过称为 “through streams” 的转换流。</p>
+<p>Through streams 是一个简单的读写过滤器，可以转换输入并产生输出。</p>
+<h2 id="双工"><a href="#双工" class="headerlink" title="双工"></a>双工</h2><p>双工流是可读/可写的，并且流的两端参与双向交互，来回发送诸如电话的消息。rpc交换是双工流的一个很好的例子。任何时候你看到像这样的：</p>
+<pre><code>a.pipe(b).pipe(a)
+</code></pre><p>N可能正在处理双工流。</p>
+<h2 id="经典流"><a href="#经典流" class="headerlink" title="经典流"></a>经典流</h2><p>经典流是一个老的接口，首次出现在 node 0.4 版本。很长时间内你都可能遇到这种风格的流，所以知道它们是如何工作是很棒的。</p>
+<h3 id="经典可读流"><a href="#经典可读流" class="headerlink" title="经典可读流"></a>经典可读流</h3><p>经典可读流只是时间触发器，当它们拥有数据供使用者使用时，会触发 <code>data</code> 事件，当它们已经提供完数据时触发 <code>end</code> 事件。</p>
+<p><code>.pipe()</code> 会通过检查 <code>stream.readable</code> 的真实性来检查一个经典流是否是一个可读流。</p>
+<p>Here is a super simple readable stream that prints A through J, inclusive:</p>
+<p>这里有一个特别简单的打印 <code>A</code> 到 <code>J</code> 的可读流，示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">var Stream = require(&apos;stream&apos;);</div><div class="line">var stream = new Stream;</div><div class="line">stream.readable = true;</div><div class="line"></div><div class="line">var c = 64;</div><div class="line">var iv = setInterval(function () &#123;</div><div class="line">    if (++c &gt;= 75) &#123;</div><div class="line">        clearInterval(iv);</div><div class="line">        stream.emit(&apos;end&apos;);</div><div class="line">    &#125;</div><div class="line">    else stream.emit(&apos;data&apos;, String.fromCharCode(c));</div><div class="line">&#125;, 100);</div><div class="line"></div><div class="line">stream.pipe(process.stdout);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ node classic0.js</div><div class="line">ABCDEFGHIJ</div></pre></td></tr></table></figure>
+<p>要读取一个经典可读流，你需要注册 <code>&quot;data&quot;</code> 和 <code>&quot;end&quot;</code> 监听事件。这里有一个使用老的可读流风格从 <code>process.stdin</code> 读取的例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">process.stdin.on(&apos;data&apos;, function (buf) &#123;</div><div class="line">    console.log(buf);</div><div class="line">&#125;);</div><div class="line">process.stdin.on(&apos;end&apos;, function () &#123;</div><div class="line">    console.log(&apos;__END__&apos;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ (echo beep; sleep 1; echo boop) | node classic1.js </div><div class="line">&lt;Buffer 62 65 65 70 0a&gt;</div><div class="line">&lt;Buffer 62 6f 6f 70 0a&gt;</div><div class="line">__END__</div></pre></td></tr></table></figure>
+<p>请注意，无论你何时注册一个 <code>&quot;data&quot;</code> 监听事件，你都可以让流进入兼容模式，以免丢失新的stream2 api的好处。</p>
+<p>你自己应该几乎不会注册 <code>&quot;data&quot;</code> 和 <code>&quot;end&quot;</code> 处理器了。如果您需要与旧版流互动，尽可能使用可以 <code>.pipe()</code> 到的库。</p>
+<p>例如，您可以使用 <code>through</code> 来避免显式设置 <code>&quot;data&quot;</code> 和 <code>&quot;end&quot;</code> 监听器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var through = require(&apos;through&apos;);</div><div class="line">process.stdin.pipe(through(write, end));</div><div class="line"></div><div class="line">function write (buf) &#123;</div><div class="line">    console.log(buf);</div><div class="line">&#125;</div><div class="line">function end () &#123;</div><div class="line">    console.log(&apos;__END__&apos;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ (echo beep; sleep 1; echo boop) | node through.js </div><div class="line">&lt;Buffer 62 65 65 70 0a&gt;</div><div class="line">&lt;Buffer 62 6f 6f 70 0a&gt;</div><div class="line">__END__</div></pre></td></tr></table></figure>
+<p>或者使用 <code>concat-stream</code> 来缓存整个流的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var concat = require(&apos;concat-stream&apos;);</div><div class="line">process.stdin.pipe(concat(function (body) &#123;</div><div class="line">    console.log(JSON.parse(body));</div><div class="line">&#125;));</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ echo &apos;&#123;&quot;beep&quot;:&quot;boop&quot;&#125;&apos; | node concat.js </div><div class="line">&#123; beep: &apos;boop&apos; &#125;</div></pre></td></tr></table></figure>
+<p>经典可读流具有 <code>.pause()</code> 和 <code>.resume()</code> 用于临时暂停流，但是这仅仅是建议性的。如果你要通过经典可读流使用 <code>.pause()</code> 和 <code>.resume()</code>，应该使用 through 来处理缓存而不是自己写。</p>
+<h3 id="经典可写流"><a href="#经典可写流" class="headerlink" title="经典可写流"></a>经典可写流</h3><p>经典可写流非常简单。只有 <code>.write(buf)</code>, <code>.end(buf)</code>和<code>.destroy()</code>三个方法。</p>
+<p><code>.end(buf)</code> 方法的buf参数是可选的，如果选择该参数，相当于<code>stream.write(buf);</code> <code>stream.end()</code> 这样的操作，需要注意的是当流的缓冲区写满即流不可写时<code>.write(buf)</code>方法会返回<code>false</code>，如果流再次可写时，流会触发<code>drain</code>事件。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/node/" rel="tag">#node</a>
+          
+            <a href="/tags/stream/" rel="tag">#stream</a>
+          
+            <a href="/tags/pipe/" rel="tag">#pipe</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/13/reflow-repaint/" rel="next" title="回流与重绘及优化">
+                <i class="fa fa-chevron-left"></i> 回流与重绘及优化
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/10/15/Stream-handbook/"
+           data-title="Stream 手册[译]" data-url="http://yoursite.com/2017/10/15/Stream-handbook/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o7nps5lzq.bkt.clouddn.com/avatar/avatar.jpg"
+               alt="拾邑" />
+          <p class="site-author-name" itemprop="name">拾邑</p>
+          <p class="site-description motion-element" itemprop="description">阅读，知识管理</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/suanmei" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/li-ruo-yu-34" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-code"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么你需要使用-streams"><span class="nav-number">2.</span> <span class="nav-text">为什么你需要使用 streams</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#basics"><span class="nav-number">3.</span> <span class="nav-text">basics</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pipe"><span class="nav-number">3.1.</span> <span class="nav-text">pipe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可读流"><span class="nav-number">3.2.</span> <span class="nav-text">可读流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建一个可读流"><span class="nav-number">3.2.1.</span> <span class="nav-text">创建一个可读流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用可读流"><span class="nav-number">3.2.2.</span> <span class="nav-text">使用可读流</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可写流"><span class="nav-number">3.3.</span> <span class="nav-text">可写流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建一个可写流"><span class="nav-number">3.3.1.</span> <span class="nav-text">创建一个可写流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写入一个可写流"><span class="nav-number">3.3.2.</span> <span class="nav-text">写入一个可写流</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转换"><span class="nav-number">3.4.</span> <span class="nav-text">转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#双工"><span class="nav-number">3.5.</span> <span class="nav-text">双工</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#经典流"><span class="nav-number">3.6.</span> <span class="nav-text">经典流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#经典可读流"><span class="nav-number">3.6.1.</span> <span class="nav-text">经典可读流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#经典可写流"><span class="nav-number">3.6.2.</span> <span class="nav-text">经典可写流</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">拾邑</span>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa">你是第</i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span>位访客</span>
+  
+
+  
+    <span class="site-pv"><i class="fa">本站总访问量</i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"suanmeixiansheng"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = false;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = decodeURIComponent(data.url);
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title >= 0 || index_content >= 0 ){
+                                isMatch = true;
+								if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            } 
+							
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

@@ -272,6 +272,131 @@
             
               
                 
+                <a class="post-title-link" href="/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/" itemprop="url">
+                  一种有趣的JavaScript内存泄漏[译]
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-24T22:08:49+08:00" content="2016-11-24">
+              2016-11-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/译de文/" itemprop="url" rel="index">
+                    <span itemprop="name">译de文</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>原文链接：<a href="http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak">http://info.meteor.com/blog/an-interesting-kind-of-javascript-memory-leak</a></p>
+<p>最近，Avi 和 David 在 Meteor 的实时HTML模板渲染系统中跟踪了一个惊人的 JavaScript 内存泄漏。修复将在 0.6.5 版本发布（现在处于 QA 最后阶段）。</p>
+<p>我在网上搜索关于 javascript 闭包内存泄漏的变化，网上并未提及相关事情，似乎在 JavaScript 主题下，这是一个鲜为人知的话题。（大多数你找到的谈论的是老版本IE的差劲的垃圾收集算法，但这个问题影响甚至我目前的Chrome安装！）我后来发现了一个很棒的博客，由一个V8开发人员发布在此主题上，但似乎大多数 JavaScript 使用者还不知道他们必须注意这一点。</p>
+<p>JavaScript是一门神秘的函数式编程语言，而且他的函数就是闭包：函数对象有权访问定义在它们封闭范围内的变量，甚至在此范围已经结束的时候。一旦函数运行结束，闭包所捕获的局部变量就会被垃圾回收，所有定义在闭包范围内的函数都会自我进行垃圾回收。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/11/24/An-interesting-kind-of-JavaScript-memory-leak/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/11/23/deeply_understand_closure/" itemprop="url">
                   Javascript深入浅出之闭包
                 </a>
@@ -1124,128 +1249,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/02/relearn_box_type/" itemprop="url">
-                  重拾CSS规范之从盒类型谈起
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-02T21:23:07+08:00" content="2016-09-02">
-              2016-09-02
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/CSS/" itemprop="url" rel="index">
-                    <span itemprop="name">CSS</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/02/relearn_box_type/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/02/relearn_box_type/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/09/02/relearn_box_type/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1291,7 +1294,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1308,7 +1311,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-count">61</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

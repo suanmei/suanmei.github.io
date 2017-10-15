@@ -95,7 +95,7 @@
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/webkit-render.jpg">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/renderTree&domTree.jpg">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/script-load.jpg">
-<meta property="og:updated_time" content="2017-02-12T19:36:36.000Z">
+<meta property="og:updated_time" content="2017-02-12T19:53:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从输入url到浏览器显示页面，发生了什么？（浏览器渲染篇）">
 <meta name="twitter:description" content="我们今天来了解一下浏览器工作原理，它是由呈现引擎（也就是各位道友常说的内核）来完成的。我们今天主要借助 webkit  来看一下。
@@ -376,8 +376,8 @@
 </li>
 </ol>
 <p>总结一下工作原理：HTML/CSS parse —&gt; Render Tree —&gt; layout —&gt; paint 。</p>
-<p>需要着重指出的是，这是一个渐进的过程。为达到更好的用户体验，呈现引擎会力求尽快将内容显示在屏幕上。它不必等到整个 HTML 文档解析完毕，就会开始构建呈现树和设置布局。在解析外联脚本的同时，呈现引擎会将已解析的内容显示出来。</p>
-<h2 id="DOM-阻塞"><a href="#DOM-阻塞" class="headerlink" title="DOM 阻塞"></a>DOM 阻塞</h2><h3 id="JS-阻塞文档解析"><a href="#JS-阻塞文档解析" class="headerlink" title="JS 阻塞文档解析"></a>JS 阻塞文档解析</h3><p>当遇到 <code>&lt;script&gt;</code> 标签时，会立即解析并执行脚本。如果脚本时外部的，则会立即停止解析，直到脚本下载下来之后继续解析脚本。这样做是有原因的，因为 javascript 可能会有诸如 document.write 的操作，这样的话，后续所有资源的加载都是无意义的。</p>
+<p>需要着重指出的是，这是一个渐进的过程。为达到更好的用户体验，呈现引擎会力求尽快将内容显示在屏幕上。它不必等到整个 HTML 文档解析完毕，就会开始构建呈现树和设置布局。在解析外联脚本的同时，呈现引擎会将已解析的页面内容显示出来。</p>
+<h2 id="DOM-阻塞"><a href="#DOM-阻塞" class="headerlink" title="DOM 阻塞"></a>DOM 阻塞</h2><h3 id="JS-阻塞文档解析"><a href="#JS-阻塞文档解析" class="headerlink" title="JS 阻塞文档解析"></a>JS 阻塞文档解析</h3><p>当遇到 <code>&lt;script&gt;</code> 标签时，会立即解析并执行脚本。如果脚本是外部的，则会立即停止解析，直到脚本下载下来之后继续解析脚本。这样做是有原因的，因为 javascript 可能会有诸如 document.write 的操作，这样的话，后续所有资源的加载都是无意义的。</p>
 <p>JS 有 defer 属性， es5还新增了一个 async 属性。他们都可以实现异步加载，不会阻塞文档解析。他们的区别就是 async 下载完了之后会立即执行，而 defer 是在遇到 <code>&lt;/html&gt;</code> 才会执行（先于 DOMContentLoaded 事件）。</p>
 <p><img src="http://o7nps5lzq.bkt.clouddn.com/url2render/script-load.jpg" alt="script 正常加载与 defer、async 的区别" title="script 正常加载与 defer、async 的区别"></p>
 <p>还有一个同样可以实现异步加载，通过 DOM 动态添加。它的执行顺序排在 defer 之后，DOMContentLoaded 事件之前。</p>
@@ -530,7 +530,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -547,7 +547,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-count">61</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

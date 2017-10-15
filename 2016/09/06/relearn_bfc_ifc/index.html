@@ -92,7 +92,7 @@
 <meta property="og:site_name" content="拾壹小筑">
 <meta property="og:description" content="BFC、IFC的概念重要吗？不重要，没有它们我们也能写出符合要求甚至很好的页面。重要，深入了了解了CSS这门语言的核心，你的CSS才可能会有创造性，你才能发明出你自己的奇淫技巧，而不是遇到新的情境就去百度，google。
 在看这篇文章之前，先得了解一些无聊的基本概念，重拾CSS规范之从盒类型谈起，当然，我已经尽可能让它有趣了。">
-<meta property="og:updated_time" content="2016-12-02T15:28:47.000Z">
+<meta property="og:updated_time" content="2017-02-13T19:54:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重拾CSS规范之BFC & IFC">
 <meta name="twitter:description" content="BFC、IFC的概念重要吗？不重要，没有它们我们也能写出符合要求甚至很好的页面。重要，深入了了解了CSS这门语言的核心，你的CSS才可能会有创造性，你才能发明出你自己的奇淫技巧，而不是遇到新的情境就去百度，google。
@@ -368,7 +368,7 @@
 
 <p>如果要控制两者之间的间距，最好对 <code>.left</code> 元素使用 margin-right 。因为如果对 <code>.center</code> 元素使用 margin-left 的话，首先 margin-left 值必须要超过 <code>.left</code> 元素的宽度值，否则无法体现作用；再者对 <code>.center</code> 元素设置 margin-left 了，不就又回到了流体自适应布局了吗！</p>
 <p><strong>4.</strong> 在计算生成了 BFC 的元素的高度时，其浮动子元素应该参与计算。</p>
-<p>几年前我技术很差的时候总在疑惑，float元素没法撑开父元素高度，但是为什么给父元素增加设置不为 ‘none’ 的 ‘float’ 值就可以了，现在总算是解开谜题了。。。</p>
+<p>几年前我技术很差的时候总在疑惑，float元素没法撑开父元素高度，但是为什么给父元素增加设置不为 ‘none’ 的 ‘overflow’ 值就可以了，现在总算是解开谜题了。。。</p>
 <h2 id="IFC"><a href="#IFC" class="headerlink" title="IFC"></a>IFC</h2><p>上一篇文章中已经提到了很多 IFC 相关的知识，这次再补充一点。</p>
 <p>IFC 中的盒子与 BFC 中的不同的是，它们可以水平依次放置。</p>
 <p>IFC中的行盒的宽度是包含块的宽度减去 float 元素（如果有的话）的宽度，行盒高度是最高的盒的top与最低的盒的bottom之间的距离。</p>
@@ -532,7 +532,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -549,7 +549,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-count">61</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
