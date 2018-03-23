@@ -94,7 +94,7 @@
 12345setTimeout(function() &amp;#123;  console.log(&apos;0&apos;);&amp;#125;, 0);console.log(&apos;1&apos;);">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/timer/event_loop.png">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/timer/single_thread_time.png">
-<meta property="og:updated_time" content="2016-12-28T05:46:47.000Z">
+<meta property="og:updated_time" content="2018-03-23T08:17:35.311Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript深入浅出之单线程">
 <meta name="twitter:description" content="在 CSS3 出来以前，我们通过 setTimeout 和 setInterval 来实现动画，我们熟悉并且热衷于它们的使用，但它背后的原理却未深究。把握核心，深究问题的根本，永远是我们的核心，今天我们了解一下定时器背后的男人——单线程。
@@ -352,7 +352,7 @@
 <p>出乎意料，上面这段代码，会先输出 1，然后输出 0。（等我们掌握了单线程，也就迎刃而解了）</p>
 <a id="more"></a>
 <h2 id="JS的单线程"><a href="#JS的单线程" class="headerlink" title="JS的单线程"></a>JS的单线程</h2><p>一个浏览器进程，拥有很多线程，比如 GUI 渲染线程、事件触发线程、HTTP 请求线程，以及 js 引擎线程。 js 单线程就是指 js 的线程只有一条，也就是说，<strong>同一时间，只有某个任务能够执行，</strong>这段代码可能是初始化执行的代码，可能是某个元素的点击事件，也可能是 ajax 请求的回调函数。</p>
-<p>javascript 操作几乎都是通过页面展示出来的，大多会用到 DOM 操作，设想一下，如果我有两个操作涉及到了同一个元素，而塔门又是冲突的，浏览器需要如何处理？当然，我们也可以像其他语言一样，为 javascript 设计诸如 <code>互斥锁</code> 或者 <code>信号量</code> 的机制来实现多线程的协调处理，但是这会给定位轻量级脚本语言的 javascript 带来繁杂计算量的成本。</p>
+<p>javascript 操作几乎都是通过页面展示出来的，大多会用到 DOM 操作，设想一下，如果我有两个操作涉及到了同一个元素，而他们又是冲突的，浏览器需要如何处理？当然，我们也可以像其他语言一样，为 javascript 设计诸如 <code>互斥锁</code> 或者 <code>信号量</code> 的机制来实现多线程的协调处理，但是这会给定位轻量级脚本语言的 javascript 带来繁杂计算量的成本。</p>
 <p>js 线程执行的时候，会阻塞其他线程的执行。比如下面这段代码，我们会发现，浏览器不会在每一个循环里去重新渲染页面，它会等待这段 js 执行完毕，再去执行 GUI 渲染线程，当然，浏览器会进行一定的优化，所以最终我们看到的是，浏览器直接显示出 1000000，而不是 0 - 1000000 极速闪过。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span></div><div class="line">  span = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'span'</span>)[<span class="number">0</span>],</div><div class="line">  i;</div><div class="line">  </div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= <span class="number">1000000</span>; i++) &#123;</div><div class="line">  span.innerHTML = i;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>上面我提到了，一个浏览器有一个进程，但是我们可爱的 Chrome 自有其可爱之处，它为了防止，因为一个页面的 js 的不好的执行影响浏览器的所有页面，所以它为每个页面开了一个进程。当然，这里我只对 Chrome 和 Firefox 进行了测试，ie 我是一直都知道的，它是整个浏览器一个进程。整个浏览器一个进程是什么意思？所有页面共用一个 js 线程，也就是，A 页面如果有一段耗时很长的代码正在执行， B 页面触发一个元素的点击事件并不会立即执行，需要等待 A 页面的 js 执行完毕。</p>
@@ -596,7 +596,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

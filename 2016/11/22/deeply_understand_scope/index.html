@@ -99,7 +99,7 @@
 
 了解作用域，就是了解作用域链。">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/scope%EF%BC%8F%5B%5Bscopes%5D%5D&Scope.png">
-<meta property="og:updated_time" content="2016-11-24T16:55:42.000Z">
+<meta property="og:updated_time" content="2018-03-23T08:18:18.593Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript深入浅出之作用域">
 <meta name="twitter:description" content="本来这篇文章是紧跟着 this 篇就要出来的，不想竟时隔近半年之期。从执行上下文，到作用域甚至闭包，这是一个小体系，缺了作用域以及闭包这部分，使我学习《Javascript Ninja》中设计函数式编程的的地方尤为吃力。遂补全这二章。
@@ -389,7 +389,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">fooContext.AO = &#123;</div><div class="line">  <span class="attr">b</span>: <span class="number">2</span>,</div><div class="line">  <span class="attr">bar</span>: &lt;reference to function&gt;</div><div class="line">&#125;</div><div class="line"></div><div class="line">fooContext.Scope = [</div><div class="line">  fooContext.AO，</div><div class="line">  globalContext.VO</div><div class="line">]</div></pre></td></tr></table></figure>
 <p>当 <code>bar</code> 创建时， <code>bar</code> 的 <code>[[scopes]]</code> 属性为：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">bar.[[scopes]] = [</div><div class="line">  fooContext.AO，</div><div class="line">  globalContext.VO</div><div class="line">]</div></pre></td></tr></table></figure>
-<p>当 <code>foo</code> 被调用时， <code>foo</code> 上下文的 活动对象 和 作用域链 为：</p>
+<p>当 <code>bar</code> 被调用时， <code>bar</code> 上下文的 活动对象 和 作用域链 为：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">barContext.AO = &#123;</div><div class="line">  <span class="attr">c</span>: <span class="number">3</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">barContext.Scope = [</div><div class="line">  barContext.AO</div><div class="line">  fooContext.AO，</div><div class="line">  globalContext.VO</div><div class="line">]</div></pre></td></tr></table></figure>
 <p>标识符解析结果：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">a</div><div class="line">-------------</div><div class="line">barContext.AO <span class="comment">// NOT FOUND</span></div><div class="line">fooContext.AO <span class="comment">// NOT FOUND</span></div><div class="line">globalContext.VO <span class="comment">// FOUND 1</span></div><div class="line"></div><div class="line">b</div><div class="line">-------------</div><div class="line">barContext.AO <span class="comment">// NOT FOUND</span></div><div class="line">fooContext.AO <span class="comment">// FOUND 2</span></div><div class="line"></div><div class="line">c</div><div class="line">-------------</div><div class="line">barContext.AO <span class="comment">// FOUND 3</span></div></pre></td></tr></table></figure>
@@ -619,7 +619,7 @@
         <div class="copyright" >
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
