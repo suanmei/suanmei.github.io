@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/block_error.png">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/block_correct.png">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/css/inline_line_box.png">
-<meta property="og:updated_time" content="2016-11-22T14:01:57.000Z">
+<meta property="og:updated_time" content="2018-03-25T18:52:14.584Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重拾CSS规范之从盒类型谈起">
 <meta name="twitter:description" content="今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！">
@@ -349,7 +349,7 @@
         <p>今天要写的不是CSS标准盒模型和IE盒模型，那个烂大街了。今天要深入探讨的是CSS去控制页面布局背后的那一套规则，页面就是由很多个各式各样的盒组成的，那我们就聊这个。这个是对后面的BFC以及定位模式的一个铺垫，基础很重要！！！</p>
 <a id="more"></a>
 <h2 id="术语普及"><a href="#术语普及" class="headerlink" title="术语普及"></a>术语普及</h2><blockquote>
-<p><strong>盒：</strong> 每个元素都会生成一个盒，用来容纳后代（生成的盒）和自己生成的内容(比如说一段文字)。所以我们可以把一个页面看做是由一个个的盒子堆砌而成的，只是这些盒子也分种类，就像这个社会在视觉上由男人和女人构成。<br><strong>块级元素：</strong> <code>display</code> 为 <code>block/table/list-item</code> 的元素。<br><strong>块级盒：</strong> 块级元素生成的盒<br><strong>块容器盒：</strong> 块级盒同时也是块容器盒，除了表格盒与可替换元素。顾名思义，块容器盒就是它要容纳后代和它自身的内容。这里面我发现了一个很有趣的事儿，可替换元素，所以它们都是通过 <code>value/src</code> 之类的属性来控制内容显示，可能正是因为它们 <em>无法添加后代元素（或者必须添加特定子元素）</em> 的特性所以才不算是块容器盒的。<br><strong>内联级元素：</strong> <code>display</code> 为 <code>inline/inline-block/inline-table</code> 的元素。<br><strong>内联级盒：</strong> 内联级元素生成的盒。但是只有 <code>inline</code> 元素生成的盒才叫做内联盒，它区别于 <code>inline-block</code> 元素的内联级块盒。<br><strong>行盒：</strong> 内联格式化上下文中，包含来自同一行的盒的矩形区域叫做行盒<br><strong>可替换元素：</strong> 浏览器根据元素的标签和它的属性来决定元素的具体显示内容。比如 <code>&lt;img&gt; &lt;input&gt; &lt;textarea&gt; &lt;select&gt; &lt;object&gt;</code>。</p>
+<p><strong>盒：</strong> 每个元素都会生成一个盒，用来容纳后代（生成的盒）和自己生成的内容(比如说一段文字)。所以我们可以把一个页面看做是由一个个的盒子堆砌而成的，只是这些盒子也分种类，就像这个社会在视觉上由男人和女人构成。<br><strong>块级元素：</strong> <code>display</code> 为 <code>block/table/list-item</code> 的元素。<br><strong>块级盒：</strong> 块级元素生成的盒<br><strong>块容器盒：</strong> 块级盒同时也是块容器盒，除了表格盒与可替换元素。顾名思义，块容器盒就是它要容纳后代和它自身的内容。这里面我发现了一个很有趣的事儿，可替换元素，它们都是通过 <code>value/src</code> 之类的属性来控制内容显示，可能正是因为它们 <em>无法添加后代元素（或者必须添加特定子元素）</em> 的特性所以才不算是块容器盒的。<br><strong>内联级元素：</strong> <code>display</code> 为 <code>inline/inline-block/inline-table</code> 的元素。<br><strong>内联级盒：</strong> 内联级元素生成的盒。但是只有 <code>inline</code> 元素生成的盒才叫做内联盒，它区别于 <code>inline-block</code> 元素的内联级块盒。<br><strong>行盒：</strong> 内联格式化上下文中，包含来自同一行的盒的矩形区域叫做行盒<br><strong>可替换元素：</strong> 浏览器根据元素的标签和它的属性来决定元素的具体显示内容。比如 <code>&lt;img&gt; &lt;input&gt; &lt;textarea&gt; &lt;select&gt; &lt;object&gt;</code>。</p>
 </blockquote>
 <h2 id="内联元素的一个小特性"><a href="#内联元素的一个小特性" class="headerlink" title="内联元素的一个小特性"></a>内联元素的一个小特性</h2><p>这里单独把内联元素给拿出来了，内联元素必须要区别于内联级元素，内联元素只是指 <code>diaplay</code> 为 <code>inline</code> 的元素。</p>
 <p><code>margin-top,margin-bottom</code> 对内联元素无效。<br><code>padding-top,padding-bottom</code> 对内联元素有效，但它们不能对布局产生任何影响。</p>
@@ -505,7 +505,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -522,7 +522,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">68</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

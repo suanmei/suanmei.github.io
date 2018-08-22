@@ -85,14 +85,14 @@
 
 
 <meta name="description" content="这是很出名的一道题，我们分成两部分来看这道题：网络通信和浏览器渲染。本篇将只介绍网络通信，浏览器渲染留待下文。
-TCP/IP 协议族计算机与网络设备要互相通信，双方就必须基本相同的规则。比如如何探测通信目标、由哪一边先发起通信、用哪种语言进行通信、硬件如何通信，所有的一切都需要有一个规则。我们把这种规则称为协议（protocol）。
+TCP/IP 协议族计算机与网络设备要互相通信，双方就必须基于相同的规则。比如如何探测通信目标、由哪一边先发起通信、用哪种语言进行通信、硬件如何通信，所有的一切都需要有一个规则。我们把这种规则称为协议（protocol）。
 需要建立规则的事务很多，每种事务都有其对应的规则（协议）。而这所">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从输入url到浏览器显示页面，发生了什么？（网络通信篇）">
 <meta property="og:url" content="http://yoursite.com/2017/02/11/url2render-part1/index.html">
 <meta property="og:site_name" content="拾壹小筑">
 <meta property="og:description" content="这是很出名的一道题，我们分成两部分来看这道题：网络通信和浏览器渲染。本篇将只介绍网络通信，浏览器渲染留待下文。
-TCP/IP 协议族计算机与网络设备要互相通信，双方就必须基本相同的规则。比如如何探测通信目标、由哪一边先发起通信、用哪种语言进行通信、硬件如何通信，所有的一切都需要有一个规则。我们把这种规则称为协议（protocol）。
+TCP/IP 协议族计算机与网络设备要互相通信，双方就必须基于相同的规则。比如如何探测通信目标、由哪一边先发起通信、用哪种语言进行通信、硬件如何通信，所有的一切都需要有一个规则。我们把这种规则称为协议（protocol）。
 需要建立规则的事务很多，每种事务都有其对应的规则（协议）。而这所">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/protocol-group.jpg">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/TCP:IP.jpg">
@@ -101,11 +101,11 @@ TCP/IP 协议族计算机与网络设备要互相通信，双方就必须基本�
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/three-way%20handshaking.jpg">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/ARP.jpg">
 <meta property="og:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/status-code.jpg">
-<meta property="og:updated_time" content="2017-02-11T15:07:53.000Z">
+<meta property="og:updated_time" content="2018-03-25T16:53:58.442Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从输入url到浏览器显示页面，发生了什么？（网络通信篇）">
 <meta name="twitter:description" content="这是很出名的一道题，我们分成两部分来看这道题：网络通信和浏览器渲染。本篇将只介绍网络通信，浏览器渲染留待下文。
-TCP/IP 协议族计算机与网络设备要互相通信，双方就必须基本相同的规则。比如如何探测通信目标、由哪一边先发起通信、用哪种语言进行通信、硬件如何通信，所有的一切都需要有一个规则。我们把这种规则称为协议（protocol）。
+TCP/IP 协议族计算机与网络设备要互相通信，双方就必须基于相同的规则。比如如何探测通信目标、由哪一边先发起通信、用哪种语言进行通信、硬件如何通信，所有的一切都需要有一个规则。我们把这种规则称为协议（protocol）。
 需要建立规则的事务很多，每种事务都有其对应的规则（协议）。而这所">
 <meta name="twitter:image" content="http://o7nps5lzq.bkt.clouddn.com/url2render/protocol-group.jpg">
 
@@ -356,7 +356,7 @@ TCP/IP 协议族计算机与网络设备要互相通信，双方就必须基本�
 
       
         <p>这是很出名的一道题，我们分成两部分来看这道题：<strong>网络通信</strong>和<strong>浏览器渲染</strong>。本篇将只介绍网络通信，浏览器渲染留待下文。</p>
-<h2 id="TCP-IP-协议族"><a href="#TCP-IP-协议族" class="headerlink" title="TCP/IP 协议族"></a>TCP/IP 协议族</h2><p>计算机与网络设备要互相通信，双方就必须基本相同的规则。比如如何探测通信目标、由哪一边先发起通信、用哪种语言进行通信、硬件如何通信，所有的一切都需要有一个规则。我们把这种规则称为协议（protocol）。</p>
+<h2 id="TCP-IP-协议族"><a href="#TCP-IP-协议族" class="headerlink" title="TCP/IP 协议族"></a>TCP/IP 协议族</h2><p>计算机与网络设备要互相通信，双方就必须基于相同的规则。比如如何探测通信目标、由哪一边先发起通信、用哪种语言进行通信、硬件如何通信，所有的一切都需要有一个规则。我们把这种规则称为协议（protocol）。</p>
 <p>需要建立规则的事务很多，每种事务都有其对应的规则（协议）。而这所有互联网相关的协议集合我们称作 <code>TCP/IP</code> 协议族。</p>
 <a id="more"></a>
 <p><img src="http://o7nps5lzq.bkt.clouddn.com/url2render/protocol-group.jpg" alt="TCP/IP是互联网相关的各类协议族的总称" title="TCP/IP是互联网相关的各类协议族的总称"></p>
@@ -533,7 +533,7 @@ TCP/IP 协议族计算机与网络设备要互相通信，双方就必须基本�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -550,7 +550,7 @@ TCP/IP 协议族计算机与网络设备要互相通信，双方就必须基本�
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">68</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
