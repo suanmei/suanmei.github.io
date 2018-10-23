@@ -94,7 +94,7 @@
 <meta property="og:description" content="前一段时间在做电流App H5页面，需求中落地页占比较大，落地页承担的职责就是引流。引流有两种形式，同时也是我们对唤端的定义：引导已下载用户打开APP，引导未下载用户下载APP。
 引导已下载用户打开APP，从数据上说用户停留在APP中的时间更多了，是在提高用户粘性；从体验上说，APP体验是要比H5好的。引导未下载用户下载APP，可以增加我们的用户量。
 上面其实分别解释了 什么是唤端 以及 为什么要">
-<meta property="og:updated_time" content="2018-10-13T18:31:27.043Z">
+<meta property="og:updated_time" content="2018-10-23T18:05:11.868Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="H5唤起APP指南">
 <meta name="twitter:description" content="前一段时间在做电流App H5页面，需求中落地页占比较大，落地页承担的职责就是引流。引流有两种形式，同时也是我们对唤端的定义：引导已下载用户打开APP，引导未下载用户下载APP。
@@ -427,7 +427,8 @@
 <h3 id="iframe"><a href="#iframe" class="headerlink" title="iframe"></a>iframe</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"sinaweibo://qrcode"</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>在只有 URL Scheme 的日子里，iframe 是使用最多的了。因为在未安装 app 的情况下，不会去跳转错误页面。但是 iframe 在各个系统以及各个应用中的兼容问题还是挺多的，不能全部使用 URL Scheme。 </p>
 <h3 id="a-标签"><a href="#a-标签" class="headerlink" title="a 标签"></a>a 标签</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"intent://scan/#Intent;scheme=zxing;package=com.google.zxing.client.android;end"</span>"&gt;</span>扫一扫<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>前面我们提到 Intent 协议，官方给出的用例使用的就是使用的 a 标签，所以我们跟着一起用就可以了。</p>
+<p><del>前面我们提到 Intent 协议，官方给出的用例使用的就是使用的 a 标签，所以我们跟着一起用就可以了</del>。</p>
+<p>使用过程中，对于动态生成的 a 标签，使用 <code>dispatch</code> 来模拟触发点击事件，发现很多种 event 传递过去都无效；使用 <code>click()</code> 来模拟触发，部分场景下存在这样的情况，第一次点击过后，回到原先页面，再次点击，点击位置和页面所识别位置有不小的偏移，所以 Intent 协议从 a 标签换成了 window.location。</p>
 <h3 id="window-location"><a href="#window-location" class="headerlink" title="window.location"></a>window.location</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.location.href = <span class="string">'sinaweibo://qrcode'</span>;</div></pre></td></tr></table></figure>
 <p>URL Scheme 在 ios 9+ 上诸如 safari、UC、QQ浏览器中， iframe 均无法成功唤起 APP，只能通过 window.location 才能成功唤端。</p>
 <p>当然，如果我们的 app 支持 Universal Link，ios 9+ 就用不到 URL Scheme 了。而 Universal Link 在使用过程中，我发现在 qq 中，无论是 iframe 导航 还是 a 标签打开 又或者 window.location 都无法成功唤端，一开始我以为是 qq 和微信一样禁止了 Universal Link 唤端的功能，其实不然，百般试验下，通过 top.location 唤端成功了。</p>
